@@ -37,9 +37,11 @@ balances the chosen recipe set as a linear system (`fractions.Fraction`, no deps
 
 ```bash
 make setup          # create .venv and install the package (dev + openai extras)
+~/Library/Application\ Support/Steam/steamapps/common/Factorio/factorio.app/Contents/MacOS/factorio --dump-data
 make dump           # copy data-raw-dump.json from Factorio's script-output
 make test           # run the suite (16 tests)
 ```
+
 
 After `make setup`, the `factoribot` command lives on the venv:
 
