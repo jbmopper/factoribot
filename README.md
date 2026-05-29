@@ -13,12 +13,36 @@ numbers over the recipe graph.
 
 ## Layout
 
-- `factoribot/` — the Factorio mod. Phase 0: dumps recipe/entity/module data to JSON.
-  Phase 2: in-game chat GUI + RCON bridge.
-- `daemon/` — Python "brain": data loader, production solver (exact math), and a
-  provider-agnostic LLM layer exposing a `solve_production` tool. Terminal-first.
+- `mod/` — the Factorio mod: a `Ctrl+K` chat GUI that talks to the daemon over
+  localhost UDP (`helpers.send_udp`/`recv_udp`, needs `--enable-lua-udp`), with a
+  "New" button to reset the conversation.
+- `daemon/` — Python "brain": data loader, the production solver (exact math), a
+  provider-agnostic LLM layer, and the UDP server. Terminal-first.
+
+## The solver
+
+The LLM picks *which* recipes to use; the solver does only exact arithmetic. It
+balances the chosen recipe set as a linear system (`fractions.Fraction`, no deps):
+
+- **Byproducts & cracking** — surplus that's consumed elsewhere is netted; oil
+  (advanced + heavy/light cracking) balances to zero leftover.
+- **Clear failures** — `ambiguous_recipe`, `overconstrained` (add a consumer /
+  allow surplus), `underdetermined` (drop a recipe), `infeasible` (negative rate).
+- **Belts** — throughput shown in belts, read mod-aware from the data dump.
+- **Beacons** — modeled as a per-category effect using the 2.0 profile curve.
+- **Two directions** — `solve_production` (targets → inputs) and
+  `evaluate_throughput` (fixed inputs → max output + bottleneck).
+
+## Usage
+
+```bash
+cd daemon && pip install -e '.[dev,openai]'
+python -m factoribot.cli solve --spec examples/purple_am2_nomods.json   # offline solve
+python -m factoribot.cli ask "purple science, AM2, no modules"          # LLM agent
+python -m factoribot.cli serve                                          # UDP daemon for the mod
+```
 
 ## Status
 
-Phase 0/1 (terminal-first): build and validate the solver against real dumped data,
-then layer the LLM on top, then wire it into the game.
+Phase 2 complete: hardened solver (balance/belts/beacons/throughput) + in-game
+chat with per-player conversation memory. Manual in-game GUI test pending.

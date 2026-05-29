@@ -51,6 +51,17 @@ class Module:
 
 
 @dataclass
+class Beacon:
+    name: str
+    distribution_effectivity: float
+    module_slots: int
+    allowed_effects: frozenset[str] = field(default_factory=frozenset)
+    # 2.0 diminishing-returns curve: per-beacon scale when N beacons affect a
+    # machine is ``profile[min(N, len)-1]`` (empty = no penalty).
+    profile: tuple[float, ...] = ()
+
+
+@dataclass
 class Database:
     recipes: dict[str, Recipe]
     machines: dict[str, Machine]
@@ -58,6 +69,8 @@ class Database:
     producers: dict[str, list[str]]  # item -> recipe names that output it
     items: dict[str, dict]           # raw item prototype (for stack sizes, names)
     fluids: set[str]
+    belts: dict[str, float] = field(default_factory=dict)    # name -> items/s
+    beacons: dict[str, Beacon] = field(default_factory=dict)
 
     def machines_for_category(self, category: str) -> list[Machine]:
         return [m for m in self.machines.values() if category in m.categories]
@@ -68,3 +81,15 @@ class Database:
             return None
         # Prefer the most capable: more module slots, then faster, then name.
         return max(cands, key=lambda m: (m.module_slots, m.speed, m.name))
+
+    def belt_tiers(self) -> list[tuple[str, float]]:
+        """Belts sorted slowest -> fastest."""
+        return sorted(self.belts.items(), key=lambda kv: kv[1])
+
+    def default_beacon(self) -> Beacon | None:
+        if not self.beacons:
+            return None
+        if "beacon" in self.beacons:
+            return self.beacons["beacon"]
+        # Avoid editor/test beacons; prefer the least gimmicky (fewest slots).
+        return min(self.beacons.values(), key=lambda b: (b.module_slots, b.name))

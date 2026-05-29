@@ -76,6 +76,8 @@ local function build_gui(player)
                             ignored_by_interaction = true }
   filler.style.height = 24
   filler.style.horizontally_stretchable = true
+  title.add{ type = "button", name = "factoribot_new", caption = "New",
+             tooltip = "New conversation (clears the daemon's memory)" }
   title.add{ type = "sprite-button", name = "factoribot_close",
              style = "frame_action_button", sprite = "utility/close",
              tooltip = "Close" }
@@ -136,6 +138,25 @@ local function submit(player)
   render_log(player)
 end
 
+local function reset_conversation(player)
+  if not (player and player.valid) then return end
+  local pdata = ensure_player(player.index)
+  pdata.log = { { who = "bot", text = "(new conversation)" } }
+
+  local id = storage.next_id
+  storage.next_id = id + 1
+  -- Fire-and-forget: tell the daemon to forget this player's history. The reply
+  -- has no matching pending entry, so the receiver simply ignores it.
+  pcall(function()
+    helpers.send_udp(
+      daemon_port(),
+      helpers.table_to_json({ id = id, reset = true, player = player.index }),
+      player.index
+    )
+  end)
+  render_log(player)
+end
+
 -- Input events --------------------------------------------------------------
 
 script.on_event("factoribot-toggle", function(e)
@@ -148,6 +169,8 @@ script.on_event(defines.events.on_gui_click, function(e)
   if not (el and el.valid) then return end
   if el.name == "factoribot_send" then
     submit(game.get_player(e.player_index))
+  elseif el.name == "factoribot_new" then
+    reset_conversation(game.get_player(e.player_index))
   elseif el.name == "factoribot_close" then
     local player = game.get_player(e.player_index)
     local frame = player and player.gui.screen.factoribot_frame

@@ -30,8 +30,17 @@ class SolveSpec:
     modules: dict[str, list[str]] = field(default_factory=dict)
     # item -> recipe name, to disambiguate items with multiple producers.
     recipes: dict[str, str] = field(default_factory=dict)
-    # items to force-treat as raw (stop expansion here).
+    # items to force-treat as raw (free source; stop expansion here).
     raw: set[str] = field(default_factory=set)
+    # extra recipes to force into the active set even if they add a second
+    # producer for an item (e.g. oil cracking). The solver balances them.
+    use_recipes: list[str] = field(default_factory=list)
+    # items allowed to be surplus (free sink) instead of forcing a balance,
+    # e.g. dump excess heavy-oil rather than cracking it all.
+    byproducts: set[str] = field(default_factory=set)
+    # crafting category (or "assembler") -> beacon setup affecting those machines:
+    #   {"count": N, "modules": [module names per beacon], "beacon": optional name}
+    beacons: dict[str, dict] = field(default_factory=dict)
 
     def machine_for(self, category: str) -> str | None:
         if category in self.machines:
@@ -47,6 +56,13 @@ class SolveSpec:
             return self.modules["assembler"]
         return self.modules.get("default", [])
 
+    def beacons_for(self, category: str) -> dict | None:
+        if category in self.beacons:
+            return self.beacons[category]
+        if category in ASSEMBLING_CATEGORIES and "assembler" in self.beacons:
+            return self.beacons["assembler"]
+        return self.beacons.get("default")
+
     @classmethod
     def from_dict(cls, d: dict) -> "SolveSpec":
         targets = [
@@ -59,4 +75,7 @@ class SolveSpec:
             modules={k: list(v) for k, v in d.get("modules", {}).items()},
             recipes=dict(d.get("recipes", {})),
             raw=set(d.get("raw", [])),
+            use_recipes=list(d.get("use_recipes", [])),
+            byproducts=set(d.get("byproducts", [])),
+            beacons={k: dict(v) for k, v in d.get("beacons", {}).items()},
         )

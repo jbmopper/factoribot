@@ -15,8 +15,11 @@ import re
 from collections import defaultdict
 from pathlib import Path
 
-from .model import Database, Machine, Module, Recipe, Stack
+from .model import Beacon, Database, Machine, Module, Recipe, Stack
 from .units import parse_energy
+
+# A belt's per-second throughput (both lanes) = prototype speed (tiles/tick) x 480.
+_BELT_ITEMS_PER_SPEED = 480.0
 
 # Recipe categories that aren't real production (editor tools, recipe params).
 EXCLUDED_CATEGORIES = {"parameters", "ee-testing-tool"}
@@ -117,6 +120,23 @@ def build_database(raw: dict) -> Database:
 
     fluids = set(raw.get("fluid", {}).keys())
 
+    belts: dict[str, float] = {}
+    for name, b in raw.get("transport-belt", {}).items():
+        speed = b.get("speed")
+        if speed:
+            belts[name] = float(speed) * _BELT_ITEMS_PER_SPEED
+
+    beacons: dict[str, Beacon] = {}
+    for name, b in raw.get("beacon", {}).items():
+        profile = tuple(float(x) for x in (b.get("profile") or []))
+        beacons[name] = Beacon(
+            name=name,
+            distribution_effectivity=float(b.get("distribution_effectivity", 0.0)),
+            module_slots=int(b.get("module_slots", 0)),
+            allowed_effects=frozenset(b.get("allowed_effects") or []),
+            profile=profile,
+        )
+
     return Database(
         recipes=recipes,
         machines=machines,
@@ -124,6 +144,8 @@ def build_database(raw: dict) -> Database:
         producers={k: v for k, v in producers.items()},
         items=items,
         fluids=fluids,
+        belts=belts,
+        beacons=beacons,
     )
 
 

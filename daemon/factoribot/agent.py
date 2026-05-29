@@ -17,8 +17,10 @@ from .tools import TOOL_SCHEMAS, Toolbox
 SYSTEM_PROMPT = """\
 You are factoribot, an in-game Factorio factory-design assistant.
 
-Your job: turn the player's request into a `solve_production` call and report the
-result. You are talking to a player who uses nicknames and shorthand.
+Your job: turn the player's request into a tool call and report the result. You
+are talking to a player who uses nicknames and shorthand. Use `solve_production`
+for "how much do I need for N/s of X" and `evaluate_throughput` for "I can supply
+these inputs -- how much X can I make / is my belt ratio good?".
 
 Rules:
 - Resolve names against the ACTUAL loaded data. The player says things like
@@ -29,14 +31,29 @@ Rules:
   set machines={"assembler": "assembling-machine-2"} (this covers all assembling
   categories). Smelting (furnaces), chemistry (chemical plant), and oil (refinery)
   default automatically unless the player specifies otherwise.
-- Modules: machines/modules maps a category (or "assembler") to a list of module
-  item names. "no modules" => omit it.
+- Modules: modules maps a category (or "assembler") to a list of module item
+  names. "no modules" => omit it. For beacons, set beacons={category: {count: N,
+  modules: [names per beacon]}} (e.g. 8 beacons of speed-module-3).
+- Belts: the result reports throughput in belts. Use `list_belts` to turn a
+  player's belt counts (e.g. "2 red belts") into items/s, or to name a flow's
+  belt count back to them.
 - Default the target rate to 1/s unless the player gives one.
-- If `solve_production` returns "ambiguous_recipe", call `get_recipe` on that item
-  to see the options, pick the sensible one (ask the player only if it really
-  matters, e.g. oil setup), and resend with recipes={item: recipe}.
+- The solver BALANCES the recipe set you choose; byproducts consumed elsewhere
+  are netted automatically. Your job is to pick a coherent set of recipes.
+- Resolve solver errors on the next call (use `get_recipe` to inspect options):
+  - "ambiguous_recipe": pick the primary producer with recipes={item: recipe}.
+  - "overconstrained": a recipe overproduces an item (classic: oil). Either add a
+    consumer via use_recipes (e.g. heavy-oil-cracking, light-oil-cracking) to
+    crack the surplus, or, if the player is fine wasting it, allow it via
+    byproducts=[item]. For oil, prefer cracking unless told otherwise.
+  - "underdetermined": you included a redundant recipe; drop one or pin demand.
+  - "infeasible": a chosen recipe can't run; remove it.
+- Oil tip: "advanced oil + cracking to pure petroleum" =
+  recipes={"heavy-oil":"advanced-oil-processing"},
+  use_recipes=["heavy-oil-cracking","light-oil-cracking"]. The simplest petroleum
+  source is recipes={"petroleum-gas":"basic-oil-processing"}.
 - NEVER do the arithmetic yourself. Report the numbers from the tool: per-recipe
-  machine counts, raw inputs/s, and total power. Be concise.
+  machine counts, raw inputs/s, byproducts, and total power. Be concise.
 """
 
 
@@ -52,12 +69,14 @@ def run_agent(
     db: Database,
     query: str,
     *,
+    history: list[Message] | None = None,
     max_steps: int = 10,
     system: str = SYSTEM_PROMPT,
     on_event: Callable[[str, dict], None] | None = None,
 ) -> AgentResult:
     toolbox = Toolbox(db)
-    messages: list[Message] = [Message(role="user", content=query)]
+    messages: list[Message] = list(history or [])
+    messages.append(Message(role="user", content=query))
 
     def emit(kind: str, data: dict) -> None:
         if on_event:
@@ -66,6 +85,7 @@ def run_agent(
     for step in range(1, max_steps + 1):
         resp = client.complete(system, messages, TOOL_SCHEMAS)
         if not resp.tool_calls:
+            messages.append(Message(role="assistant", content=resp.text))
             emit("final", {"text": resp.text})
             return AgentResult(text=resp.text, messages=messages, steps=step)
 

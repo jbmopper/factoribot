@@ -38,7 +38,7 @@ def _cmd_solve(args: argparse.Namespace) -> int:
     except SolverError as e:
         print(f"Solver error: {e}", file=sys.stderr)
         return 2
-    print(report.render(result, spec))
+    print(report.render(result, spec, db))
     return 0
 
 

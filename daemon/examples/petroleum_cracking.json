@@ -1,0 +1,5 @@
+{
+  "targets": [{ "name": "petroleum-gas", "rate": 100 }],
+  "recipes": { "heavy-oil": "advanced-oil-processing" },
+  "use_recipes": ["heavy-oil-cracking", "light-oil-cracking"]
+}
