@@ -12,6 +12,9 @@ venv/
 # Dumped Factorio data (large, regenerated from the game)
 data/*.json
 
+# Scratch (test saves, etc.)
+.tmp/
+
 # Secrets / local config
 *.local.toml
 secrets.toml

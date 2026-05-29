@@ -64,6 +64,21 @@ def _cmd_ask(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_serve(args: argparse.Namespace) -> int:
+    from .server import serve
+
+    serve(
+        host=args.host,
+        port=args.port,
+        provider=args.provider,
+        model=args.model,
+        key_file=args.key_file,
+        data=args.data,
+        verbose=args.verbose,
+    )
+    return 0
+
+
 def _cmd_info(args: argparse.Namespace) -> int:
     db = load_database(args.data)
     print(f"recipes: {len(db.recipes)}")
@@ -107,6 +122,15 @@ def main(argv: list[str] | None = None) -> int:
     sa.add_argument("--key-file", default=None, help="path to API key file")
     sa.add_argument("-v", "--verbose", action="store_true", help="trace tool calls")
     sa.set_defaults(func=_cmd_ask)
+
+    sv = sub.add_parser("serve", help="run the UDP daemon for the in-game mod")
+    sv.add_argument("--host", default="127.0.0.1")
+    sv.add_argument("--port", type=int, default=25001)
+    sv.add_argument("--provider", default="openai", help="openai | anthropic | gemini | ollama")
+    sv.add_argument("--model", default=None)
+    sv.add_argument("--key-file", default=None)
+    sv.add_argument("-v", "--verbose", action="store_true")
+    sv.set_defaults(func=_cmd_serve)
 
     si = sub.add_parser("info", help="inspect the loaded data")
     si.add_argument("--recipe", default=None)
