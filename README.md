@@ -47,14 +47,33 @@ After `make setup`, the `factoribot` command lives on the venv:
 
 ```bash
 .venv/bin/factoribot solve --spec daemon/examples/purple_am2_nomods.json   # offline solve
-.venv/bin/factoribot ask "purple science, AM2, no modules"                 # LLM agent
+.venv/bin/factoribot ask "purple science, AM2, no modules"                 # one-off LLM agent
+.venv/bin/factoribot chat                                                   # interactive multi-turn
 .venv/bin/factoribot serve                                                  # UDP daemon for the mod
 ```
 
 The game data is mod-aware: generate it once in Factorio with `--dump-data`, then
 `make dump` copies it into `data/` (it's gitignored; tests skip without it). The
-`ask`/`serve` commands need an OpenAI key via `OPENAI_API_KEY` or `--key-file`.
-Run `make` with no target for the full task list.
+`ask`/`chat`/`serve` commands need an OpenAI key via `OPENAI_API_KEY` or
+`--key-file`. Run `make` with no target for the full task list.
+
+### In-game bridge
+
+For the `Ctrl+K` GUI (or the `/factoribot` console command) you need the daemon
+running *and* Factorio launched with the UDP feature:
+
+```bash
+make serve ARGS=--verbose                              # daemon on port 25001
+factorio --enable-lua-udp=25000                        # game socket on a DIFFERENT port
+```
+
+The game's `--enable-lua-udp` port **must differ** from the daemon's port — they're
+two separate localhost sockets, and reusing one port collides (silent hang, or a
+crash on older 2.0 builds). The mod's "daemon port" setting must point at the
+daemon (default 25001). With `--verbose` the daemon prints each request it receives;
+if nothing prints when you hit Send, the packet isn't reaching it (wrong port, or
+`--enable-lua-udp` missing). Prefer `factoribot chat` while iterating — it skips the
+bridge entirely.
 
 ## Status
 

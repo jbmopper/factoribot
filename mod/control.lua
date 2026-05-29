@@ -104,6 +104,24 @@ local function build_gui(player)
   render_log(player)
 end
 
+local SEND_HINT = "Is the daemon running (factoribot serve) and Factorio "
+  .. "launched with --enable-lua-udp?"
+
+-- Send a query to the daemon; returns the request id, or nil + error string.
+local function send_to_daemon(player, text)
+  local id = storage.next_id
+  storage.next_id = id + 1
+  local ok, err = pcall(function()
+    helpers.send_udp(
+      daemon_port(),
+      helpers.table_to_json({ id = id, query = text, player = player.index }),
+      player.index
+    )
+  end)
+  if not ok then return nil, tostring(err) end
+  return id
+end
+
 local function submit(player)
   if not (player and player.valid) then return end
   local frame = player.gui.screen.factoribot_frame
@@ -118,24 +136,33 @@ local function submit(player)
   table.insert(pdata.log, { who = "bot", text = "…thinking" })
   local log_index = #pdata.log
 
-  local id = storage.next_id
-  storage.next_id = id + 1
-  storage.pending[id] = { player_index = player.index, log_index = log_index }
-
-  local ok, err = pcall(function()
-    helpers.send_udp(
-      daemon_port(),
-      helpers.table_to_json({ id = id, query = text, player = player.index }),
-      player.index
-    )
-  end)
-  if not ok then
+  local id, err = send_to_daemon(player, text)
+  if id then
+    storage.pending[id] = { player_index = player.index, log_index = log_index }
+  else
     pdata.log[log_index] = { who = "err",
-      text = "send failed (" .. tostring(err) .. "). Is the daemon running and "
-             .. "Factorio launched with --enable-lua-udp?" }
-    storage.pending[id] = nil
+      text = "send failed (" .. err .. "). " .. SEND_HINT }
   end
   render_log(player)
+end
+
+-- Console: /factoribot <question>  (alias /fb)
+local function ask_via_console(command)
+  local player = game.get_player(command.player_index)
+  if not player then return end
+  local text = command.parameter and command.parameter:match("^%s*(.-)%s*$") or ""
+  if text == "" then
+    player.print("[factoribot] usage: /factoribot <question>  "
+      .. "e.g. /factoribot purple science, assembly machine 2, no modules")
+    return
+  end
+  local id, err = send_to_daemon(player, text)
+  if id then
+    storage.pending[id] = { player_index = player.index, console = true }
+    player.print("[factoribot] thinking: " .. text)
+  else
+    player.print("[factoribot] send failed (" .. err .. "). " .. SEND_HINT)
+  end
 end
 
 local function reset_conversation(player)
@@ -193,8 +220,16 @@ end)
 -- UDP bridge ----------------------------------------------------------------
 
 script.on_nth_tick(20, function()
-  if game.is_multiplayer() and #game.connected_players == 0 then return end
-  helpers.recv_udp()
+  -- We send with for_player = player.index, so the reply lands on that player's
+  -- socket; recv_udp(for_player) only drains the socket you name. Poll the server
+  -- socket (0, for the host) and every connected player's socket. Wrapped in
+  -- pcall so a missing --enable-lua-udp doesn't spam errors every tick.
+  pcall(function()
+    helpers.recv_udp(0)
+    for _, p in pairs(game.connected_players) do
+      helpers.recv_udp(p.index)
+    end
+  end)
 end)
 
 script.on_event(defines.events.on_udp_packet_received, function(e)
@@ -204,8 +239,15 @@ script.on_event(defines.events.on_udp_packet_received, function(e)
   if not p then return end
   storage.pending[decoded.id] = nil
 
-  local pdata = ensure_player(p.player_index)
   local text = decoded.text or ("error: " .. tostring(decoded.error))
+
+  if p.console then
+    local player = game.get_player(p.player_index)
+    if player then player.print("[factoribot] " .. text) end
+    return
+  end
+
+  local pdata = ensure_player(p.player_index)
   if pdata.log[p.log_index] then
     pdata.log[p.log_index] = { who = "bot", text = text }
   else
@@ -220,4 +262,15 @@ script.on_event(defines.events.on_udp_packet_received, function(e)
       player.print("[factoribot] " .. text)
     end
   end
+end)
+
+-- Console commands -----------------------------------------------------------
+
+commands.add_command(
+  "factoribot",
+  "Ask factoribot a factory-design question, e.g. /factoribot purple science, AM2",
+  ask_via_console
+)
+pcall(function()
+  commands.add_command("fb", "Alias for /factoribot.", ask_via_console)
 end)

@@ -9,7 +9,7 @@ FACTORIO_SCRIPT_OUTPUT ?= $(HOME)/Library/Application Support/factorio/script-ou
 DUMP_SRC := $(FACTORIO_SCRIPT_OUTPUT)/data-raw-dump.json
 
 .DEFAULT_GOAL := help
-.PHONY: help setup dump test ask serve clean
+.PHONY: help setup dump test ask chat serve clean
 
 help:
 	@echo "factoribot dev tasks:"
@@ -17,6 +17,7 @@ help:
 	@echo "  make dump    copy data-raw-dump.json from Factorio's script-output"
 	@echo "  make test    run the test suite"
 	@echo "  make ask Q='purple science, AM2'   one-off LLM query"
+	@echo "  make chat    interactive multi-turn chat in the terminal"
 	@echo "  make serve   run the UDP daemon for the in-game mod (ARGS='--verbose')"
 	@echo "  make clean   remove .venv and caches"
 
@@ -40,6 +41,9 @@ test:
 
 ask:
 	$(PY) -m factoribot.cli ask "$(Q)"
+
+chat:
+	$(PY) -m factoribot.cli chat $(ARGS)
 
 serve:
 	$(PY) -m factoribot.cli serve $(ARGS)
