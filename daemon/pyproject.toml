@@ -10,6 +10,9 @@ dependencies = []
 openai = ["openai>=2"]
 dev = ["pytest"]
 
+[project.scripts]
+factoribot = "factoribot.cli:main"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 

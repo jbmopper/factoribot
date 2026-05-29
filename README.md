@@ -36,11 +36,23 @@ balances the chosen recipe set as a linear system (`fractions.Fraction`, no deps
 ## Usage
 
 ```bash
-cd daemon && pip install -e '.[dev,openai]'
-python -m factoribot.cli solve --spec examples/purple_am2_nomods.json   # offline solve
-python -m factoribot.cli ask "purple science, AM2, no modules"          # LLM agent
-python -m factoribot.cli serve                                          # UDP daemon for the mod
+make setup          # create .venv and install the package (dev + openai extras)
+make dump           # copy data-raw-dump.json from Factorio's script-output
+make test           # run the suite (16 tests)
 ```
+
+After `make setup`, the `factoribot` command lives on the venv:
+
+```bash
+.venv/bin/factoribot solve --spec daemon/examples/purple_am2_nomods.json   # offline solve
+.venv/bin/factoribot ask "purple science, AM2, no modules"                 # LLM agent
+.venv/bin/factoribot serve                                                  # UDP daemon for the mod
+```
+
+The game data is mod-aware: generate it once in Factorio with `--dump-data`, then
+`make dump` copies it into `data/` (it's gitignored; tests skip without it). The
+`ask`/`serve` commands need an OpenAI key via `OPENAI_API_KEY` or `--key-file`.
+Run `make` with no target for the full task list.
 
 ## Status
 
