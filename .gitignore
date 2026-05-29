@@ -11,6 +11,7 @@ venv/
 
 # Dumped Factorio data (large, regenerated from the game)
 data/*.json
+data/*.txt
 
 # Scratch (test saves, etc.)
 .tmp/
