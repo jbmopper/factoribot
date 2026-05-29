@@ -48,7 +48,7 @@ local function render_log(player)
   for _, entry in ipairs(ensure_player(player.index).log) do
     local lbl = out.add{ type = "label", caption = entry.text }
     lbl.style.single_line = false
-    lbl.style.maximal_width = 380
+    lbl.style.maximal_width = 540
     if entry.who == "you" then
       lbl.style.font_color = { r = 0.6, g = 0.8, b = 1 }
     elseif entry.who == "err" then
@@ -86,17 +86,27 @@ local function build_gui(player)
                           direction = "vertical", style = "inside_shallow_frame" }
   local out = body.add{ type = "scroll-pane", name = "factoribot_output",
                         direction = "vertical" }
-  out.style.height = 320
-  out.style.width = 400
+  out.style.height = 460
+  out.style.width = 560
   out.style.padding = 8
+  out.style.vertically_stretchable = true
+  out.style.horizontally_stretchable = true
 
   local row = frame.add{ type = "flow", name = "factoribot_input_row",
                          direction = "horizontal" }
   row.style.top_padding = 8
-  local tf = row.add{ type = "textfield", name = "factoribot_input" }
+  row.style.horizontally_stretchable = true
+  row.style.vertical_align = "center"
+  local tf = row.add{ type = "text-box", name = "factoribot_input" }
   tf.style.horizontally_stretchable = true
-  tf.style.width = 330
+  tf.style.minimal_width = 470
+  tf.style.height = 72
   row.add{ type = "button", name = "factoribot_send", caption = "Send" }
+
+  local hint = frame.add{ type = "label",
+                          caption = "Press Enter or click Send to ask." }
+  hint.style.top_padding = 4
+  hint.style.font_color = { r = 0.6, g = 0.6, b = 0.6 }
 
   frame.force_auto_center()
   player.opened = frame
@@ -205,8 +215,15 @@ script.on_event(defines.events.on_gui_click, function(e)
   end
 end)
 
-script.on_event(defines.events.on_gui_confirmed, function(e)
-  if e.element and e.element.valid and e.element.name == "factoribot_input" then
+-- A text-box doesn't fire on_gui_confirmed; pressing Enter just appends a newline.
+-- Treat a trailing newline as "send" (and strip it back out). Multi-line text
+-- pasted without a trailing newline stays put until Enter or the Send button.
+script.on_event(defines.events.on_gui_text_changed, function(e)
+  local el = e.element
+  if not (el and el.valid and el.name == "factoribot_input") then return end
+  local text = el.text
+  if text ~= "" and text:sub(-1) == "\n" then
+    el.text = text:sub(1, -2)
     submit(game.get_player(e.player_index))
   end
 end)

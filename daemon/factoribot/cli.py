@@ -75,6 +75,14 @@ def _cmd_chat(args: argparse.Namespace) -> int:
     from .llm import make_client
     from .server import Sessions
 
+    # Importing readline upgrades the bare input() to a real line editor: arrow
+    # keys, in-session history (up/down), and word-delete. Without it, arrow keys
+    # leak escape codes like "^[[D". Optional so non-readline platforms still run.
+    try:
+        import readline  # noqa: F401
+    except ImportError:
+        pass
+
     db = load_database(args.data)
     client = make_client(args.provider, args.model, key_file=args.key_file)
     model = getattr(client, "model", None) or "default"
