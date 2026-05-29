@@ -42,6 +42,28 @@ def _cmd_solve(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_ask(args: argparse.Namespace) -> int:
+    from .agent import run_agent
+    from .llm import make_client
+
+    db = load_database(args.data)
+    client = make_client(args.provider, args.model, key_file=args.key_file)
+
+    def on_event(kind: str, data: dict) -> None:
+        if not args.verbose:
+            return
+        if kind == "tool_call":
+            print(f"  -> {data['name']}({json.dumps(data['arguments'])})", file=sys.stderr)
+        elif kind == "tool_result":
+            out = data["output"]
+            brief = out.get("error") or ("ok" if out.get("ok") else list(out)[:3])
+            print(f"  <- {data['name']}: {brief}", file=sys.stderr)
+
+    result = run_agent(client, db, args.query, on_event=on_event)
+    print(result.text)
+    return 0
+
+
 def _cmd_info(args: argparse.Namespace) -> int:
     db = load_database(args.data)
     print(f"recipes: {len(db.recipes)}")
@@ -77,6 +99,14 @@ def main(argv: list[str] | None = None) -> int:
     sp = sub.add_parser("solve", help="solve a production spec")
     sp.add_argument("--spec", required=True, help="spec JSON file, or - for stdin")
     sp.set_defaults(func=_cmd_solve)
+
+    sa = sub.add_parser("ask", help="natural-language query via the LLM agent")
+    sa.add_argument("query", help='e.g. "purple science, assembly machine 2, no modules"')
+    sa.add_argument("--provider", default="openai", help="openai | anthropic | gemini | ollama")
+    sa.add_argument("--model", default=None, help="provider model id (optional)")
+    sa.add_argument("--key-file", default=None, help="path to API key file")
+    sa.add_argument("-v", "--verbose", action="store_true", help="trace tool calls")
+    sa.set_defaults(func=_cmd_ask)
 
     si = sub.add_parser("info", help="inspect the loaded data")
     si.add_argument("--recipe", default=None)

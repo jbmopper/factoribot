@@ -6,8 +6,8 @@ requires-python = ">=3.10"
 dependencies = []
 
 [project.optional-dependencies]
-# LLM providers get added here once we pick one (terminal-first means the
-# solver works with zero external deps).
+# The solver + agent loop need zero external deps; each provider is opt-in.
+openai = ["openai>=2"]
 dev = ["pytest"]
 
 [tool.pytest.ini_options]
