@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Dumped Factorio data (large, regenerated from the game)
+data/*.json
+
+# Secrets / local config
+*.local.toml
+secrets.toml
+
+# OS
+.DS_Store

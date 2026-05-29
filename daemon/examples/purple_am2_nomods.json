@@ -1,0 +1,7 @@
+{
+  "targets": [{ "name": "production-science-pack", "rate": 1.0 }],
+  "machines": { "assembler": "assembling-machine-2" },
+  "modules": {},
+  "recipes": { "petroleum-gas": "basic-oil-processing" },
+  "raw": []
+}

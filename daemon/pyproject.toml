@@ -1,0 +1,21 @@
+[project]
+name = "factoribot"
+version = "0.0.1"
+description = "Factoribot brain: production solver + LLM layer for the in-game Factorio assistant"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+# LLM providers get added here once we pick one (terminal-first means the
+# solver works with zero external deps).
+dev = ["pytest"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["factoribot"]
