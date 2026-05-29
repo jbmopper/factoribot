@@ -4,6 +4,7 @@ from __future__ import annotations
 import math
 from collections import defaultdict
 
+from .bpanalyze import BlueprintAnalysis
 from .model import Database
 from .solver import EvalResult, Result
 from .spec import SolveSpec, Target
@@ -37,7 +38,10 @@ def _belt_note(rate: float, db: Database, item: str) -> str:
     if item in db.fluids or not tiers or tiers[-1][1] <= 0:
         return ""
     name, per = tiers[-1]
-    return f"   ({rate / per:.2f} {_belt_label(name)})"
+    count = rate / per
+    if count < 0.005:  # rounds to 0.00 -- not worth the noise
+        return ""
+    return f"   ({count:.2f} {_belt_label(name)})"
 
 
 def _power(w: float) -> str:
@@ -127,4 +131,67 @@ def render_eval(ev: EvalResult, db: Database) -> str:
     lines.append("")
     sub = SolveSpec(targets=[Target(ev.product, ev.output_per_s)])
     lines.append(render(ev.result, sub, db))
+    return "\n".join(lines)
+
+
+def render_blueprint(a: BlueprintAnalysis, db: Database) -> str:
+    lines: list[str] = []
+    if a.product is None:
+        lines.append("Blueprint analysis: no single end product identified.")
+    else:
+        lines.append(
+            f"Blueprint -> {a.product}: {_fmt(a.output_per_s)}/s"
+            f"{_belt_note(a.output_per_s, db, a.product)}"
+        )
+        if a.bottleneck:
+            bs = next((s for s in a.stages if s.recipe == a.bottleneck), None)
+            if bs:
+                lines.append(
+                    f"Bottleneck: {a.bottleneck} ({bs.machines_present}x {bs.machine}, "
+                    f"{bs.utilization * 100:.0f}% utilized)"
+                )
+            else:
+                lines.append(f"Bottleneck: {a.bottleneck}")
+
+    stages = a.stages or a.offchain
+    if stages:
+        lines.append("")
+        lines.append("Stages (machines, capacity, utilization):")
+        rec_w = max(len(s.recipe) for s in stages)
+        mac_w = max(len(s.machine) for s in stages)
+        for s in sorted(stages, key=lambda s: -s.utilization):
+            flag = "  <- bottleneck" if s.recipe == a.bottleneck else ""
+            util = f"{s.utilization * 100:4.0f}%" if a.product else "  n/a"
+            lines.append(
+                f"  {s.recipe:<{rec_w}}  {s.machines_present:>4}x {s.machine:<{mac_w}}  "
+                f"cap {_fmt(s.capacity_per_s):>8}/s  {util}{flag}"
+            )
+
+    if a.external_inputs:
+        lines.append("")
+        lines.append("External inputs needed /s (belted in):")
+        for name, rate in sorted(a.external_inputs.items(), key=lambda kv: -kv[1]):
+            lines.append(f"  {name:<28} {_fmt(rate):>8}{_belt_note(rate, db, name)}")
+
+    if a.surplus:
+        lines.append("")
+        lines.append("Surplus /s:")
+        for name, rate in sorted(a.surplus.items(), key=lambda kv: -kv[1]):
+            lines.append(f"  {name:<28} {_fmt(rate):>8}")
+
+    if a.unmodeled_machines:
+        lines.append("")
+        lines.append("Not modeled (no recipe set, e.g. furnaces auto-smelt):")
+        for name, count in sorted(a.unmodeled_machines.items(), key=lambda kv: -kv[1]):
+            lines.append(f"  {count}x {name}")
+
+    if a.product:
+        lines.append("")
+        lines.append(f"Power @ output: {_power(a.total_power_w)}")
+
+    if a.warnings:
+        lines.append("")
+        lines.append("Notes:")
+        for w in a.warnings:
+            lines.append(f"  - {w}")
     return "\n".join(lines)

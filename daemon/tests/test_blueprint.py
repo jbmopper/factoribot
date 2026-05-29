@@ -7,6 +7,7 @@ from factoribot.blueprint import (
     MachineGroup,
     _parse_modules,
     decode_blueprint_string,
+    find_blueprint_string,
     iter_blueprints,
     summarize_blueprint,
 )
@@ -63,6 +64,12 @@ def test_iter_blueprints_flattens_book():
     }
     bps = iter_blueprints(book)
     assert [b["entities"][0]["name"] for b in bps] == ["a", "b"]
+
+
+def test_find_blueprint_string_in_prose():
+    assert find_blueprint_string(f"hey check this base {SMALL_BP} thanks!") == SMALL_BP
+    assert find_blueprint_string("how much iron for 2 red belts of circuits?") is None
+    assert find_blueprint_string("") is None
 
 
 def test_parse_modules_2_0_shape():

@@ -69,9 +69,43 @@ def _cmd_ask(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_analyze(args: argparse.Namespace) -> int:
+    """Decode and analyze a blueprint string. Deterministic; no LLM/API."""
+    from .blueprint import (
+        BlueprintError,
+        decode_blueprint_string,
+        iter_blueprints,
+        summarize_blueprint,
+    )
+    from .bpanalyze import analyze_blueprint
+
+    db = load_database(args.data)
+    src = sys.stdin.read() if args.bp == "-" else open(args.bp).read()
+    try:
+        bps = iter_blueprints(decode_blueprint_string(src))
+    except BlueprintError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 2
+    if not bps:
+        print("error: no blueprint with entities found.", file=sys.stderr)
+        return 2
+    if len(bps) > 1:
+        print(f"(blueprint book: analyzing the first of {len(bps)} blueprints)\n")
+    summ = summarize_blueprint(bps[0], db)
+    print(report.render_blueprint(analyze_blueprint(summ, db, product=args.product), db))
+    return 0
+
+
 def _cmd_chat(args: argparse.Namespace) -> int:
     """Interactive, multi-turn REPL. Same agent + memory model as the daemon."""
     from .agent import run_agent
+    from .blueprint import (
+        decode_blueprint_string,
+        find_blueprint_string,
+        iter_blueprints,
+        summarize_blueprint,
+    )
+    from .bpanalyze import analyze_blueprint
     from .llm import make_client
     from .server import Sessions
 
@@ -109,7 +143,20 @@ def _cmd_chat(args: argparse.Namespace) -> int:
             print("(new conversation)")
             continue
         if low in ("/help", "/?", "?"):
-            print("commands: /new (clear memory), /exit (quit)")
+            print("commands: /new (clear memory), /exit (quit). Paste a blueprint "
+                  "string to analyze it.")
+            continue
+        # A pasted blueprint string is analyzed deterministically -- no point
+        # sending 20+ KB through the LLM (and it can't echo it back reliably).
+        bp = find_blueprint_string(line)
+        if bp:
+            try:
+                bps = iter_blueprints(decode_blueprint_string(bp))
+                summ = summarize_blueprint(bps[0], db)
+                a = analyze_blueprint(summ, db)
+                print("\n" + report.render_blueprint(a, db))
+            except Exception as e:
+                print(f"error analyzing blueprint: {type(e).__name__}: {e}", file=sys.stderr)
             continue
         try:
             result = run_agent(
@@ -187,6 +234,11 @@ def main(argv: list[str] | None = None) -> int:
     sc.add_argument("--key-file", default=None, help="path to API key file")
     sc.add_argument("-v", "--verbose", action="store_true", help="trace tool calls")
     sc.set_defaults(func=_cmd_chat)
+
+    sb = sub.add_parser("analyze", help="analyze a blueprint string (offline, no LLM)")
+    sb.add_argument("--bp", required=True, help="file with the blueprint string, or - for stdin")
+    sb.add_argument("--product", default=None, help="optional output item to analyze")
+    sb.set_defaults(func=_cmd_analyze)
 
     sv = sub.add_parser("serve", help="run the UDP daemon for the in-game mod")
     sv.add_argument("--host", default="127.0.0.1")

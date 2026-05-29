@@ -70,3 +70,32 @@ def test_empty_blueprint(db):
     a = analyze_blueprint(empty, db)
     assert a.product is None and a.output_per_s == 0.0
     assert any("No analyzable" in w for w in a.warnings)
+
+
+def test_analyze_blueprint_tool(db):
+    from factoribot.tools import Toolbox
+
+    s = (FIXTURES / "wip_science.txt").read_text()
+    out = Toolbox(db).call("analyze_blueprint", {"blueprint_string": s})
+    assert out["ok"] is True
+    assert out["summary"]["product"] == "production-science-pack"
+    assert out["summary"]["bottleneck"] == "advanced-circuit"
+    assert out["summary"]["unmodeled_machines"] == {"electric-furnace": 76}
+    assert "Bottleneck: advanced-circuit" in out["report"]
+    assert "External inputs" in out["report"]
+
+
+def test_analyze_blueprint_tool_rejects_garbage(db):
+    from factoribot.tools import Toolbox
+
+    out = Toolbox(db).call("analyze_blueprint", {"blueprint_string": "not-a-blueprint"})
+    assert out.get("error") == "bad_blueprint"
+
+
+def test_render_blueprint_text(db, wip):
+    from factoribot import report
+
+    txt = report.render_blueprint(analyze_blueprint(wip, db), db)
+    assert "production-science-pack" in txt
+    assert "<- bottleneck" in txt
+    assert "Not modeled" in txt

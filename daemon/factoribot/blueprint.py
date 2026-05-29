@@ -14,11 +14,15 @@ from __future__ import annotations
 import base64
 import binascii
 import json
+import re
 import zlib
 from collections import defaultdict
 from dataclasses import dataclass, field
 
 from .model import Database
+
+# A blueprint export string is a version digit followed by a long base64 run.
+_BP_RE = re.compile(r"[0-9][A-Za-z0-9+/=]{60,}")
 
 
 class BlueprintError(ValueError):
@@ -46,6 +50,22 @@ def decode_blueprint_string(s: str) -> dict:
             "not a valid blueprint string "
             "(expected a version byte followed by base64 of zlib-compressed JSON)"
         ) from e
+
+
+def find_blueprint_string(text: str) -> str | None:
+    """Pull a blueprint string out of free text (e.g. a pasted chat message).
+
+    Returns the first long base64-ish run that actually decodes, so we can route
+    a pasted blueprint to the analyzer without sending it through the LLM.
+    """
+    for m in _BP_RE.finditer(text or ""):
+        cand = m.group(0)
+        try:
+            decode_blueprint_string(cand)
+            return cand
+        except BlueprintError:
+            continue
+    return None
 
 
 def iter_blueprints(decoded: dict) -> list[dict]:

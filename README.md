@@ -33,6 +33,14 @@ balances the chosen recipe set as a linear system (`fractions.Fraction`, no deps
 - **Two directions** — `solve_production` (targets → inputs) and
   `evaluate_throughput` (fixed inputs → max output + bottleneck).
 
+## Blueprint analysis
+
+Paste a blueprint string (in `make chat`, or `make analyze BP=file`) and it
+decodes the entities, groups machines by recipe, and reports the achievable
+throughput, the limiting stage (bottleneck) with per-stage utilization, the
+external inputs it must be fed, and recipe-less machines (furnaces). Geometry
+(belt routing/beacon coverage) isn't modeled; throughput is speed-only for now.
+
 ## Usage
 
 ```bash
@@ -49,6 +57,7 @@ After `make setup`, the `factoribot` command lives on the venv:
 .venv/bin/factoribot solve --spec daemon/examples/purple_am2_nomods.json   # offline solve
 .venv/bin/factoribot ask "purple science, AM2, no modules"                 # one-off LLM agent
 .venv/bin/factoribot chat                                                   # interactive multi-turn
+.venv/bin/factoribot analyze --bp data/bp1.txt                              # blueprint analysis (offline)
 .venv/bin/factoribot serve                                                  # UDP daemon for the mod
 ```
 

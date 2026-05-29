@@ -15,6 +15,13 @@ import math
 from collections import defaultdict
 
 from . import report
+from .blueprint import (
+    BlueprintError,
+    decode_blueprint_string,
+    iter_blueprints,
+    summarize_blueprint,
+)
+from .bpanalyze import analyze_blueprint
 from .model import Database, Recipe
 from .solver import (
     AmbiguousRecipe,
@@ -205,6 +212,36 @@ TOOL_SCHEMAS: list[dict] = [
             "required": ["product", "inputs"],
         },
     },
+    {
+        "name": "analyze_blueprint",
+        "description": (
+            "Analyze a Factorio blueprint STRING. Decodes it and reports what it "
+            "produces, the achievable throughput, the limiting stage (bottleneck) "
+            "with per-stage machine utilization, the external inputs it must be fed "
+            "(stages it doesn't build itself), and any recipe-less machines like "
+            "furnaces. Use when the player pastes a blueprint string or asks to "
+            "analyze/check/balance a blueprint. Do NOT echo the blueprint string "
+            "back. Geometry (belt routing/beacon coverage) is not modeled and "
+            "throughput is speed-only (productivity modules are noted)."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "blueprint_string": {
+                    "type": "string",
+                    "description": "the exported blueprint string (usually starts with '0')",
+                },
+                "product": {
+                    "type": "string",
+                    "description": (
+                        "optional: which output item to analyze throughput for; "
+                        "defaults to the blueprint's largest net output"
+                    ),
+                },
+            },
+            "required": ["blueprint_string"],
+        },
+    },
 ]
 
 
@@ -257,6 +294,29 @@ def _err(e: SolverError) -> dict:
     if isinstance(e, UnknownName):
         return {"error": "unknown_name", "message": str(e)}
     return {"error": "solver_error", "message": str(e)}
+
+
+def _bp_summary(a) -> dict:
+    return {
+        "product": a.product,
+        "output_per_s": round(a.output_per_s, 4),
+        "bottleneck": a.bottleneck,
+        "stages": [
+            {
+                "recipe": s.recipe,
+                "machine": s.machine,
+                "machines": s.machines_present,
+                "capacity_per_s": round(s.capacity_per_s, 4),
+                "utilization": round(s.utilization, 4),
+            }
+            for s in a.stages
+        ],
+        "external_inputs_per_s": {k: round(v, 4) for k, v in a.external_inputs.items()},
+        "surplus_per_s": {k: round(v, 4) for k, v in a.surplus.items()},
+        "unmodeled_machines": a.unmodeled_machines,
+        "total_power_w": round(a.total_power_w, 1),
+        "warnings": a.warnings,
+    }
 
 
 def _eval_summary(ev, db: Database) -> dict:
@@ -429,3 +489,28 @@ class Toolbox:
             "summary": _eval_summary(ev, self.db),
             "report": report.render_eval(ev, self.db),
         }
+
+    def _t_analyze_blueprint(self, args: dict) -> dict:
+        s = str(args.get("blueprint_string") or "")
+        if not s.strip():
+            return {"error": "bad_request", "message": "blueprint_string is required."}
+        try:
+            decoded = decode_blueprint_string(s)
+        except BlueprintError as e:
+            return {"error": "bad_blueprint", "message": str(e)}
+        bps = iter_blueprints(decoded)
+        if not bps:
+            return {
+                "error": "bad_blueprint",
+                "message": "no blueprint with entities found (an empty book or a planner?).",
+            }
+        summ = summarize_blueprint(bps[0], self.db)
+        a = analyze_blueprint(summ, self.db, product=args.get("product"))
+        result = {
+            "ok": True,
+            "summary": _bp_summary(a),
+            "report": report.render_blueprint(a, self.db),
+        }
+        if len(bps) > 1:
+            result["note"] = f"analyzed the first of {len(bps)} blueprints in the book"
+        return result
