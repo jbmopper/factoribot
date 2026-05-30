@@ -90,4 +90,5 @@ bridge entirely.
 ## Status
 
 Phase 2 complete: hardened solver (balance/belts/beacons/throughput) + in-game
-chat with per-player conversation memory. Manual in-game GUI test pending.
+chat (UDP bridge verified working) with per-player conversation memory, plus
+blueprint analysis (decode → throughput/bottleneck).

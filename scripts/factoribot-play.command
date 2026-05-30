@@ -70,11 +70,29 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
-# --- Launch the game (blocks until you quit Factorio) ---------------------
+# --- Launch the game ------------------------------------------------------
 echo "Launching Factorio (--enable-lua-udp=$GAME_PORT)"
 echo "  binary: $FACTORIO_BIN"
 echo "In-game: Ctrl+K (or /factoribot ...). Watch this window for daemon traffic."
 echo "--------------------------------------------------------------------------"
 "$FACTORIO_BIN" --enable-lua-udp="$GAME_PORT"
 
+# The Steam build bounces ("Steam requires game restart, restarting...") and shows
+# a confirm-custom-args nag: the binary we launched exits immediately while Steam
+# relaunches the real game (with our args). So a fast return here is NOT "game
+# closed". If we started the daemon, keep it alive until the actual game process
+# is gone -- or until you Ctrl-C this window.
+game_running() { pgrep -f "MacOS/factorio" >/dev/null 2>&1; }
+
+if [[ -n "$STARTED_DAEMON" ]]; then
+  echo "(If Steam asks to confirm custom launch options, click OK.)"
+  for _ in 1 2 3 4 5 6; do
+    game_running && break
+    sleep 1
+  done
+  if game_running; then
+    echo "Factorio is up; daemon stays on $DAEMON_PORT. Press Ctrl-C here when done."
+    while game_running; do sleep 5; done
+  fi
+fi
 echo "Factorio exited."
