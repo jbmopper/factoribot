@@ -9,7 +9,7 @@ FACTORIO_SCRIPT_OUTPUT ?= $(HOME)/Library/Application Support/factorio/script-ou
 DUMP_SRC := $(FACTORIO_SCRIPT_OUTPUT)/data-raw-dump.json
 
 .DEFAULT_GOAL := help
-.PHONY: help setup dump test ask chat analyze serve clean
+.PHONY: help setup dump test ask chat analyze serve play clean
 
 help:
 	@echo "factoribot dev tasks:"
@@ -20,6 +20,7 @@ help:
 	@echo "  make chat    interactive multi-turn chat in the terminal"
 	@echo "  make analyze BP=data/bp1.txt   analyze a blueprint string (offline)"
 	@echo "  make serve   run the UDP daemon for the in-game mod (ARGS='--verbose')"
+	@echo "  make play    start daemon + launch Factorio with the UDP flag (macOS)"
 	@echo "  make clean   remove .venv and caches"
 
 setup:
@@ -51,6 +52,9 @@ analyze:
 
 serve:
 	$(PY) -m factoribot.cli serve $(ARGS)
+
+play:
+	./scripts/factoribot-play.command
 
 clean:
 	rm -rf $(VENV) .pytest_cache daemon/factoribot.egg-info

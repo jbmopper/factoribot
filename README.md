@@ -69,7 +69,10 @@ The game data is mod-aware: generate it once in Factorio with `--dump-data`, the
 ### In-game bridge
 
 For the `Ctrl+K` GUI (or the `/factoribot` console command) you need the daemon
-running *and* Factorio launched with the UDP feature:
+running *and* Factorio launched with the UDP feature. On macOS, `make play` (or
+double-clicking `scripts/factoribot-play.command`) does both — it starts the daemon
+and launches Factorio with the flag, which is the part Steam's launch-options field
+can't do. Manually it's:
 
 ```bash
 make serve ARGS=--verbose                              # daemon on port 25001
