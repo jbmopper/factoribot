@@ -4,8 +4,12 @@ Prepared 2026-09-08. These are implementation assignments, not claims that the
 features exist. The parent design is
 [blueprint-routing-design.md](../blueprint-routing-design.md).
 
-Start with **00 and 01**. Task 00 resolves the contracts that make the other tasks
-independent. Tasks 00–08 deliver the first routing audit; 09–14 are later releases.
+**Current dispatch plan: [Next steps after the Claude tranche](NEXT-STEPS.md).**
+It includes the three review fixes, model assignments, and the next parallel wave.
+The reviewed baseline is commit `76fd016`; tasks 00/01 and components of
+02/03/05/06 are already present. Do not restart them from scratch.
+
+Tasks 00–08 deliver the first routing audit; 09–14 are later releases.
 Manual furnace assignments and explicit optimistic treatment of unknown inserter
 rates belong in the first release.
 
@@ -14,7 +18,7 @@ rates belong in the first release.
 Open the repository in the chosen agent and paste this, replacing the task path:
 
 ```text
-Implement the assignment in docs/blueprint-routing-prompts/00-contracts.md.
+Implement task 04 from docs/blueprint-routing-prompts/04-transport-graph.md.
 Read docs/blueprint-routing-prompts/WORKING-RULES.md first. Work only on this
 assignment, verify its prerequisites in this checkout, and return the specified
 handoff. Use the current repository files as evidence; no prior chat is required.
@@ -25,11 +29,11 @@ repository. The instructions are host-neutral: Codex and Cursor should use their
 own file, shell, test, and browser tools. These prompts do not configure a model
 or launch other agents automatically.
 
-The repository currently contains substantial uncommitted work, including the
-planner, MCP adapter, skill, and design documents. **A new worktree from HEAD alone
-may omit required code.** Before dispatch, the coordinator must provide the same
-reviewed starting snapshot to each checkout, including required untracked files,
-and record the revision plus any patch manifest. Transfer only relevant files;
+The reviewed work is now committed in `76fd016`. Before dispatch, check for
+subsequent changes and provide the same reviewed starting snapshot to each
+checkout, including required untracked files if any, and record the revision plus
+any patch manifest. A worktree from an older revision may omit required code.
+Transfer only relevant files;
 keep credentials, environment directories, and large local data out of handoffs.
 Do not stash, reset, clean, or commit all existing changes as a setup shortcut.
 
@@ -75,7 +79,10 @@ model when a concrete counterexample, contract conflict, or unresolved mechanics
 question warrants it. Avoid repeatedly retrying the same vague prompt. Give the
 next agent the failing case, attempted fix, and remaining question.
 
-## Practical parallel schedule
+## Original dependency schedule
+
+This records the full implementation order. Use [NEXT-STEPS.md](NEXT-STEPS.md)
+for the work remaining after the reviewed tranche.
 
 1. Run 00 and 01 independently. Task 00 owns new contracts; 01 owns legacy fixes.
 2. After 00 lands, run 02 and 06 against contract examples; start 05 against
