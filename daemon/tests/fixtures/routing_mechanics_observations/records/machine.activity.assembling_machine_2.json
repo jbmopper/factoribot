@@ -1,0 +1,37 @@
+{
+  "blocking_gate": null,
+  "control_state": "planned: no modules, no beacons, normal quality, powered",
+  "environment": {
+    "declared_mods": null,
+    "game_version": null,
+    "save": null
+  },
+  "evidence_status": "documented-only",
+  "expected_behavior": "An AM2 crafts at crafting_speed 0.75 divided by the recipe's energy_required, with no modules and no beacons. The prototype also advertises 2 module slots and 150kW, which the first profile does not use.",
+  "measurement": null,
+  "measurement_interval_s": null,
+  "notes": [
+    "Recipe arithmetic belongs to the shared calculation layer (task 01), not to this adapter, so the extract derives crafts_per_second as null/pending and records crafting_speed verbatim.",
+    "The pilot's 153 AM2 entities carry explicit recipes in the blueprint.",
+    "No controlled game capture has been run for this checkout: task 02 had no Factorio installation or disposable save available, so nothing was measured."
+  ],
+  "observation_method": "Planned (CAPTURE.md 4.12): one AM2 with a fixed recipe and unlimited input; count products removed per interval and compare with crafting_speed / energy_required.",
+  "profile": "base-2.0.76-normal-v1",
+  "record_id": "machine.activity.assembling_machine_2",
+  "references": [
+    "source:data-raw-dump",
+    "repo:blueprint-routing-contract"
+  ],
+  "research_state": null,
+  "schema_version": "factoribot-mechanics-observation-1",
+  "setup_blueprint": null,
+  "supplied_items": [
+    {
+      "count": null,
+      "item": "iron-plate",
+      "rate_per_s": null,
+      "source": "planned: infinity chest feeding one AM2 with a fixed recipe"
+    }
+  ],
+  "title": "AM2 craft rate from crafting_speed"
+}

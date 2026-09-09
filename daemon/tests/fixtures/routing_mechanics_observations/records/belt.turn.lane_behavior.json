@@ -1,0 +1,34 @@
+{
+  "blocking_gate": "The wiki physics page describes inner/outer lane path lengths but states no throughput rule for turns, and the prototype exposes nothing about curves. No controlled game capture has been run for this checkout: task 02 had no Factorio installation or disposable save available, so nothing was measured.",
+  "control_state": "planned: no circuit wires",
+  "environment": {
+    "declared_mods": null,
+    "game_version": null,
+    "save": null
+  },
+  "evidence_status": "pending",
+  "expected_behavior": "A turn is expected not to reduce a saturated lane's throughput, but the inner and outer lanes traverse different path lengths, so per-lane timing differs. The magnitude, and whether any lane loses throughput, is not established here.",
+  "measurement": null,
+  "measurement_interval_s": null,
+  "notes": [
+    "Until this is observed, task 04 must not claim a turn is lossless nor that it is lossy; a turn's capacity stays the straight-lane capacity as a relaxation, with the relaxation recorded."
+  ],
+  "observation_method": "Planned (CAPTURE.md 4.2): identical saturated feeds into a straight run and into a run containing one 90-degree turn; compare delivered items per interval on each lane separately with lane-specific colouring.",
+  "profile": "base-2.0.76-normal-v1",
+  "record_id": "belt.turn.lane_behavior",
+  "references": [
+    "wiki:transport-belts-physics"
+  ],
+  "research_state": null,
+  "schema_version": "factoribot-mechanics-observation-1",
+  "setup_blueprint": null,
+  "supplied_items": [
+    {
+      "count": null,
+      "item": "iron-plate",
+      "rate_per_s": null,
+      "source": "planned: infinity chest set to provide iron plates without limit"
+    }
+  ],
+  "title": "Behaviour of the two lanes through a turn"
+}

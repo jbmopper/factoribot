@@ -1,0 +1,29 @@
+{
+  "blocking_gate": null,
+  "control_state": null,
+  "environment": {
+    "declared_mods": null,
+    "game_version": null,
+    "save": null
+  },
+  "evidence_status": "documented-only",
+  "expected_behavior": "An entity outside the first entity set stays visible in the graph as unsupported topology with a subsystem hint, and never becomes a supported activity or an implicit transport link. In the pilot this is the 3 ee-super-substation entities, classified as subsystem 'power', support 'unsupported', origin 'unknown'.",
+  "measurement": null,
+  "measurement_interval_s": null,
+  "notes": [
+    "This is a contract and adapter rule, not an engine mechanic; it is recorded here so the release gate covers it explicitly.",
+    "The dump used for the extract does define ee-super-substation, but no mod manifest identifies which mod and version supplied it, so its geometry is retained with origin 'unknown' and it stays unsupported."
+  ],
+  "observation_method": "Static check rather than a game capture: the pilot coverage fixture lists every pilot entity name with its subsystem hint and support level.",
+  "profile": "base-2.0.76-normal-v1",
+  "record_id": "unsupported.entity_visibility",
+  "references": [
+    "repo:blueprint-routing-contract",
+    "source:data-raw-dump"
+  ],
+  "research_state": null,
+  "schema_version": "factoribot-mechanics-observation-1",
+  "setup_blueprint": null,
+  "supplied_items": [],
+  "title": "Unsupported entities stay visible, never operating"
+}

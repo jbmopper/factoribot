@@ -1,0 +1,34 @@
+{
+  "blocking_gate": "No primary document states the pairing rule. No controlled game capture has been run for this checkout: task 02 had no Factorio installation or disposable save available, so nothing was measured.",
+  "control_state": "planned: no circuit wires",
+  "environment": {
+    "declared_mods": null,
+    "game_version": null,
+    "save": null
+  },
+  "evidence_status": "pending",
+  "expected_behavior": "An intervening same-tier underground entrance is expected to capture the pairing, splitting the original tunnel; a different tier is expected to pass through. Neither is established here.",
+  "measurement": null,
+  "measurement_interval_s": null,
+  "notes": [
+    "The pilot contains 178 fast underground belts; a wrong pairing rule would produce a confidently wrong topology, so this is a blocking gate for any pilot bound."
+  ],
+  "observation_method": "Planned (CAPTURE.md 4.6): build an entrance/exit pair, then place a second same-tier entrance between them and record which entrance the original exit pairs with; repeat with a different tier in between.",
+  "profile": "base-2.0.76-normal-v1",
+  "record_id": "underground.pairing.conflict",
+  "references": [
+    "doc:lua-api-2.0.76-underground-belt-prototype"
+  ],
+  "research_state": null,
+  "schema_version": "factoribot-mechanics-observation-1",
+  "setup_blueprint": null,
+  "supplied_items": [
+    {
+      "count": null,
+      "item": "iron-plate",
+      "rate_per_s": null,
+      "source": "planned: infinity chest set to provide iron plates without limit"
+    }
+  ],
+  "title": "Interaction with an intervening same-tier pair"
+}

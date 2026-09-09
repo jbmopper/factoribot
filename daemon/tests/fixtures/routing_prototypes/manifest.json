@@ -1,0 +1,40 @@
+{
+  "environment": {
+    "declared_mods": null,
+    "environment_status": "unidentified",
+    "game_version": null,
+    "matches_target_profile": "unknown"
+  },
+  "extract": {
+    "content_hash": "sha256:756af0daaf0da4d68e414513bf18144b2638e9e6b76d3319fe1f7e38e126655e",
+    "missing_from_first_entity_set": [],
+    "path": "prototypes.json",
+    "prototype_count": 20,
+    "supported_count": 14
+  },
+  "notes": [
+    "The dump carries no build number and no mod manifest, so the game version and the enabled mod list are unknown. A blueprint's encoded format version does not identify the prototype environment either.",
+    "This dump defines 142 prototypes whose names begin with 'ee-', including the ee-super-substation used by the pilot blueprint. That is consistent with an enabled Editor Extensions mod, but the dump names and versions no mod, so every prototype's origin is recorded as unknown and this extract is NOT certified as base-2.0.76-normal-v1.",
+    "The dump's quality prototypes are only 'normal' and 'quality-unknown', its only planet is 'nauvis', and it defines no space platform or elevated rail prototypes; no Quality, Space Age or Elevated Rails content was loaded.",
+    "source_dump_sha256 is the SHA-256 of the dump file's bytes, the identity the MCP adapter already records for loaded game data. The 'sha256:'-prefixed hashes are canonical-JSON content hashes of decoded documents, a different thing."
+  ],
+  "observations": {
+    "mechanics_gate_unmet": true,
+    "path": "../routing_mechanics_observations/manifest.json",
+    "status_counts": {
+      "documented-only": 6,
+      "observed": 0,
+      "pending": 10
+    }
+  },
+  "raw_slice": {
+    "content_hash": "sha256:297274bf56ad05206171519360feaf1875a0b40082c82c4c7ec2db76171fed72",
+    "path": "raw_prototype_slice.json"
+  },
+  "schema_version": "factoribot-routing-prototypes-1",
+  "source_dump": {
+    "path": "data/data-raw-dump.json",
+    "sha256": "42d6dd2f8b39e22123651d3de22fbd8e0f991b50ee40eace1ce54330df83de87"
+  },
+  "target_mechanics_profile": "base-2.0.76-normal-v1"
+}

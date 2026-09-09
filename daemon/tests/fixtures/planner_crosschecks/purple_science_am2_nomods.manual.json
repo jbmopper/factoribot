@@ -1,0 +1,121 @@
+{
+  "name": "purple science, AM2, no modules",
+  "source": {
+    "tool": "manual_recipe_math",
+    "version": "vanilla data dump",
+    "factorio_version": "2.0",
+    "notes": "Starter baseline using the same schema as Factory Planner/Helmod snapshots."
+  },
+  "tolerance": { "rel": 0.001, "abs": 0.000001 },
+  "strict": true,
+  "spec": {
+    "targets": [{ "name": "production-science-pack", "rate": 1.0 }],
+    "machines": { "assembler": "assembling-machine-2" },
+    "modules": {},
+    "recipes": { "petroleum-gas": "basic-oil-processing" },
+    "raw": []
+  },
+  "expected": {
+    "recipes": {
+      "advanced-circuit": {
+        "crafts_per_s": 3.3333333333333335,
+        "machines_exact": 26.666666666666668,
+        "machines_whole": 27,
+        "machine": "assembling-machine-2"
+      },
+      "basic-oil-processing": {
+        "crafts_per_s": 1.4814814814814814,
+        "machines_exact": 7.4074074074074066,
+        "machines_whole": 8,
+        "machine": "oil-refinery"
+      },
+      "copper-cable": {
+        "crafts_per_s": 19.166666666666668,
+        "machines_exact": 12.777777777777779,
+        "machines_whole": 13,
+        "machine": "assembling-machine-2"
+      },
+      "copper-plate": {
+        "crafts_per_s": 19.166666666666668,
+        "machines_exact": 30.66666666666667,
+        "machines_whole": 31,
+        "machine": "electric-furnace"
+      },
+      "electric-furnace": {
+        "crafts_per_s": 0.3333333333333333,
+        "machines_exact": 2.2222222222222223,
+        "machines_whole": 3,
+        "machine": "assembling-machine-2"
+      },
+      "electronic-circuit": {
+        "crafts_per_s": 8.333333333333334,
+        "machines_exact": 5.555555555555555,
+        "machines_whole": 6,
+        "machine": "assembling-machine-2"
+      },
+      "iron-plate": {
+        "crafts_per_s": 52.5,
+        "machines_exact": 84.0,
+        "machines_whole": 84,
+        "machine": "electric-furnace"
+      },
+      "iron-stick": {
+        "crafts_per_s": 2.5,
+        "machines_exact": 1.6666666666666665,
+        "machines_whole": 2,
+        "machine": "assembling-machine-2"
+      },
+      "plastic-bar": {
+        "crafts_per_s": 3.3333333333333335,
+        "machines_exact": 3.3333333333333335,
+        "machines_whole": 4,
+        "machine": "chemical-plant"
+      },
+      "production-science-pack": {
+        "crafts_per_s": 0.3333333333333333,
+        "machines_exact": 9.333333333333332,
+        "machines_whole": 10,
+        "machine": "assembling-machine-2"
+      },
+      "productivity-module": {
+        "crafts_per_s": 0.3333333333333333,
+        "machines_exact": 6.666666666666666,
+        "machines_whole": 7,
+        "machine": "assembling-machine-2"
+      },
+      "rail": {
+        "crafts_per_s": 5.0,
+        "machines_exact": 3.333333333333333,
+        "machines_whole": 4,
+        "machine": "assembling-machine-2"
+      },
+      "steel-plate": {
+        "crafts_per_s": 8.333333333333334,
+        "machines_exact": 66.66666666666667,
+        "machines_whole": 67,
+        "machine": "electric-furnace"
+      },
+      "stone-brick": {
+        "crafts_per_s": 3.3333333333333335,
+        "machines_exact": 5.333333333333334,
+        "machines_whole": 6,
+        "machine": "electric-furnace"
+      }
+    },
+    "raw_per_s": {
+      "coal": 3.3333333333333335,
+      "copper-ore": 19.166666666666668,
+      "crude-oil": 148.14814814814815,
+      "iron-ore": 52.5,
+      "stone": 11.666666666666666
+    },
+    "byproducts_per_s": {},
+    "machine_totals_whole": {
+      "assembling-machine-2": 72,
+      "chemical-plant": 4,
+      "electric-furnace": 188,
+      "oil-refinery": 8
+    },
+    "total_power_w": 47644444.44444444
+  }
+}

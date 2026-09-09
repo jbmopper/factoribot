@@ -7,11 +7,51 @@ ambiguous is reported back so the model can fill it in.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from copy import deepcopy
 
 # Categories an "assembler" choice applies to.
 ASSEMBLING_CATEGORIES = frozenset(
     {"crafting", "basic-crafting", "advanced-crafting", "crafting-with-fluid"}
 )
+
+
+class OptionValidationError(Exception):
+    """A category-scoped option cannot affect any recipe in this request."""
+
+    def __init__(self, option: str, category: str, active_categories: set[str]):
+        self.option = option
+        self.category = category
+        self.active_categories = sorted(active_categories)
+        super().__init__(
+            f"{option}: category '{category}' does not apply to an active recipe "
+            f"(active categories: {self.active_categories})."
+        )
+
+
+def validate_category_options(spec: "SolveSpec", active_categories: set[str]) -> None:
+    """Reject options that would otherwise be silently ignored.
+
+    This is deliberately based on the active recipe set, rather than every
+    category in the data.  A category key is meaningful only if it affects this
+    calculation.  ``assembler`` remains the assembling-category alias and
+    ``default`` remains the module/beacon fallback alias; machine defaults are
+    selected by the database when no machine option applies.
+    """
+    for option in ("machines", "modules", "beacons"):
+        values = getattr(spec, option)
+        for category in values:
+            applies = category in active_categories
+            applies |= (
+                category == "assembler"
+                and bool(active_categories & ASSEMBLING_CATEGORIES)
+            )
+            applies |= (
+                category == "default"
+                and option != "machines"
+                and bool(active_categories)
+            )
+            if not applies:
+                raise OptionValidationError(option, category, active_categories)
 
 
 @dataclass
@@ -62,6 +102,19 @@ class SolveSpec:
         if category in ASSEMBLING_CATEGORIES and "assembler" in self.beacons:
             return self.beacons["assembler"]
         return self.beacons.get("default")
+
+    def to_dict(self) -> dict:
+        """Return a JSON-ready request that can be replayed by ``solve``."""
+        return {
+            "targets": [{"name": t.name, "rate": t.rate} for t in self.targets],
+            "machines": deepcopy(self.machines),
+            "modules": deepcopy(self.modules),
+            "recipes": deepcopy(self.recipes),
+            "raw": sorted(self.raw),
+            "use_recipes": list(self.use_recipes),
+            "byproducts": sorted(self.byproducts),
+            "beacons": deepcopy(self.beacons),
+        }
 
     @classmethod
     def from_dict(cls, d: dict) -> "SolveSpec":

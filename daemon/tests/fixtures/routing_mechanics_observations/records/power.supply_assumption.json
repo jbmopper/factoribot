@@ -1,0 +1,27 @@
+{
+  "blocking_gate": "Power coverage and generation checks are deferred by the contract, and the pilot's only poles are 3 unsupported modded substations. No controlled game capture has been run for this checkout: task 02 had no Factorio installation or disposable save available, so nothing was measured.",
+  "control_state": "planned: explicit assumed_available and unknown scenarios",
+  "environment": {
+    "declared_mods": null,
+    "game_version": null,
+    "save": null
+  },
+  "evidence_status": "pending",
+  "expected_behavior": "The first profile analyses a blueprint under an explicit external power assumption. Whether a blueprint's own poles actually cover and supply its machines is a separate question this profile does not answer, and unknown power forces a partial result with no bound.",
+  "measurement": null,
+  "measurement_interval_s": null,
+  "notes": [
+    "The extract retains pole supply_area_distance and wire distances, and the beacon profile curve, so tasks 11 and 12 need no second extraction pass; retaining the fields implies no mechanics."
+  ],
+  "observation_method": "Planned (CAPTURE.md 4.14): build a small powered and an unpowered copy of the same setup and compare delivered output per interval.",
+  "profile": "base-2.0.76-normal-v1",
+  "record_id": "power.supply_assumption",
+  "references": [
+    "repo:blueprint-routing-contract"
+  ],
+  "research_state": null,
+  "schema_version": "factoribot-mechanics-observation-1",
+  "setup_blueprint": null,
+  "supplied_items": [],
+  "title": "Externally powered assumption vs actual coverage"
+}

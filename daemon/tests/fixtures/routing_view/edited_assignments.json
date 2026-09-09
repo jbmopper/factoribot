@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.1.1",
+  "blueprint_hash": "sha256:d1b4f2031d8785f3d6e2479b8653e86a063e015fbf5ddb739d0cd773eac5ee6c",
+  "graph_hash": "sha256:a231fb10ce36af325213e2375447e2012272a1dc1e3d7fc968242775228bf981",
+  "feeds": [
+    {
+      "id": "stone_feed",
+      "budget_id": "stone",
+      "endpoint": {
+        "entity": {
+          "book_path": [
+            2,
+            7
+          ],
+          "entity_number": 1
+        },
+        "kind": "inventory",
+        "name": "ingredients"
+      },
+      "capacity": {
+        "kind": "unlimited",
+        "value": null
+      }
+    },
+    {
+      "id": "belt_feed",
+      "budget_id": "stone",
+      "endpoint": {
+        "entity": {
+          "book_path": [
+            2,
+            7
+          ],
+          "entity_number": 2
+        },
+        "kind": "port",
+        "name": "left_in"
+      },
+      "capacity": {
+        "kind": "finite",
+        "value": 4
+      }
+    }
+  ],
+  "furnaces": [
+    {
+      "entity": {
+        "book_path": [
+          2,
+          7
+        ],
+        "entity_number": 1
+      },
+      "recipe": "iron-plate"
+    }
+  ],
+  "controls": []
+}

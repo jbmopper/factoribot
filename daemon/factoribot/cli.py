@@ -22,6 +22,45 @@ from .solver import AmbiguousRecipe, SolverError, solve
 from .spec import SolveSpec
 
 
+def _cmd_tool(args: argparse.Namespace) -> int:
+    from .mcp_server import load_toolbox
+
+    source = args.spec
+    try:
+        if source == "-":
+            request = json.load(sys.stdin)
+        else:
+            with open(source) as f:
+                request = json.load(f)
+        result = load_toolbox(args.data).call(args.name, request)
+    except (OSError, ValueError) as e:
+        result = {"error": "bad_request", "message": str(e)}
+    print(json.dumps(result, indent=2, allow_nan=False))
+    return 2 if "error" in result else 0
+
+
+def _cmd_tools(args: argparse.Namespace) -> int:
+    from .tools import TOOL_SCHEMAS
+
+    print(json.dumps(TOOL_SCHEMAS, indent=2))
+    return 0
+
+
+def _cmd_mcp(args: argparse.Namespace) -> int:
+    import asyncio
+    from .mcp_server import serve_mcp
+
+    try:
+        asyncio.run(serve_mcp(args.data))
+    except ImportError:
+        print("Install factoribot[mcp] to run the MCP server.", file=sys.stderr)
+        return 2
+    except (OSError, ValueError) as e:
+        print(f"Cannot load Factorio data: {e}", file=sys.stderr)
+        return 2
+    return 0
+
+
 def _cmd_solve(args: argparse.Namespace) -> int:
     db = load_database(args.data)
     if args.spec == "-":
@@ -215,6 +254,21 @@ def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="factoribot")
     p.add_argument("--data", default=None, help="path to data-raw-dump.json")
     sub = p.add_subparsers(dest="cmd", required=True)
+
+    sm = sub.add_parser("mcp", help="serve read-only tools over MCP stdio; host supplies the LLM")
+    sm.set_defaults(func=_cmd_mcp)
+
+    spl = sub.add_parser("plan", help="optimize multiple inputs/outputs from a JSON spec; no LLM")
+    spl.add_argument("--spec", required=True, help="plan JSON file, or - for stdin")
+    spl.set_defaults(func=_cmd_tool, name="plan_production")
+
+    st = sub.add_parser("tool", help="call a deterministic tool with JSON arguments; no LLM")
+    st.add_argument("name", help="tool name; see tools for schemas")
+    st.add_argument("--args", dest="spec", default="-", help="JSON argument file, or - for stdin")
+    st.set_defaults(func=_cmd_tool)
+
+    sts = sub.add_parser("tools", help="print deterministic tool schemas as JSON")
+    sts.set_defaults(func=_cmd_tools)
 
     sp = sub.add_parser("solve", help="solve a production spec")
     sp.add_argument("--spec", required=True, help="spec JSON file, or - for stdin")

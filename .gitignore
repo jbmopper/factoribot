@@ -19,6 +19,8 @@ data/*.txt
 # Secrets / local config
 *.local.toml
 secrets.toml
+# Generated checkout-specific absolute paths; recreate with make setup-codex.
+.codex/config.toml
 
 # OS
 .DS_Store

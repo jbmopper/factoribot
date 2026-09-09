@@ -1,0 +1,38 @@
+{
+  "blocking_gate": null,
+  "control_state": "planned: no circuit wires, no filters",
+  "environment": {
+    "declared_mods": null,
+    "game_version": null,
+    "save": null
+  },
+  "evidence_status": "documented-only",
+  "expected_behavior": "Pickup and drop tiles follow the prototype's pickup_position [0, -1] and insert_position [0, 1.2] rotated by the entity direction, so a north-facing inserter takes from the tile one south and drops one north. Documented wiki behaviour adds that an inserter dropping onto a belt places items on the far lane.",
+  "measurement": null,
+  "measurement_interval_s": null,
+  "notes": [
+    "The prototype documentation does not state the coordinate frame or the rotation convention for these vectors, so the rotation itself is task 03's mapping and must be checked against a real blueprint before use.",
+    "The wiki inserter page states its data is valid up to 2.0.77, which covers the 2.0.76 target profile.",
+    "No controlled game capture has been run for this checkout: task 02 had no Factorio installation or disposable save available, so nothing was measured."
+  ],
+  "observation_method": "Planned (CAPTURE.md 4.10): for each of the four cardinal directions, place an inserter between a distinguishable source and a belt, and record the tile it takes from, the tile it drops on, and the belt lane it uses.",
+  "profile": "base-2.0.76-normal-v1",
+  "record_id": "inserter.endpoints.pickup_drop_tiles",
+  "references": [
+    "doc:lua-api-2.0.76-inserter-prototype",
+    "wiki:inserters",
+    "source:data-raw-dump"
+  ],
+  "research_state": null,
+  "schema_version": "factoribot-mechanics-observation-1",
+  "setup_blueprint": null,
+  "supplied_items": [
+    {
+      "count": null,
+      "item": "iron-plate",
+      "rate_per_s": null,
+      "source": "planned: infinity chest as the pickup container"
+    }
+  ],
+  "title": "Pickup and drop tiles, and belt lane chosen"
+}

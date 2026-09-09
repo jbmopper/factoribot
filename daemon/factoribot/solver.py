@@ -28,7 +28,7 @@ from dataclasses import dataclass, field, replace
 from fractions import Fraction
 
 from .model import Database, Machine, Recipe
-from .spec import SolveSpec, Target
+from .spec import OptionValidationError, SolveSpec, Target, validate_category_options
 
 # Factorio clamps total speed and consumption multipliers to a floor of 20%.
 _MIN_MULT = 0.2
@@ -41,8 +41,30 @@ def _F(x) -> Fraction:
     return Fraction(x).limit_denominator(_DENOM)
 
 
+def output_items_per_s(recipe: Recipe, crafts_per_s: float | Fraction, productivity: float = 1.0) -> dict[str, float]:
+    """Gross item/fluid output rates for every result of a recipe.
+
+    Result entries are additive so unusual recipes with repeated result names do
+    not lose a stack while being converted to structured output.
+    """
+    rates: dict[str, float] = defaultdict(float)
+    for result in recipe.results:
+        if result.amount > 0:
+            rates[result.name] += float(_F(result.amount) * _F(productivity) * crafts_per_s)
+    return dict(rates)
+
+
 class SolverError(Exception):
     pass
+
+
+class InvalidOption(SolverError, OptionValidationError):
+    """A machine/module/beacon category key cannot affect this calculation."""
+
+    def __init__(self, error: OptionValidationError):
+        OptionValidationError.__init__(
+            self, error.option, error.category, set(error.active_categories)
+        )
 
 
 class AmbiguousRecipe(SolverError):
@@ -98,6 +120,7 @@ class RecipeUse:
     category: str
     machine: str
     crafts_per_s: float
+    output_items_per_s: dict[str, float]  # every recipe result, after productivity
     machines: float  # fractional (throughput-exact)
     power_w: float
 
@@ -109,6 +132,9 @@ class Result:
     byproducts: dict[str, float] = field(default_factory=dict)   # item -> /s surplus
     total_power_w: float = 0.0
     warnings: list[str] = field(default_factory=list)
+    # The normalized, JSON-ready input and the category options actually used.
+    request: dict = field(default_factory=dict)
+    resolved_choices: dict[str, dict] = field(default_factory=dict)
 
 
 def _beacon_deltas(
@@ -325,13 +351,18 @@ def _rref_solve(
 
 
 def solve(spec: SolveSpec, db: Database) -> Result:
-    result = Result()
+    result = Result(request=spec.to_dict())
     demand: dict[str, Fraction] = defaultdict(lambda: Fraction(0))
     for t in spec.targets:
         demand[t.name] += _F(t.rate)
     targets = set(demand)
 
     active = _active_recipes(spec, db)
+    categories = {db.recipes[rn].category for rn in active}
+    try:
+        validate_category_options(spec, categories)
+    except OptionValidationError as e:
+        raise InvalidOption(e) from e
 
     # Resolve machine + module effects per active recipe (independent of rates).
     info: dict[str, tuple[Machine, float, float, float]] = {}
@@ -346,6 +377,15 @@ def solve(spec: SolveSpec, db: Database) -> Result:
             db,
         )
         info[rn] = (machine, sm, pm, cm)
+    for category in sorted(categories):
+        # Values here are the effective selections, not just aliases supplied by
+        # the caller.  This makes default-machine calculations reproducible.
+        machine = _resolve_machine(db, spec, category)
+        result.resolved_choices[category] = {
+            "machine": machine.name,
+            "modules": list(spec.modules_for(category)),
+            "beacon": spec.beacons_for(category),
+        }
 
     # Net stoichiometry (outputs scaled by productivity), plus gross produce/consume
     # sets used to classify each item.
@@ -417,6 +457,7 @@ def solve(spec: SolveSpec, db: Database) -> Result:
                 category=recipe.category,
                 machine=machine.name,
                 crafts_per_s=float(rate),
+                output_items_per_s=output_items_per_s(recipe, rate, pm),
                 machines=machines,
                 power_w=power,
             )
@@ -466,6 +507,7 @@ class EvalResult:
     bottleneck: str | None
     inputs: list[InputUse] = field(default_factory=list)
     result: Result = field(default_factory=Result)  # full production, scaled to output
+    request: dict = field(default_factory=dict)  # replay with evaluate_throughput
 
 
 def _scaled(result: Result, f: float) -> Result:
@@ -474,6 +516,8 @@ def _scaled(result: Result, f: float) -> Result:
         byproducts={k: v * f for k, v in result.byproducts.items()},
         total_power_w=result.total_power_w * f,
         warnings=list(result.warnings),
+        request=dict(result.request),
+        resolved_choices={k: dict(v) for k, v in result.resolved_choices.items()},
     )
     out.uses = [
         RecipeUse(
@@ -482,6 +526,7 @@ def _scaled(result: Result, f: float) -> Result:
             category=u.category,
             machine=u.machine,
             crafts_per_s=u.crafts_per_s * f,
+            output_items_per_s={k: v * f for k, v in u.output_items_per_s.items()},
             machines=u.machines * f,
             power_w=u.power_w * f,
         )
@@ -526,4 +571,7 @@ def evaluate(spec: SolveSpec, db: Database, inputs: dict[str, float]) -> EvalRes
     for item, supply in sorted(inputs.items()):
         used = per_unit.get(item, 0.0) * output
         input_uses.append(InputUse(item, supply, used, supply - used))
-    return EvalResult(product, output, bottleneck, input_uses, scaled)
+    replay = spec.to_dict()
+    replay.pop("targets", None)
+    replay.update({"product": product, "inputs": dict(inputs)})
+    return EvalResult(product, output, bottleneck, input_uses, scaled, replay)

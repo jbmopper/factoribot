@@ -23,7 +23,7 @@ from dataclasses import dataclass, field
 
 from .blueprint import BlueprintSummary
 from .model import Database
-from .solver import SolverError, _effect_multipliers, solve
+from .solver import SolverError, _effect_multipliers, output_items_per_s, solve
 from .spec import SolveSpec, Target
 
 
@@ -32,9 +32,12 @@ class StageLoad:
     recipe: str
     machine: str
     machines_present: int
+    # Legacy aliases: capacity_per_s and actual_per_s are crafts/s, not item/s.
     capacity_per_s: float  # max crafts/s summed over machines on this recipe
     actual_per_s: float = 0.0  # crafts/s at the achievable output (0 if unknown)
     power_w: float = 0.0
+    capacity_output_items_per_s: dict[str, float] = field(default_factory=dict)
+    actual_output_items_per_s: dict[str, float] = field(default_factory=dict)
 
     @property
     def utilization(self) -> float:
@@ -64,6 +67,16 @@ class _Stage:
     capacity: float  # crafts/s
     energy_w: float  # one machine's draw
     cons_mult: float
+
+
+def _load(recipe: str, stage: _Stage, db: Database, actual: float = 0.0, power: float = 0.0) -> StageLoad:
+    """Expose both craft capacity and every output's item rate."""
+    recipe_data = db.recipes[recipe]
+    return StageLoad(
+        recipe, stage.machine, stage.count, stage.capacity, actual, power,
+        output_items_per_s(recipe_data, stage.capacity),
+        output_items_per_s(recipe_data, actual),
+    )
 
 
 def _stages_by_recipe(
@@ -167,7 +180,7 @@ def analyze_blueprint(
         # Everything is an internal intermediate (no clear end product). Report
         # capacities without a throughput figure.
         loads = [
-            StageLoad(rn, s.machine, s.count, s.capacity) for rn, s in stages.items()
+            _load(rn, s, db) for rn, s in stages.items()
         ]
         warnings.append("No net output product found; reporting stage capacities only.")
         return BlueprintAnalysis(
@@ -186,7 +199,7 @@ def analyze_blueprint(
         unit = solve(spec, db)
     except SolverError as e:
         warnings.append(f"Couldn't compute throughput for '{product}': {e}")
-        loads = [StageLoad(rn, s.machine, s.count, s.capacity) for rn, s in stages.items()]
+        loads = [_load(rn, s, db) for rn, s in stages.items()]
         return BlueprintAnalysis(
             product, 0.0, None, offchain=loads, unmodeled_machines=unmodeled, warnings=warnings
         )
@@ -204,12 +217,10 @@ def analyze_blueprint(
         util = actual / s.capacity if s.capacity else 0.0
         power = s.count * util * s.energy_w * s.cons_mult
         total_power += power
-        stage_loads.append(
-            StageLoad(rn, s.machine, s.count, s.capacity, actual_per_s=actual, power_w=power)
-        )
+        stage_loads.append(_load(rn, s, db, actual, power))
 
     offchain = [
-        StageLoad(rn, s.machine, s.count, s.capacity)
+        _load(rn, s, db)
         for rn, s in stages.items()
         if rn not in relevant
     ]

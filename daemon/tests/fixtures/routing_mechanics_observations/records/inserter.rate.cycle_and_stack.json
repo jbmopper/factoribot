@@ -1,0 +1,38 @@
+{
+  "blocking_gate": null,
+  "control_state": "planned: research levels recorded explicitly per trial",
+  "environment": {
+    "declared_mods": null,
+    "game_version": null,
+    "save": null
+  },
+  "evidence_status": "documented-only",
+  "expected_behavior": "Throughput is cycles per second times hand size. The wiki gives roughly 0.86 cycles/s for the inserter and 2.5 cycles/s for the fast and bulk inserters at normal quality, and hand size grows with inserter capacity research, which the blueprint does not record. The prototype exposes only extension_speed, rotation_speed and the bulk flag, so no items/s follows from it.",
+  "measurement": null,
+  "measurement_interval_s": null,
+  "notes": [
+    "Documented cycle rates are not sufficient for a capacity: swing time depends on source and destination geometry, and the pilot's research level is unknown. The adapter therefore derives items_per_second as null/pending and the contract keeps inserter capacity unknown, which the optimistic model relaxes rather than bounds.",
+    "Task 09 owns inserter rates; this record is the evidence it starts from.",
+    "No controlled game capture has been run for this checkout: task 02 had no Factorio installation or disposable save available, so nothing was measured."
+  ],
+  "observation_method": "Planned (CAPTURE.md 4.11): chest-to-chest and chest-to-belt trials for inserter, fast-inserter and bulk-inserter at each recorded inserter capacity research level; count items moved per interval.",
+  "profile": "base-2.0.76-normal-v1",
+  "record_id": "inserter.rate.cycle_and_stack",
+  "references": [
+    "wiki:inserters",
+    "doc:lua-api-2.0.76-inserter-prototype",
+    "source:data-raw-dump"
+  ],
+  "research_state": null,
+  "schema_version": "factoribot-mechanics-observation-1",
+  "setup_blueprint": null,
+  "supplied_items": [
+    {
+      "count": null,
+      "item": "iron-plate",
+      "rate_per_s": null,
+      "source": "planned: infinity chest as the pickup container"
+    }
+  ],
+  "title": "Cycle time and hand size, including research"
+}

@@ -1,0 +1,879 @@
+{
+  "assignments": {
+    "blueprint_hash": "sha256:f9820300ee70865b0b36fd3f363abc8c4bdbf3d59711e97feac75d9d281017e2",
+    "controls": [],
+    "feeds": [
+      {
+        "budget_id": "iron",
+        "capacity": {
+          "kind": "unlimited",
+          "value": null
+        },
+        "endpoint": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 1
+          },
+          "kind": "inventory",
+          "name": "ingredients"
+        },
+        "id": "iron_feed"
+      }
+    ],
+    "furnaces": [],
+    "graph_hash": "sha256:3bb7ebf433cdacbec10751e37e6c8994b746b059f6adcc94b8f29d6aebbed45c",
+    "schema_version": "1.1.1"
+  },
+  "description": "SYNTHETIC schema/interaction fixture; all assignments illustrative.",
+  "graph": {
+    "activities": [
+      {
+        "craft_capacity": {
+          "kind": "finite",
+          "value": 10
+        },
+        "entity": {
+          "book_path": [
+            2,
+            7
+          ],
+          "entity_number": 1
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": "make_circuit",
+        "inputs": [
+          {
+            "amount_per_craft": 1,
+            "endpoint": {
+              "entity": {
+                "book_path": [
+                  2,
+                  7
+                ],
+                "entity_number": 1
+              },
+              "kind": "inventory",
+              "name": "ingredients"
+            },
+            "material": {
+              "kind": "item",
+              "name": "iron-plate",
+              "quality": "normal"
+            }
+          }
+        ],
+        "outputs": [
+          {
+            "amount_per_craft": 1,
+            "endpoint": {
+              "entity": {
+                "book_path": [
+                  2,
+                  7
+                ],
+                "entity_number": 1
+              },
+              "kind": "port",
+              "name": "output"
+            },
+            "material": {
+              "kind": "item",
+              "name": "electronic-circuit",
+              "quality": "normal"
+            }
+          }
+        ],
+        "recipe": "synthetic-circuit",
+        "resources": [
+          {
+            "coefficient": 0.1,
+            "group_id": "machine_time"
+          }
+        ]
+      }
+    ],
+    "arcs": [
+      {
+        "conditions": [],
+        "eligibility": {
+          "kind": "any_item",
+          "materials": []
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": "belt_2",
+        "resources": [
+          {
+            "coefficient": 1,
+            "group_id": "lane_2"
+          }
+        ],
+        "semantics": "exact",
+        "source": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_in"
+        },
+        "target": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_out"
+        }
+      }
+    ],
+    "blueprint": {
+      "canonical": "{\"blueprint_book\":{\"active_index\":2,\"blueprints\":[{\"blueprint_book\":{\"active_index\":7,\"blueprints\":[{\"blueprint\":{\"description\":\"Illustrative assignments. No owner feed assignments inferred.\",\"entities\":[{\"direction\":4,\"entity_number\":1,\"name\":\"assembling-machine-2\",\"position\":{\"x\":0,\"y\":0},\"tags\":{\"fixture\":\"SYNTHETIC; illustrative, not game observation\",\"opaque\":[\"preserved\",1]}},{\"direction\":4,\"entity_number\":2,\"name\":\"transport-belt\",\"position\":{\"x\":3,\"y\":0},\"tags\":{\"fixture\":\"SYNTHETIC; illustrative, not game observation\",\"opaque\":[\"preserved\",2]}}],\"item\":\"blueprint\",\"label\":\"SYNTHETIC blocked_export\",\"version\":562949958402048},\"index\":7}],\"item\":\"blueprint-book\"},\"index\":2}],\"item\":\"blueprint-book\"}}"
+    },
+    "blueprint_hash": "sha256:f9820300ee70865b0b36fd3f363abc8c4bdbf3d59711e97feac75d9d281017e2",
+    "capacity_groups": [
+      {
+        "capacity": {
+          "kind": "finite",
+          "value": 15
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": "lane_2",
+        "kind": "lane",
+        "unit": "items/s"
+      },
+      {
+        "capacity": {
+          "kind": "finite",
+          "value": 1
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": "machine_time",
+        "kind": "machine_time",
+        "unit": "seconds/s"
+      }
+    ],
+    "entities": [
+      {
+        "direction": 4,
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "footprint": {
+          "maximum": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "minimum": {
+            "x": -0.5,
+            "y": -0.5
+          }
+        },
+        "furnace_candidates": [],
+        "id": {
+          "book_path": [
+            2,
+            7
+          ],
+          "entity_number": 1
+        },
+        "mod": "base",
+        "orientation": null,
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "prototype": "assembling-machine-2",
+        "quality": "normal",
+        "raw": {
+          "canonical": "{\"direction\":4,\"entity_number\":1,\"name\":\"assembling-machine-2\",\"position\":{\"x\":0,\"y\":0},\"tags\":{\"fixture\":\"SYNTHETIC; illustrative, not game observation\",\"opaque\":[\"preserved\",1]}}"
+        },
+        "subsystem": "production",
+        "support": "supported"
+      },
+      {
+        "direction": 4,
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "footprint": {
+          "maximum": {
+            "x": 3.5,
+            "y": 0.5
+          },
+          "minimum": {
+            "x": 2.5,
+            "y": -0.5
+          }
+        },
+        "furnace_candidates": [],
+        "id": {
+          "book_path": [
+            2,
+            7
+          ],
+          "entity_number": 2
+        },
+        "mod": "base",
+        "orientation": null,
+        "position": {
+          "x": 3,
+          "y": 0
+        },
+        "prototype": "transport-belt",
+        "quality": "normal",
+        "raw": {
+          "canonical": "{\"direction\":4,\"entity_number\":2,\"name\":\"transport-belt\",\"position\":{\"x\":3,\"y\":0},\"tags\":{\"fixture\":\"SYNTHETIC; illustrative, not game observation\",\"opaque\":[\"preserved\",2]}}"
+        },
+        "subsystem": "transport",
+        "support": "supported"
+      }
+    ],
+    "evidence": [
+      {
+        "arc_path": [
+          "belt_2"
+        ],
+        "description": "SYNTHETIC hand-defined geometry and conservation example, not observed game behavior.",
+        "endpoint_ids": [],
+        "entity_ids": [
+          {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 1
+          }
+        ],
+        "id": "fixture_geometry",
+        "kind": "structural",
+        "sources": [
+          {
+            "pointer": "/blueprint_book/blueprints/0/blueprint_book/blueprints/0/blueprint/entities",
+            "source": "blueprint",
+            "uri": "synthetic:blocked_export"
+          },
+          {
+            "pointer": "/entities",
+            "source": "prototype",
+            "uri": "synthetic:blocked_export"
+          }
+        ]
+      }
+    ],
+    "graph_hash": "sha256:3bb7ebf433cdacbec10751e37e6c8994b746b059f6adcc94b8f29d6aebbed45c",
+    "inventories": [
+      {
+        "eligibility": {
+          "kind": "any_item",
+          "materials": []
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 1
+          },
+          "kind": "inventory",
+          "name": "ingredients"
+        },
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "storage_capacity": {
+          "kind": "finite",
+          "value": 100
+        }
+      }
+    ],
+    "lanes": [
+      {
+        "eligibility": {
+          "kind": "any_item",
+          "materials": []
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "lane",
+          "name": "left"
+        },
+        "incoming": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_in"
+        },
+        "outgoing": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_out"
+        },
+        "polyline": [
+          {
+            "x": 2.5,
+            "y": -0.2
+          },
+          {
+            "x": 3.5,
+            "y": -0.2
+          }
+        ],
+        "side": "left"
+      }
+    ],
+    "mechanics_profile": "base-2.0.76-normal-v1",
+    "ports": [
+      {
+        "boundary_candidate": true,
+        "direction": 4,
+        "eligibility": {
+          "kind": "any_item",
+          "materials": []
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 1
+          },
+          "kind": "port",
+          "name": "output"
+        },
+        "position": {
+          "x": 0.5,
+          "y": 0
+        },
+        "role": "outgoing"
+      },
+      {
+        "boundary_candidate": true,
+        "direction": 4,
+        "eligibility": {
+          "kind": "any_item",
+          "materials": []
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_in"
+        },
+        "position": {
+          "x": 2.5,
+          "y": -0.2
+        },
+        "role": "incoming"
+      },
+      {
+        "boundary_candidate": true,
+        "direction": 4,
+        "eligibility": {
+          "kind": "any_item",
+          "materials": []
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_out"
+        },
+        "position": {
+          "x": 3.5,
+          "y": -0.2
+        },
+        "role": "outgoing"
+      }
+    ],
+    "prototype_hash": "sha256:ceec76011e5a314ab83f32e9368a9c89b19f60eb98280e8eaecd643d5d607a1c",
+    "prototypes": {
+      "canonical": "{\"entities\":[\"assembling-machine-2\",\"transport-belt\"],\"fixture\":\"synthetic\",\"note\":\"Hand-defined geometry, activities and capacities; NOT a Factorio prototype extract.\",\"profile\":\"base-2.0.76-normal-v1\"}"
+    },
+    "provenance": "synthetic",
+    "schema_version": "1.1.1",
+    "selected_paths": [
+      [
+        2,
+        7
+      ]
+    ],
+    "topology_gaps": []
+  },
+  "hand_expectation": "Production is not net export: the isolated outlet has zero incoming material despite 10 crafts/s machine capacity.",
+  "provenance": "synthetic",
+  "request": {
+    "assignments": {
+      "blueprint_hash": "sha256:f9820300ee70865b0b36fd3f363abc8c4bdbf3d59711e97feac75d9d281017e2",
+      "controls": [],
+      "feeds": [
+        {
+          "budget_id": "iron",
+          "capacity": {
+            "kind": "unlimited",
+            "value": null
+          },
+          "endpoint": {
+            "entity": {
+              "book_path": [
+                2,
+                7
+              ],
+              "entity_number": 1
+            },
+            "kind": "inventory",
+            "name": "ingredients"
+          },
+          "id": "iron_feed"
+        }
+      ],
+      "furnaces": [],
+      "graph_hash": "sha256:3bb7ebf433cdacbec10751e37e6c8994b746b059f6adcc94b8f29d6aebbed45c",
+      "schema_version": "1.1.1"
+    },
+    "assumptions": {
+      "available_recipes": [
+        "synthetic-circuit"
+      ],
+      "beacons": "none",
+      "control_policy": "explicit",
+      "game_version": "2.0.76",
+      "irrelevant": [],
+      "mods": [
+        {
+          "alters_item_mechanics": false,
+          "name": "base",
+          "provides": [],
+          "version": "2.0.76"
+        }
+      ],
+      "modules": "none",
+      "power": "assumed_available",
+      "quality": "normal",
+      "research": [
+        {
+          "level": 0,
+          "name": "inserter-capacity-bonus"
+        }
+      ]
+    },
+    "blueprint_hash": "sha256:f9820300ee70865b0b36fd3f363abc8c4bdbf3d59711e97feac75d9d281017e2",
+    "budgets": [
+      {
+        "capacity": {
+          "kind": "finite",
+          "value": 10
+        },
+        "id": "iron",
+        "material": {
+          "kind": "item",
+          "name": "iron-plate",
+          "quality": "normal"
+        }
+      }
+    ],
+    "detail": {
+      "cursor": null,
+      "entity_ids": [],
+      "kind": "full",
+      "limit": 10000
+    },
+    "exports": [
+      {
+        "endpoint": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_out"
+        },
+        "id": "product",
+        "material": {
+          "kind": "item",
+          "name": "electronic-circuit",
+          "quality": "normal"
+        },
+        "rate": 1,
+        "requirement": "minimum",
+        "sink": {
+          "capacity": {
+            "kind": "unlimited",
+            "value": null
+          },
+          "kind": "external",
+          "service": "Illustrative continuous external removal; not inventory storage"
+        }
+      }
+    ],
+    "graph_hash": "sha256:3bb7ebf433cdacbec10751e37e6c8994b746b059f6adcc94b8f29d6aebbed45c",
+    "mechanics_profile": "base-2.0.76-normal-v1",
+    "objective": {
+      "export_id": "product",
+      "kind": "maximize_export"
+    },
+    "protected": {
+      "areas": [],
+      "endpoints": [
+        {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_out"
+        }
+      ],
+      "entities": [],
+      "preserve_boundaries": true,
+      "preserve_unknown": true,
+      "preserve_wiring": true
+    },
+    "prototype_hash": "sha256:ceec76011e5a314ab83f32e9368a9c89b19f60eb98280e8eaecd643d5d607a1c",
+    "request_hash": "sha256:52ff203e612097208b2592884b953b6976f73fc0878ef2392d577386e6942a85",
+    "schema_version": "1.1.1",
+    "surplus": []
+  },
+  "result": {
+    "analyzer_version": "synthetic-contract-fixture-1",
+    "assumptions": [
+      "SYNTHETIC; illustrative input and external removal assignments"
+    ],
+    "blueprint_hash": "sha256:f9820300ee70865b0b36fd3f363abc8c4bdbf3d59711e97feac75d9d281017e2",
+    "bounds": [
+      {
+        "assumptions": [
+          "Declared illustrative feeds, recipes, external removal and power"
+        ],
+        "certificate": "SYNTHETIC hand proof: explicit machine, budget or outlet ceiling; illustrative allocation attains the stated relaxed bound.",
+        "comparison_hash": "sha256:032835910cffb56619f664e5ff6e45290f9f287f2bc4f0f3d7dcb62ab7eaf0e4",
+        "constraint_hash": "sha256:cea5a44d537ffe35ee436a8028ae6cea5afae60601f60d02fe3ef14223142443",
+        "direction": "upper",
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "objective_export_id": "product",
+        "relaxations": [
+          "delivery_unconstrained",
+          "budgets_unlimited"
+        ],
+        "solver_state": "optimal",
+        "stage": "aggregate",
+        "unit": "items/s",
+        "value": {
+          "kind": "finite",
+          "value": 10
+        }
+      },
+      {
+        "assumptions": [
+          "Declared illustrative feeds, recipes, external removal and power"
+        ],
+        "certificate": "SYNTHETIC hand proof: explicit machine, budget or outlet ceiling; illustrative allocation attains the stated relaxed bound.",
+        "comparison_hash": "sha256:032835910cffb56619f664e5ff6e45290f9f287f2bc4f0f3d7dcb62ab7eaf0e4",
+        "constraint_hash": "sha256:0197d44dac64957ee4880ba64f155330570ef00bd4ee50db15acaa57be104b23",
+        "direction": "upper",
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "objective_export_id": "product",
+        "relaxations": [
+          "delivery_unconstrained"
+        ],
+        "solver_state": "optimal",
+        "stage": "budget",
+        "unit": "items/s",
+        "value": {
+          "kind": "finite",
+          "value": 10
+        }
+      },
+      {
+        "assumptions": [
+          "Declared illustrative feeds, recipes, external removal and power"
+        ],
+        "certificate": "SYNTHETIC hand proof: no arc reaches the demanded endpoint, so its net export cannot reach 1/s.",
+        "comparison_hash": "sha256:032835910cffb56619f664e5ff6e45290f9f287f2bc4f0f3d7dcb62ab7eaf0e4",
+        "constraint_hash": "sha256:92b7015faf8ad9f1f7e4f6552b2605523fecfc62cb28be6e9169b0d07df65c6f",
+        "direction": "upper",
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "objective_export_id": "product",
+        "relaxations": [],
+        "solver_state": "infeasible",
+        "stage": "routing",
+        "unit": "items/s",
+        "value": null
+      }
+    ],
+    "detail": {
+      "cursor": null,
+      "entity_ids": [],
+      "kind": "full",
+      "limit": 10000
+    },
+    "findings": [
+      {
+        "assumptions": [
+          "Synthetic fixture with explicitly illustrative assignments"
+        ],
+        "capacity_upper_bound": null,
+        "code": "blocked_export",
+        "endpoint_ids": [
+          {
+            "entity": {
+              "book_path": [
+                2,
+                7
+              ],
+              "entity_number": 2
+            },
+            "kind": "port",
+            "name": "left_out"
+          }
+        ],
+        "entity_ids": [
+          {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 1
+          },
+          {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          }
+        ],
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "evidence_kind": "structural",
+        "id": "finding:333c7737934b656bdf9f4206e10f2da67c2feb06de33fa7fdc739b429cb588cd",
+        "material": null,
+        "message": "The machine output has no connection to the explicitly declared export lane.",
+        "required_rate": null,
+        "severity": "warning"
+      }
+    ],
+    "graph_hash": "sha256:3bb7ebf433cdacbec10751e37e6c8994b746b059f6adcc94b8f29d6aebbed45c",
+    "interpreted_request": {
+      "assignments": {
+        "blueprint_hash": "sha256:f9820300ee70865b0b36fd3f363abc8c4bdbf3d59711e97feac75d9d281017e2",
+        "controls": [],
+        "feeds": [
+          {
+            "budget_id": "iron",
+            "capacity": {
+              "kind": "unlimited",
+              "value": null
+            },
+            "endpoint": {
+              "entity": {
+                "book_path": [
+                  2,
+                  7
+                ],
+                "entity_number": 1
+              },
+              "kind": "inventory",
+              "name": "ingredients"
+            },
+            "id": "iron_feed"
+          }
+        ],
+        "furnaces": [],
+        "graph_hash": "sha256:3bb7ebf433cdacbec10751e37e6c8994b746b059f6adcc94b8f29d6aebbed45c",
+        "schema_version": "1.1.1"
+      },
+      "assumptions": {
+        "available_recipes": [
+          "synthetic-circuit"
+        ],
+        "beacons": "none",
+        "control_policy": "explicit",
+        "game_version": "2.0.76",
+        "irrelevant": [],
+        "mods": [
+          {
+            "alters_item_mechanics": false,
+            "name": "base",
+            "provides": [],
+            "version": "2.0.76"
+          }
+        ],
+        "modules": "none",
+        "power": "assumed_available",
+        "quality": "normal",
+        "research": [
+          {
+            "level": 0,
+            "name": "inserter-capacity-bonus"
+          }
+        ]
+      },
+      "blueprint_hash": "sha256:f9820300ee70865b0b36fd3f363abc8c4bdbf3d59711e97feac75d9d281017e2",
+      "budgets": [
+        {
+          "capacity": {
+            "kind": "finite",
+            "value": 10
+          },
+          "id": "iron",
+          "material": {
+            "kind": "item",
+            "name": "iron-plate",
+            "quality": "normal"
+          }
+        }
+      ],
+      "detail": {
+        "cursor": null,
+        "entity_ids": [],
+        "kind": "full",
+        "limit": 10000
+      },
+      "exports": [
+        {
+          "endpoint": {
+            "entity": {
+              "book_path": [
+                2,
+                7
+              ],
+              "entity_number": 2
+            },
+            "kind": "port",
+            "name": "left_out"
+          },
+          "id": "product",
+          "material": {
+            "kind": "item",
+            "name": "electronic-circuit",
+            "quality": "normal"
+          },
+          "rate": 1,
+          "requirement": "minimum",
+          "sink": {
+            "capacity": {
+              "kind": "unlimited",
+              "value": null
+            },
+            "kind": "external",
+            "service": "Illustrative continuous external removal; not inventory storage"
+          }
+        }
+      ],
+      "graph_hash": "sha256:3bb7ebf433cdacbec10751e37e6c8994b746b059f6adcc94b8f29d6aebbed45c",
+      "mechanics_profile": "base-2.0.76-normal-v1",
+      "objective": {
+        "export_id": "product",
+        "kind": "maximize_export"
+      },
+      "protected": {
+        "areas": [],
+        "endpoints": [
+          {
+            "entity": {
+              "book_path": [
+                2,
+                7
+              ],
+              "entity_number": 2
+            },
+            "kind": "port",
+            "name": "left_out"
+          }
+        ],
+        "entities": [],
+        "preserve_boundaries": true,
+        "preserve_unknown": true,
+        "preserve_wiring": true
+      },
+      "prototype_hash": "sha256:ceec76011e5a314ab83f32e9368a9c89b19f60eb98280e8eaecd643d5d607a1c",
+      "request_hash": "sha256:52ff203e612097208b2592884b953b6976f73fc0878ef2392d577386e6942a85",
+      "schema_version": "1.1.1",
+      "surplus": []
+    },
+    "limitations": [
+      "Not a game observation or computed routing solution; no achievable-throughput claim"
+    ],
+    "prototype_hash": "sha256:ceec76011e5a314ab83f32e9368a9c89b19f60eb98280e8eaecd643d5d607a1c",
+    "request_hash": "sha256:52ff203e612097208b2592884b953b6976f73fc0878ef2392d577386e6942a85",
+    "result_hash": "sha256:205ed6d5beb42d309636811048c5a3f4ca466e524e03b6bf42d5e100eaaacde7",
+    "schema_version": "1.1.1",
+    "status": "insufficient",
+    "witness": null
+  }
+}

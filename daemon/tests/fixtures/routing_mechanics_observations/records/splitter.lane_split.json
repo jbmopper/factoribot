@@ -1,0 +1,35 @@
+{
+  "blocking_gate": "The 2.0.76 splitter prototype documentation defines no tile dimensions and no lane behaviour; the footprint above is derived from the collision box rather than observed. No controlled game capture has been run for this checkout: task 02 had no Factorio installation or disposable save available, so nothing was measured.",
+  "control_state": "planned: no priorities set, no filter, no circuit wires",
+  "environment": {
+    "declared_mods": null,
+    "game_version": null,
+    "save": null
+  },
+  "evidence_status": "pending",
+  "expected_behavior": "A splitter occupies a 2x1 tile footprint with two input tiles and two output tiles, each carrying two lanes, and its total throughput is bounded by the belt tier. Which physical resource the four paths share, and how an unbalanced input is distributed, is not established here.",
+  "measurement": null,
+  "measurement_interval_s": null,
+  "notes": [
+    "The contract requires the alternative paths through one splitter to share a single capacity group; this record is the evidence that group needs before a routing bound may use it."
+  ],
+  "observation_method": "Planned (CAPTURE.md 4.8): saturate one input side of a fast splitter and count items removed from each output side per interval; repeat with both inputs saturated.",
+  "profile": "base-2.0.76-normal-v1",
+  "record_id": "splitter.lane_split",
+  "references": [
+    "doc:lua-api-2.0.76-splitter-prototype",
+    "source:data-raw-dump"
+  ],
+  "research_state": null,
+  "schema_version": "factoribot-mechanics-observation-1",
+  "setup_blueprint": null,
+  "supplied_items": [
+    {
+      "count": null,
+      "item": "iron-plate",
+      "rate_per_s": null,
+      "source": "planned: infinity chest set to provide iron plates without limit"
+    }
+  ],
+  "title": "Per-lane input/output tiles and shared throughput"
+}

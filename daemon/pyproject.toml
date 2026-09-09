@@ -9,6 +9,8 @@ dependencies = []
 # The solver + agent loop need zero external deps; each provider is opt-in.
 openai = ["openai>=2"]
 dev = ["pytest"]
+planning = ["scipy>=1.11,<2", "jsonschema>=4.20,<5"]
+mcp = ["mcp>=1.12,<2", "scipy>=1.11,<2", "jsonschema>=4.20,<5"]
 
 [project.scripts]
 factoribot = "factoribot.cli:main"
@@ -20,5 +22,5 @@ testpaths = ["tests"]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = ["factoribot"]
+[tool.setuptools.packages.find]
+include = ["factoribot*"]

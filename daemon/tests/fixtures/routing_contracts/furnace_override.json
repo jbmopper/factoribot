@@ -1,0 +1,1062 @@
+{
+  "assignments": {
+    "blueprint_hash": "sha256:d1b4f2031d8785f3d6e2479b8653e86a063e015fbf5ddb739d0cd773eac5ee6c",
+    "controls": [],
+    "feeds": [
+      {
+        "budget_id": "stone",
+        "capacity": {
+          "kind": "unlimited",
+          "value": null
+        },
+        "endpoint": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 1
+          },
+          "kind": "inventory",
+          "name": "ingredients"
+        },
+        "id": "stone_feed"
+      }
+    ],
+    "furnaces": [
+      {
+        "entity": {
+          "book_path": [
+            2,
+            7
+          ],
+          "entity_number": 1
+        },
+        "recipe": "stone-brick"
+      }
+    ],
+    "graph_hash": "sha256:a231fb10ce36af325213e2375447e2012272a1dc1e3d7fc968242775228bf981",
+    "schema_version": "1.1.1"
+  },
+  "description": "SYNTHETIC schema/interaction fixture; all assignments illustrative.",
+  "graph": {
+    "activities": [
+      {
+        "craft_capacity": {
+          "kind": "finite",
+          "value": 10
+        },
+        "entity": {
+          "book_path": [
+            2,
+            7
+          ],
+          "entity_number": 1
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": "iron",
+        "inputs": [
+          {
+            "amount_per_craft": 1,
+            "endpoint": {
+              "entity": {
+                "book_path": [
+                  2,
+                  7
+                ],
+                "entity_number": 1
+              },
+              "kind": "inventory",
+              "name": "ingredients"
+            },
+            "material": {
+              "kind": "item",
+              "name": "iron-ore",
+              "quality": "normal"
+            }
+          }
+        ],
+        "outputs": [
+          {
+            "amount_per_craft": 1,
+            "endpoint": {
+              "entity": {
+                "book_path": [
+                  2,
+                  7
+                ],
+                "entity_number": 1
+              },
+              "kind": "port",
+              "name": "output"
+            },
+            "material": {
+              "kind": "item",
+              "name": "iron-plate",
+              "quality": "normal"
+            }
+          }
+        ],
+        "recipe": "iron-plate",
+        "resources": [
+          {
+            "coefficient": 0.1,
+            "group_id": "furnace_time"
+          }
+        ]
+      },
+      {
+        "craft_capacity": {
+          "kind": "finite",
+          "value": 10
+        },
+        "entity": {
+          "book_path": [
+            2,
+            7
+          ],
+          "entity_number": 1
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": "brick",
+        "inputs": [
+          {
+            "amount_per_craft": 2,
+            "endpoint": {
+              "entity": {
+                "book_path": [
+                  2,
+                  7
+                ],
+                "entity_number": 1
+              },
+              "kind": "inventory",
+              "name": "ingredients"
+            },
+            "material": {
+              "kind": "item",
+              "name": "stone",
+              "quality": "normal"
+            }
+          }
+        ],
+        "outputs": [
+          {
+            "amount_per_craft": 1,
+            "endpoint": {
+              "entity": {
+                "book_path": [
+                  2,
+                  7
+                ],
+                "entity_number": 1
+              },
+              "kind": "port",
+              "name": "output"
+            },
+            "material": {
+              "kind": "item",
+              "name": "stone-brick",
+              "quality": "normal"
+            }
+          }
+        ],
+        "recipe": "stone-brick",
+        "resources": [
+          {
+            "coefficient": 0.1,
+            "group_id": "furnace_time"
+          }
+        ]
+      }
+    ],
+    "arcs": [
+      {
+        "conditions": [],
+        "eligibility": {
+          "kind": "any_item",
+          "materials": []
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": "belt_2",
+        "resources": [
+          {
+            "coefficient": 1,
+            "group_id": "lane_2"
+          }
+        ],
+        "semantics": "exact",
+        "source": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_in"
+        },
+        "target": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_out"
+        }
+      },
+      {
+        "conditions": [],
+        "eligibility": {
+          "kind": "any_item",
+          "materials": []
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": "furnace_to_belt",
+        "resources": [
+          {
+            "coefficient": 1,
+            "group_id": "transfer"
+          }
+        ],
+        "semantics": "exact",
+        "source": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 1
+          },
+          "kind": "port",
+          "name": "output"
+        },
+        "target": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_in"
+        }
+      }
+    ],
+    "blueprint": {
+      "canonical": "{\"blueprint_book\":{\"active_index\":2,\"blueprints\":[{\"blueprint_book\":{\"active_index\":7,\"blueprints\":[{\"blueprint\":{\"description\":\"Illustrative assignments. No owner feed assignments inferred.\",\"entities\":[{\"direction\":4,\"entity_number\":1,\"name\":\"electric-furnace\",\"position\":{\"x\":0,\"y\":0},\"tags\":{\"fixture\":\"SYNTHETIC; illustrative, not game observation\",\"opaque\":[\"preserved\",1]}},{\"direction\":4,\"entity_number\":2,\"name\":\"transport-belt\",\"position\":{\"x\":1,\"y\":0},\"tags\":{\"fixture\":\"SYNTHETIC; illustrative, not game observation\",\"opaque\":[\"preserved\",2]}}],\"item\":\"blueprint\",\"label\":\"SYNTHETIC furnace_override\",\"version\":562949958402048},\"index\":7}],\"item\":\"blueprint-book\"},\"index\":2}],\"item\":\"blueprint-book\"}}"
+    },
+    "blueprint_hash": "sha256:d1b4f2031d8785f3d6e2479b8653e86a063e015fbf5ddb739d0cd773eac5ee6c",
+    "capacity_groups": [
+      {
+        "capacity": {
+          "kind": "finite",
+          "value": 15
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": "lane_2",
+        "kind": "lane",
+        "unit": "items/s"
+      },
+      {
+        "capacity": {
+          "kind": "unlimited",
+          "value": null
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": "transfer",
+        "kind": "boundary",
+        "unit": "items/s"
+      },
+      {
+        "capacity": {
+          "kind": "finite",
+          "value": 1
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": "furnace_time",
+        "kind": "machine_time",
+        "unit": "seconds/s"
+      }
+    ],
+    "entities": [
+      {
+        "direction": 4,
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "footprint": {
+          "maximum": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "minimum": {
+            "x": -0.5,
+            "y": -0.5
+          }
+        },
+        "furnace_candidates": [
+          "iron-plate",
+          "stone-brick"
+        ],
+        "id": {
+          "book_path": [
+            2,
+            7
+          ],
+          "entity_number": 1
+        },
+        "mod": "base",
+        "orientation": null,
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "prototype": "electric-furnace",
+        "quality": "normal",
+        "raw": {
+          "canonical": "{\"direction\":4,\"entity_number\":1,\"name\":\"electric-furnace\",\"position\":{\"x\":0,\"y\":0},\"tags\":{\"fixture\":\"SYNTHETIC; illustrative, not game observation\",\"opaque\":[\"preserved\",1]}}"
+        },
+        "subsystem": "production",
+        "support": "supported"
+      },
+      {
+        "direction": 4,
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "footprint": {
+          "maximum": {
+            "x": 1.5,
+            "y": 0.5
+          },
+          "minimum": {
+            "x": 0.5,
+            "y": -0.5
+          }
+        },
+        "furnace_candidates": [],
+        "id": {
+          "book_path": [
+            2,
+            7
+          ],
+          "entity_number": 2
+        },
+        "mod": "base",
+        "orientation": null,
+        "position": {
+          "x": 1,
+          "y": 0
+        },
+        "prototype": "transport-belt",
+        "quality": "normal",
+        "raw": {
+          "canonical": "{\"direction\":4,\"entity_number\":2,\"name\":\"transport-belt\",\"position\":{\"x\":1,\"y\":0},\"tags\":{\"fixture\":\"SYNTHETIC; illustrative, not game observation\",\"opaque\":[\"preserved\",2]}}"
+        },
+        "subsystem": "transport",
+        "support": "supported"
+      }
+    ],
+    "evidence": [
+      {
+        "arc_path": [
+          "furnace_to_belt",
+          "belt_2"
+        ],
+        "description": "SYNTHETIC hand-defined geometry and conservation example, not observed game behavior.",
+        "endpoint_ids": [],
+        "entity_ids": [
+          {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 1
+          }
+        ],
+        "id": "fixture_geometry",
+        "kind": "structural",
+        "sources": [
+          {
+            "pointer": "/blueprint_book/blueprints/0/blueprint_book/blueprints/0/blueprint/entities",
+            "source": "blueprint",
+            "uri": "synthetic:furnace_override"
+          },
+          {
+            "pointer": "/entities",
+            "source": "prototype",
+            "uri": "synthetic:furnace_override"
+          }
+        ]
+      }
+    ],
+    "graph_hash": "sha256:a231fb10ce36af325213e2375447e2012272a1dc1e3d7fc968242775228bf981",
+    "inventories": [
+      {
+        "eligibility": {
+          "kind": "any_item",
+          "materials": []
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 1
+          },
+          "kind": "inventory",
+          "name": "ingredients"
+        },
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "storage_capacity": {
+          "kind": "finite",
+          "value": 100
+        }
+      }
+    ],
+    "lanes": [
+      {
+        "eligibility": {
+          "kind": "any_item",
+          "materials": []
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "lane",
+          "name": "left"
+        },
+        "incoming": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_in"
+        },
+        "outgoing": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_out"
+        },
+        "polyline": [
+          {
+            "x": 0.5,
+            "y": -0.2
+          },
+          {
+            "x": 1.5,
+            "y": -0.2
+          }
+        ],
+        "side": "left"
+      }
+    ],
+    "mechanics_profile": "base-2.0.76-normal-v1",
+    "ports": [
+      {
+        "boundary_candidate": true,
+        "direction": 4,
+        "eligibility": {
+          "kind": "any_item",
+          "materials": []
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 1
+          },
+          "kind": "port",
+          "name": "output"
+        },
+        "position": {
+          "x": 0.5,
+          "y": 0
+        },
+        "role": "outgoing"
+      },
+      {
+        "boundary_candidate": true,
+        "direction": 4,
+        "eligibility": {
+          "kind": "any_item",
+          "materials": []
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_in"
+        },
+        "position": {
+          "x": 0.5,
+          "y": -0.2
+        },
+        "role": "incoming"
+      },
+      {
+        "boundary_candidate": true,
+        "direction": 4,
+        "eligibility": {
+          "kind": "any_item",
+          "materials": []
+        },
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "id": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_out"
+        },
+        "position": {
+          "x": 1.5,
+          "y": -0.2
+        },
+        "role": "outgoing"
+      }
+    ],
+    "prototype_hash": "sha256:de94da985e17afb6471b0371bb50662ff9ad99d48e152d77b097ee4750c11285",
+    "prototypes": {
+      "canonical": "{\"entities\":[\"electric-furnace\",\"transport-belt\"],\"fixture\":\"synthetic\",\"note\":\"Hand-defined geometry, activities and capacities; NOT a Factorio prototype extract.\",\"profile\":\"base-2.0.76-normal-v1\"}"
+    },
+    "provenance": "synthetic",
+    "schema_version": "1.1.1",
+    "selected_paths": [
+      [
+        2,
+        7
+      ]
+    ],
+    "topology_gaps": []
+  },
+  "hand_expectation": "Explicit stone-brick override: 10 stone/s / 2 stone per craft = 5 bricks/s. Fixture craft speed is illustrative, not the real furnace speed.",
+  "provenance": "synthetic",
+  "request": {
+    "assignments": {
+      "blueprint_hash": "sha256:d1b4f2031d8785f3d6e2479b8653e86a063e015fbf5ddb739d0cd773eac5ee6c",
+      "controls": [],
+      "feeds": [
+        {
+          "budget_id": "stone",
+          "capacity": {
+            "kind": "unlimited",
+            "value": null
+          },
+          "endpoint": {
+            "entity": {
+              "book_path": [
+                2,
+                7
+              ],
+              "entity_number": 1
+            },
+            "kind": "inventory",
+            "name": "ingredients"
+          },
+          "id": "stone_feed"
+        }
+      ],
+      "furnaces": [
+        {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 1
+          },
+          "recipe": "stone-brick"
+        }
+      ],
+      "graph_hash": "sha256:a231fb10ce36af325213e2375447e2012272a1dc1e3d7fc968242775228bf981",
+      "schema_version": "1.1.1"
+    },
+    "assumptions": {
+      "available_recipes": [
+        "iron-plate",
+        "stone-brick"
+      ],
+      "beacons": "none",
+      "control_policy": "explicit",
+      "game_version": "2.0.76",
+      "irrelevant": [],
+      "mods": [
+        {
+          "alters_item_mechanics": false,
+          "name": "base",
+          "provides": [],
+          "version": "2.0.76"
+        }
+      ],
+      "modules": "none",
+      "power": "assumed_available",
+      "quality": "normal",
+      "research": [
+        {
+          "level": 0,
+          "name": "inserter-capacity-bonus"
+        }
+      ]
+    },
+    "blueprint_hash": "sha256:d1b4f2031d8785f3d6e2479b8653e86a063e015fbf5ddb739d0cd773eac5ee6c",
+    "budgets": [
+      {
+        "capacity": {
+          "kind": "finite",
+          "value": 10
+        },
+        "id": "stone",
+        "material": {
+          "kind": "item",
+          "name": "stone",
+          "quality": "normal"
+        }
+      }
+    ],
+    "detail": {
+      "cursor": null,
+      "entity_ids": [],
+      "kind": "full",
+      "limit": 10000
+    },
+    "exports": [
+      {
+        "endpoint": {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_out"
+        },
+        "id": "product",
+        "material": {
+          "kind": "item",
+          "name": "stone-brick",
+          "quality": "normal"
+        },
+        "rate": 0,
+        "requirement": "minimum",
+        "sink": {
+          "capacity": {
+            "kind": "unlimited",
+            "value": null
+          },
+          "kind": "external",
+          "service": "Illustrative continuous external removal; not inventory storage"
+        }
+      }
+    ],
+    "graph_hash": "sha256:a231fb10ce36af325213e2375447e2012272a1dc1e3d7fc968242775228bf981",
+    "mechanics_profile": "base-2.0.76-normal-v1",
+    "objective": {
+      "export_id": "product",
+      "kind": "maximize_export"
+    },
+    "protected": {
+      "areas": [],
+      "endpoints": [
+        {
+          "entity": {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 2
+          },
+          "kind": "port",
+          "name": "left_out"
+        }
+      ],
+      "entities": [],
+      "preserve_boundaries": true,
+      "preserve_unknown": true,
+      "preserve_wiring": true
+    },
+    "prototype_hash": "sha256:de94da985e17afb6471b0371bb50662ff9ad99d48e152d77b097ee4750c11285",
+    "request_hash": "sha256:939e2f178324f738f39dd261b653bb989c72837a8fabcfe120a360cc573a46e3",
+    "schema_version": "1.1.1",
+    "surplus": []
+  },
+  "result": {
+    "analyzer_version": "synthetic-contract-fixture-1",
+    "assumptions": [
+      "SYNTHETIC; illustrative input and external removal assignments"
+    ],
+    "blueprint_hash": "sha256:d1b4f2031d8785f3d6e2479b8653e86a063e015fbf5ddb739d0cd773eac5ee6c",
+    "bounds": [
+      {
+        "assumptions": [
+          "Declared illustrative feeds, recipes, external removal and power"
+        ],
+        "certificate": "SYNTHETIC hand proof: explicit machine, budget or outlet ceiling; illustrative allocation attains the stated relaxed bound.",
+        "comparison_hash": "sha256:3d287a0b8c727afa08e39d746943a9fdf6065da544a7cd7067107d7be1323504",
+        "constraint_hash": "sha256:5a3ea4b4dbb3929f6ff03094dfd3aa7fedba35bed59a4775a882e5d2c4953541",
+        "direction": "upper",
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "objective_export_id": "product",
+        "relaxations": [
+          "delivery_unconstrained",
+          "budgets_unlimited"
+        ],
+        "solver_state": "optimal",
+        "stage": "aggregate",
+        "unit": "items/s",
+        "value": {
+          "kind": "finite",
+          "value": 10
+        }
+      },
+      {
+        "assumptions": [
+          "Declared illustrative feeds, recipes, external removal and power"
+        ],
+        "certificate": "SYNTHETIC hand proof: explicit machine, budget or outlet ceiling; illustrative allocation attains the stated relaxed bound.",
+        "comparison_hash": "sha256:3d287a0b8c727afa08e39d746943a9fdf6065da544a7cd7067107d7be1323504",
+        "constraint_hash": "sha256:ff43f8c0340aeff6373c776b1c1f016ef35a546600172dbb1bcf1a9c5c3c22b6",
+        "direction": "upper",
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "objective_export_id": "product",
+        "relaxations": [
+          "delivery_unconstrained"
+        ],
+        "solver_state": "optimal",
+        "stage": "budget",
+        "unit": "items/s",
+        "value": {
+          "kind": "finite",
+          "value": 5
+        }
+      },
+      {
+        "assumptions": [
+          "Declared illustrative feeds, recipes, external removal and power"
+        ],
+        "certificate": "SYNTHETIC hand proof: explicit machine, budget or outlet ceiling; illustrative allocation attains the stated relaxed bound.",
+        "comparison_hash": "sha256:3d287a0b8c727afa08e39d746943a9fdf6065da544a7cd7067107d7be1323504",
+        "constraint_hash": "sha256:8d7a811020d350384013c2c28cb431e1b5c386821fc241ca21fe9ec8a8f61ce8",
+        "direction": "upper",
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "objective_export_id": "product",
+        "relaxations": [],
+        "solver_state": "optimal",
+        "stage": "routing",
+        "unit": "items/s",
+        "value": {
+          "kind": "finite",
+          "value": 5
+        }
+      }
+    ],
+    "detail": {
+      "cursor": null,
+      "entity_ids": [],
+      "kind": "full",
+      "limit": 10000
+    },
+    "findings": [
+      {
+        "assumptions": [
+          "Synthetic fixture with explicitly illustrative assignments"
+        ],
+        "capacity_upper_bound": null,
+        "code": "furnace_override",
+        "endpoint_ids": [],
+        "entity_ids": [
+          {
+            "book_path": [
+              2,
+              7
+            ],
+            "entity_number": 1
+          }
+        ],
+        "evidence_ids": [
+          "fixture_geometry"
+        ],
+        "evidence_kind": "conditional",
+        "id": "finding:65ea7d0a6d281f79daa482a8732c2208474770343a8b7a83e59a0daa1109e879",
+        "material": null,
+        "message": "Illustrative explicit stone-brick assignment resolves the candidate ambiguity; it is not inferred from the owner.",
+        "required_rate": null,
+        "severity": "warning"
+      }
+    ],
+    "graph_hash": "sha256:a231fb10ce36af325213e2375447e2012272a1dc1e3d7fc968242775228bf981",
+    "interpreted_request": {
+      "assignments": {
+        "blueprint_hash": "sha256:d1b4f2031d8785f3d6e2479b8653e86a063e015fbf5ddb739d0cd773eac5ee6c",
+        "controls": [],
+        "feeds": [
+          {
+            "budget_id": "stone",
+            "capacity": {
+              "kind": "unlimited",
+              "value": null
+            },
+            "endpoint": {
+              "entity": {
+                "book_path": [
+                  2,
+                  7
+                ],
+                "entity_number": 1
+              },
+              "kind": "inventory",
+              "name": "ingredients"
+            },
+            "id": "stone_feed"
+          }
+        ],
+        "furnaces": [
+          {
+            "entity": {
+              "book_path": [
+                2,
+                7
+              ],
+              "entity_number": 1
+            },
+            "recipe": "stone-brick"
+          }
+        ],
+        "graph_hash": "sha256:a231fb10ce36af325213e2375447e2012272a1dc1e3d7fc968242775228bf981",
+        "schema_version": "1.1.1"
+      },
+      "assumptions": {
+        "available_recipes": [
+          "iron-plate",
+          "stone-brick"
+        ],
+        "beacons": "none",
+        "control_policy": "explicit",
+        "game_version": "2.0.76",
+        "irrelevant": [],
+        "mods": [
+          {
+            "alters_item_mechanics": false,
+            "name": "base",
+            "provides": [],
+            "version": "2.0.76"
+          }
+        ],
+        "modules": "none",
+        "power": "assumed_available",
+        "quality": "normal",
+        "research": [
+          {
+            "level": 0,
+            "name": "inserter-capacity-bonus"
+          }
+        ]
+      },
+      "blueprint_hash": "sha256:d1b4f2031d8785f3d6e2479b8653e86a063e015fbf5ddb739d0cd773eac5ee6c",
+      "budgets": [
+        {
+          "capacity": {
+            "kind": "finite",
+            "value": 10
+          },
+          "id": "stone",
+          "material": {
+            "kind": "item",
+            "name": "stone",
+            "quality": "normal"
+          }
+        }
+      ],
+      "detail": {
+        "cursor": null,
+        "entity_ids": [],
+        "kind": "full",
+        "limit": 10000
+      },
+      "exports": [
+        {
+          "endpoint": {
+            "entity": {
+              "book_path": [
+                2,
+                7
+              ],
+              "entity_number": 2
+            },
+            "kind": "port",
+            "name": "left_out"
+          },
+          "id": "product",
+          "material": {
+            "kind": "item",
+            "name": "stone-brick",
+            "quality": "normal"
+          },
+          "rate": 0,
+          "requirement": "minimum",
+          "sink": {
+            "capacity": {
+              "kind": "unlimited",
+              "value": null
+            },
+            "kind": "external",
+            "service": "Illustrative continuous external removal; not inventory storage"
+          }
+        }
+      ],
+      "graph_hash": "sha256:a231fb10ce36af325213e2375447e2012272a1dc1e3d7fc968242775228bf981",
+      "mechanics_profile": "base-2.0.76-normal-v1",
+      "objective": {
+        "export_id": "product",
+        "kind": "maximize_export"
+      },
+      "protected": {
+        "areas": [],
+        "endpoints": [
+          {
+            "entity": {
+              "book_path": [
+                2,
+                7
+              ],
+              "entity_number": 2
+            },
+            "kind": "port",
+            "name": "left_out"
+          }
+        ],
+        "entities": [],
+        "preserve_boundaries": true,
+        "preserve_unknown": true,
+        "preserve_wiring": true
+      },
+      "prototype_hash": "sha256:de94da985e17afb6471b0371bb50662ff9ad99d48e152d77b097ee4750c11285",
+      "request_hash": "sha256:939e2f178324f738f39dd261b653bb989c72837a8fabcfe120a360cc573a46e3",
+      "schema_version": "1.1.1",
+      "surplus": []
+    },
+    "limitations": [
+      "Not a game observation or computed routing solution; no achievable-throughput claim"
+    ],
+    "prototype_hash": "sha256:de94da985e17afb6471b0371bb50662ff9ad99d48e152d77b097ee4750c11285",
+    "request_hash": "sha256:939e2f178324f738f39dd261b653bb989c72837a8fabcfe120a360cc573a46e3",
+    "result_hash": "sha256:db7214b93b570ca44d7f0f622d55406b3c4260fe2ab8004266c31ea5ae981992",
+    "schema_version": "1.1.1",
+    "status": "feasible_relaxed",
+    "witness": {
+      "activities": [
+        {
+          "activity_id": "brick",
+          "crafts_per_s": 5
+        }
+      ],
+      "exports": [
+        {
+          "id": "product",
+          "rate": 5
+        }
+      ],
+      "flows": [
+        {
+          "arc_id": "furnace_to_belt",
+          "material": {
+            "kind": "item",
+            "name": "stone-brick",
+            "quality": "normal"
+          },
+          "rate": 5
+        },
+        {
+          "arc_id": "belt_2",
+          "material": {
+            "kind": "item",
+            "name": "stone-brick",
+            "quality": "normal"
+          },
+          "rate": 5
+        }
+      ],
+      "imports": [
+        {
+          "id": "stone_feed",
+          "rate": 10
+        }
+      ],
+      "surplus": [],
+      "tolerance": 1e-08,
+      "validation": "synthetic_hand_checked"
+    }
+  }
+}

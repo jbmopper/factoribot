@@ -1,0 +1,37 @@
+{
+  "blocking_gate": null,
+  "control_state": "planned: no modules, no beacons, normal quality, powered",
+  "environment": {
+    "declared_mods": null,
+    "game_version": null,
+    "save": null
+  },
+  "evidence_status": "documented-only",
+  "expected_behavior": "An electric furnace crafts smelting recipes at crafting_speed 2.0 divided by energy_required, with source and result inventory size 1. A furnace has no recipe field in a blueprint, so its recipe follows from what is inserted and is a candidate set until assigned.",
+  "measurement": null,
+  "measurement_interval_s": null,
+  "notes": [
+    "The pilot's 76 electric furnaces carry no recipe field, which is exactly the unresolved-furnace case the contract forces to a partial result.",
+    "Task 10 owns furnace inference; this record fixes what the prototype does and does not determine.",
+    "No controlled game capture has been run for this checkout: task 02 had no Factorio installation or disposable save available, so nothing was measured."
+  ],
+  "observation_method": "Planned (CAPTURE.md 4.13): feed one electric furnace a single ore type and count plates removed per interval; repeat per smelting recipe.",
+  "profile": "base-2.0.76-normal-v1",
+  "record_id": "machine.activity.electric_furnace",
+  "references": [
+    "source:data-raw-dump",
+    "repo:blueprint-routing-contract"
+  ],
+  "research_state": null,
+  "schema_version": "factoribot-mechanics-observation-1",
+  "setup_blueprint": null,
+  "supplied_items": [
+    {
+      "count": null,
+      "item": "iron-ore",
+      "rate_per_s": null,
+      "source": "planned: infinity chest feeding one electric furnace"
+    }
+  ],
+  "title": "Electric furnace craft rate and recipe set"
+}

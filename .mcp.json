@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "factoribot": {
+      "type": "stdio",
+      "command": ".venv/bin/python",
+      "args": [
+        "-m",
+        "factoribot.cli",
+        "--data",
+        "data/data-raw-dump.json",
+        "mcp"
+      ],
+      "env": {}
+    }
+  }
+}

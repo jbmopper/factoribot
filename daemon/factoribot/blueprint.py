@@ -192,3 +192,333 @@ def summarize_blueprint(bp: dict, db: Database) -> BlueprintSummary:
         other=dict(other),
         total_entities=len(ents),
     )
+
+
+# ---------------------------------------------------------------------------
+# Bounded decode/encode and explicit book selection (routing task 03).
+#
+# Everything below is additive. The legacy `decode_blueprint_string` /
+# `iter_blueprints` pair keeps its exact behaviour: it is the aggregate tool's
+# entry point and flattens books, which loses the path an entity was found at.
+# The routing model needs the opposite: the *whole* decoded document as the
+# preservation boundary, an explicit selection path, and hard limits enforced
+# while decompressing rather than after an unbounded allocation.
+# ---------------------------------------------------------------------------
+
+#: Longest accepted encoded blueprint string. Cheap pre-filter before base64.
+MAX_ENCODED_CHARS = 16 * 1024 * 1024
+#: Contract's provisional decoded-byte ceiling (docs/blueprint-routing-contract.md).
+MAX_DECOMPRESSED_BYTES = 32 * 1024 * 1024
+#: Deepest JSON container nesting accepted in a decoded document.
+MAX_JSON_DEPTH = 64
+#: Contract's provisional normalized-entity ceiling, counted per leaf blueprint.
+MAX_ENTITIES = 10_000
+
+_DECOMPRESS_CHUNK = 256 * 1024
+
+
+class BlueprintDecodeError(BlueprintError):
+    """A structured decode/selection failure.
+
+    Subclasses `BlueprintError` so existing callers keep catching one type;
+    `code` names the machine-readable reason and `detail` carries the numbers.
+    """
+
+    def __init__(self, code: str, message: str, **detail):
+        super().__init__(message)
+        self.code = code
+        self.detail = detail
+
+
+@dataclass(frozen=True)
+class DecodeLimits:
+    """Resource ceilings applied while decoding one blueprint document."""
+
+    max_encoded_chars: int = MAX_ENCODED_CHARS
+    max_decompressed_bytes: int = MAX_DECOMPRESSED_BYTES
+    max_depth: int = MAX_JSON_DEPTH
+    max_entities: int = MAX_ENTITIES
+
+
+DEFAULT_LIMITS = DecodeLimits()
+
+
+def _inflate(payload: bytes, limit: int) -> bytes:
+    """Inflate `payload`, refusing to allocate more than `limit` bytes.
+
+    The limit is enforced *during* decompression: `decompressobj.decompress`
+    is called with `max_length`, so a zip bomb stops at the ceiling instead of
+    being fully expanded and measured afterwards.
+    """
+    obj = zlib.decompressobj()
+    out = bytearray()
+    pending = payload
+    while True:
+        want = limit - len(out) + 1  # +1 so overflow is observable
+        chunk = obj.decompress(pending, min(want, _DECOMPRESS_CHUNK))
+        out += chunk
+        if len(out) > limit:
+            raise BlueprintDecodeError(
+                "decompressed_limit",
+                f"decompressed blueprint exceeds {limit} bytes",
+                limit=limit,
+            )
+        pending = obj.unconsumed_tail
+        if obj.eof:
+            break
+        if not pending and not chunk:
+            raise BlueprintDecodeError(
+                "truncated_stream", "compressed blueprint data ended early"
+            )
+    return bytes(out)
+
+
+def _check_depth(value, limit: int) -> None:
+    """Reject documents nested deeper than `limit` containers."""
+    stack = [(value, 1)]
+    while stack:
+        node, depth = stack.pop()
+        if isinstance(node, dict):
+            children = node.values()
+        elif isinstance(node, list):
+            children = node
+        else:
+            continue
+        if depth > limit:
+            raise BlueprintDecodeError(
+                "nesting_limit", f"document nests deeper than {limit} levels", limit=limit
+            )
+        for child in children:
+            stack.append((child, depth + 1))
+
+
+def decode_blueprint(text: str, limits: DecodeLimits = DEFAULT_LIMITS) -> dict:
+    """Decode an encoded string or raw JSON into the complete document.
+
+    Unlike `decode_blueprint_string` this bounds the encoded length, the
+    decompressed size (during decompression) and the nesting depth, and it
+    fails with `BlueprintDecodeError` codes rather than one opaque message.
+    The returned value is the entire root document; nothing is flattened,
+    dropped or normalized here.
+    """
+    text = (text or "").strip()
+    if text.startswith("```"):
+        text = text.strip("`").strip()
+    if not text:
+        raise BlueprintDecodeError("empty_input", "empty blueprint string")
+    if len(text) > limits.max_encoded_chars:
+        raise BlueprintDecodeError(
+            "encoded_limit",
+            f"encoded blueprint exceeds {limits.max_encoded_chars} characters",
+            limit=limits.max_encoded_chars,
+            length=len(text),
+        )
+    if text[0] == "{":
+        raw = text.encode("utf-8")
+        if len(raw) > limits.max_decompressed_bytes:
+            raise BlueprintDecodeError(
+                "decompressed_limit",
+                f"raw JSON blueprint exceeds {limits.max_decompressed_bytes} bytes",
+                limit=limits.max_decompressed_bytes,
+            )
+    else:
+        try:
+            payload = base64.b64decode(text[1:], validate=False)
+        except (binascii.Error, ValueError) as exc:
+            raise BlueprintDecodeError("invalid_base64", f"invalid base64 body: {exc}") from exc
+        if not payload:
+            raise BlueprintDecodeError("invalid_base64", "empty base64 body")
+        try:
+            raw = _inflate(payload, limits.max_decompressed_bytes)
+        except zlib.error as exc:
+            raise BlueprintDecodeError("invalid_deflate", f"invalid deflate stream: {exc}") from exc
+    try:
+        document = json.loads(raw.decode("utf-8"))
+    except UnicodeDecodeError as exc:
+        raise BlueprintDecodeError("invalid_utf8", f"decoded bytes are not UTF-8: {exc}") from exc
+    except RecursionError as exc:
+        raise BlueprintDecodeError("nesting_limit", "document nests too deeply to parse") from exc
+    except json.JSONDecodeError as exc:
+        raise BlueprintDecodeError("invalid_json", f"decoded payload is not JSON: {exc}") from exc
+    if not isinstance(document, dict):
+        raise BlueprintDecodeError(
+            "invalid_document", "blueprint document must be a JSON object"
+        )
+    _check_depth(document, limits.max_depth)
+    return document
+
+
+def encode_blueprint(document: dict) -> str:
+    """Re-encode a decoded document as a Factorio blueprint string.
+
+    Round-tripping is *semantic*: `decode_blueprint(encode_blueprint(d)) == d`.
+    Byte equality with the original string is not attempted and not required,
+    because key order and deflate parameters are not part of the format.
+    """
+    if not isinstance(document, dict):
+        raise BlueprintDecodeError(
+            "invalid_document", "blueprint document must be a JSON object"
+        )
+    try:
+        body = json.dumps(document, separators=(",", ":"), ensure_ascii=False, allow_nan=False)
+    except ValueError as exc:
+        raise BlueprintDecodeError("invalid_document", f"document is not JSON-encodable: {exc}") from exc
+    return "0" + base64.b64encode(zlib.compress(body.encode("utf-8"), 9)).decode("ascii")
+
+
+#: Document keys that hold an addressable planner/blueprint payload.
+LEAF_KINDS = ("blueprint", "blueprint_book", "upgrade_planner", "deconstruction_planner")
+
+
+@dataclass(frozen=True)
+class BookEntry:
+    """One addressable entry of a decoded document.
+
+    `path` is the sequence of book entry **index values** used by the routing
+    contract's `EntityId.book_path` -- never array offsets. The root document
+    has path `()`. `record` is the original nested dict, not a copy.
+    """
+
+    path: tuple[int, ...]
+    kind: str
+    record: dict
+
+
+def _entry_payload(entry: dict) -> tuple[str, dict] | None:
+    for kind in LEAF_KINDS:
+        payload = entry.get(kind)
+        if isinstance(payload, dict):
+            return kind, payload
+    return None
+
+
+def walk_entries(document: dict, limits: DecodeLimits = DEFAULT_LIMITS) -> list[BookEntry]:
+    """Every addressable entry of `document`, books included, in document order.
+
+    Unselected and unsupported entries (planners, empty books) are returned too:
+    they stay visible so a caller can report what it did *not* select.
+    """
+    if not isinstance(document, dict):
+        raise BlueprintDecodeError("invalid_document", "blueprint document must be a JSON object")
+    found = _entry_payload(document)
+    if found is None:
+        if "entities" in document:  # a bare blueprint record
+            return [BookEntry((), "blueprint", document)]
+        return []
+    out: list[BookEntry] = []
+    stack: list[tuple[tuple[int, ...], str, dict]] = [((), found[0], found[1])]
+    while stack:
+        path, kind, record = stack.pop(0)
+        out.append(BookEntry(path, kind, record))
+        if kind != "blueprint_book":
+            continue
+        if len(path) >= limits.max_depth:
+            raise BlueprintDecodeError(
+                "nesting_limit",
+                f"blueprint book nests deeper than {limits.max_depth} levels",
+                limit=limits.max_depth,
+            )
+        entries = record.get("blueprints")
+        if entries is None:
+            continue
+        if not isinstance(entries, list):
+            raise BlueprintDecodeError(
+                "malformed_book", "blueprint_book 'blueprints' must be an array",
+                path=list(path),
+            )
+        seen: set[int] = set()
+        children: list[tuple[tuple[int, ...], str, dict]] = []
+        for offset, entry in enumerate(entries):
+            if not isinstance(entry, dict):
+                raise BlueprintDecodeError(
+                    "malformed_book", "book entry must be an object",
+                    path=list(path), offset=offset,
+                )
+            index = entry.get("index")
+            if type(index) is not int or index < 0:
+                raise BlueprintDecodeError(
+                    "malformed_book",
+                    "book entry needs a nonnegative integer 'index'",
+                    path=list(path), offset=offset, index=index,
+                )
+            if index in seen:
+                raise BlueprintDecodeError(
+                    "duplicate_book_index",
+                    f"book at {list(path)} has two entries with index {index}",
+                    path=list(path), index=index,
+                )
+            seen.add(index)
+            payload = _entry_payload(entry)
+            if payload is None:
+                continue
+            children.append((path + (index,), payload[0], payload[1]))
+        stack = children + stack
+    return out
+
+
+def parse_selection_path(value) -> tuple[int, ...]:
+    """Normalize a selection path from a sequence or a `bp/2/7` style string."""
+    if isinstance(value, str):
+        text = value.strip().removeprefix("bp/")
+        if text in ("", "root"):
+            return ()
+        parts = text.split("/")
+    elif isinstance(value, (list, tuple)):
+        parts = list(value)
+    elif value is None:
+        return ()
+    else:
+        raise BlueprintDecodeError(
+            "malformed_selection_path", f"selection path must be a sequence or string, got {type(value).__name__}"
+        )
+    out: list[int] = []
+    for part in parts:
+        if isinstance(part, bool) or not isinstance(part, (int, str)):
+            raise BlueprintDecodeError(
+                "malformed_selection_path", f"invalid selection path component {part!r}"
+            )
+        if isinstance(part, str):
+            if not part.isdigit():
+                raise BlueprintDecodeError(
+                    "malformed_selection_path", f"invalid selection path component {part!r}"
+                )
+            part = int(part)
+        if part < 0:
+            raise BlueprintDecodeError(
+                "malformed_selection_path", f"negative selection path component {part!r}"
+            )
+        out.append(part)
+    return tuple(out)
+
+
+def select_blueprint(
+    document: dict, path=(), limits: DecodeLimits = DEFAULT_LIMITS
+) -> dict:
+    """Return the blueprint record at `path`, raising a structured error.
+
+    `path` is the agreed sequence of book entry index values; `()` selects a
+    standalone blueprint. The returned dict is the original record.
+    """
+    wanted = parse_selection_path(path)
+    entries = walk_entries(document, limits)
+    for entry in entries:
+        if entry.path != wanted:
+            continue
+        if entry.kind != "blueprint":
+            raise BlueprintDecodeError(
+                "not_a_blueprint",
+                f"entry at {list(wanted)} is a {entry.kind}, not a blueprint",
+                path=list(wanted), kind=entry.kind,
+            )
+        return entry.record
+    raise BlueprintDecodeError(
+        "unknown_selection_path",
+        f"no blueprint entry at {list(wanted)}",
+        path=list(wanted),
+        available=[list(e.path) for e in entries if e.kind == "blueprint"],
+    )
+
+
+def blueprint_leaves(document: dict, limits: DecodeLimits = DEFAULT_LIMITS) -> list[BookEntry]:
+    """Every blueprint leaf of `document`, each with its selection path."""
+    return [e for e in walk_entries(document, limits) if e.kind == "blueprint"]

@@ -1,0 +1,34 @@
+{
+  "blocking_gate": "No capture has been run, and the pilot's 2 wire entries have no recorded enable/disable semantics. No controlled game capture has been run for this checkout: task 02 had no Factorio installation or disposable save available, so nothing was measured.",
+  "control_state": "planned: one trial with the condition satisfied, one with it unsatisfied, and one with the wire present but the condition unknown",
+  "environment": {
+    "declared_mods": null,
+    "game_version": null,
+    "save": null
+  },
+  "evidence_status": "pending",
+  "expected_behavior": "A circuit-disabled entity does not move items. An entity whose condition state is unknown must remain an explicit condition: relaxed open for an upper bound, or assigned explicitly, never silently enabled or deleted.",
+  "measurement": null,
+  "measurement_interval_s": null,
+  "notes": [
+    "The counterexample that matters: removing an unknown-condition arc and then proving insufficiency is unsound."
+  ],
+  "observation_method": "Planned (CAPTURE.md 4.15): a wired inserter and a wired belt whose enable condition is toggled by a constant combinator; count throughput per interval in each state.",
+  "profile": "base-2.0.76-normal-v1",
+  "record_id": "circuit.control_state",
+  "references": [
+    "repo:blueprint-routing-contract"
+  ],
+  "research_state": null,
+  "schema_version": "factoribot-mechanics-observation-1",
+  "setup_blueprint": null,
+  "supplied_items": [
+    {
+      "count": null,
+      "item": "iron-plate",
+      "rate_per_s": null,
+      "source": "planned: infinity chest set to provide iron plates without limit"
+    }
+  ],
+  "title": "Circuit-disabled and unknown-condition behaviour"
+}

@@ -68,7 +68,7 @@ def render(result: Result, spec: SolveSpec, db: Database) -> str:
     rec_w = max((len(u.recipe) for u in uses), default=6)
     mac_w = max((len(u.machine) for u in uses), default=7)
 
-    header = f"  {'item':<{name_w}}  {'recipe':<{rec_w}}  {'/s':>8}  {'machine':<{mac_w}}  {'count':>10}"
+    header = f"  {'item':<{name_w}}  {'recipe':<{rec_w}}  {'crafts/s':>8}  {'output items/s':>18}  {'machine':<{mac_w}}  {'count':>10}"
     lines.append(header)
     lines.append("  " + "-" * (len(header) - 2))
     machine_totals: dict[str, float] = defaultdict(float)
@@ -76,9 +76,12 @@ def render(result: Result, spec: SolveSpec, db: Database) -> str:
         whole = math.ceil(u.machines - 1e-9)
         machine_totals[u.machine] += whole
         count = f"{whole:>4} ({u.machines:.2f})"
+        outputs = ", ".join(
+            f"{name}={_fmt(rate)}" for name, rate in sorted(u.output_items_per_s.items())
+        )
         lines.append(
             f"  {u.item:<{name_w}}  {u.recipe:<{rec_w}}  {_fmt(u.crafts_per_s):>8}  "
-            f"{u.machine:<{mac_w}}  {count:>10}"
+            f"{outputs:>18}  {u.machine:<{mac_w}}  {count:>10}"
         )
 
     lines.append("")
@@ -156,7 +159,7 @@ def render_blueprint(a: BlueprintAnalysis, db: Database) -> str:
     stages = a.stages or a.offchain
     if stages:
         lines.append("")
-        lines.append("Stages (machines, capacity, utilization):")
+        lines.append("Stages (machines, craft capacity, output item capacity, utilization):")
         rec_w = max(len(s.recipe) for s in stages)
         mac_w = max(len(s.machine) for s in stages)
         for s in sorted(stages, key=lambda s: -s.utilization):
@@ -164,7 +167,8 @@ def render_blueprint(a: BlueprintAnalysis, db: Database) -> str:
             util = f"{s.utilization * 100:4.0f}%" if a.product else "  n/a"
             lines.append(
                 f"  {s.recipe:<{rec_w}}  {s.machines_present:>4}x {s.machine:<{mac_w}}  "
-                f"cap {_fmt(s.capacity_per_s):>8}/s  {util}{flag}"
+                f"cap {_fmt(s.capacity_per_s):>8} crafts/s  "
+                f"outputs {', '.join(f'{name}={_fmt(rate)}/s' for name, rate in sorted(s.capacity_output_items_per_s.items()))}  {util}{flag}"
             )
 
     if a.external_inputs:

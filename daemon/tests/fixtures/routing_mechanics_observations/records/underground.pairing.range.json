@@ -1,0 +1,37 @@
+{
+  "blocking_gate": "The 2.0.76 prototype documentation gives max_distance a type but no description, and the wiki states '4 squares' only for the basic tier without saying whether that is the gap or the separation. No controlled game capture has been run for this checkout: task 02 had no Factorio installation or disposable save available, so nothing was measured.",
+  "control_state": "planned: no circuit wires",
+  "environment": {
+    "declared_mods": null,
+    "game_version": null,
+    "save": null
+  },
+  "evidence_status": "pending",
+  "expected_behavior": "The prototype's raw max_distance is 5 (underground-belt), 7 (fast) and 9 (express). Whether that number counts the tiles between the pair or the centre-to-centre separation determines the reach by exactly one tile, and the prototype documentation does not say which.",
+  "measurement": null,
+  "measurement_interval_s": null,
+  "notes": [
+    "The adapter therefore records max_distance verbatim and derives underground_span_tiles as null/pending rather than guessing max_distance or max_distance - 1.",
+    "An off-by-one here silently changes which pairs task 03 connects, so no bound may depend on it until it is observed."
+  ],
+  "observation_method": "Planned (CAPTURE.md 4.5): place an underground entrance and step the exit one tile further away per trial until the pair no longer connects; record the largest connecting separation for each of the three tiers.",
+  "profile": "base-2.0.76-normal-v1",
+  "record_id": "underground.pairing.range",
+  "references": [
+    "doc:lua-api-2.0.76-underground-belt-prototype",
+    "wiki:underground-belt",
+    "source:data-raw-dump"
+  ],
+  "research_state": null,
+  "schema_version": "factoribot-mechanics-observation-1",
+  "setup_blueprint": null,
+  "supplied_items": [
+    {
+      "count": null,
+      "item": "iron-plate",
+      "rate_per_s": null,
+      "source": "planned: infinity chest set to provide iron plates without limit"
+    }
+  ],
+  "title": "Entrance/exit pairing distance from max_distance"
+}

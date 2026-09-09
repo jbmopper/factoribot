@@ -1,0 +1,13 @@
+{
+  "inputs": {"iron-plate": 90, "copper-plate": 30},
+  "outputs": {
+    "logistic-science-pack": {"ratio": 1},
+    "automation-science-pack": {"ratio": 1},
+    "iron-gear-wheel": {"ratio": 1},
+    "inserter": {"ratio": 1},
+    "transport-belt": {"ratio": 1},
+    "electronic-circuit": {"ratio": 1}
+  },
+  "objective": {"kind": "maximize_ratio"},
+  "machines": {"assembler": "assembling-machine-2"}
+}

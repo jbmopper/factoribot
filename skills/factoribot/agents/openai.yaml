@@ -1,0 +1,4 @@
+interface:
+  display_name: "Factoribot"
+  short_description: "Plan factories with verified production tools"
+  default_prompt: "Use $factoribot to plan a factory from my available inputs and desired net outputs."

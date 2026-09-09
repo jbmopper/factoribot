@@ -1,0 +1,34 @@
+{
+  "blocking_gate": "No primary document states the handover rule. No controlled game capture has been run for this checkout: task 02 had no Factorio installation or disposable save available, so nothing was measured.",
+  "control_state": "planned: no circuit wires",
+  "environment": {
+    "declared_mods": null,
+    "game_version": null,
+    "save": null
+  },
+  "evidence_status": "pending",
+  "expected_behavior": "An end-to-end handover between two belts of the same direction preserves lane identity and is limited by the slower of the two belts. Neither the lane preservation nor the tier-boundary limit is established here.",
+  "measurement": null,
+  "measurement_interval_s": null,
+  "notes": [
+    "The pilot uses a single belt tier, so this rule is not needed for the pilot, but it is needed before the profile advertises mixed tiers."
+  ],
+  "observation_method": "Planned (CAPTURE.md 4.4): saturated straight run crossing a tier boundary (fast to express and express to fast); count per lane on both sides.",
+  "profile": "base-2.0.76-normal-v1",
+  "record_id": "belt.transfer.belt_to_belt",
+  "references": [
+    "wiki:transport-belts-physics"
+  ],
+  "research_state": null,
+  "schema_version": "factoribot-mechanics-observation-1",
+  "setup_blueprint": null,
+  "supplied_items": [
+    {
+      "count": null,
+      "item": "iron-plate",
+      "rate_per_s": null,
+      "source": "planned: infinity chest set to provide iron plates without limit"
+    }
+  ],
+  "title": "End-to-end belt handover and lane preservation"
+}

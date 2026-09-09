@@ -1,0 +1,38 @@
+{
+  "blocking_gate": null,
+  "control_state": "planned: no circuit wires, no enable/disable condition",
+  "environment": {
+    "declared_mods": null,
+    "game_version": null,
+    "save": null
+  },
+  "evidence_status": "documented-only",
+  "expected_behavior": "A straight fast-transport-belt carries at most 30 items/s across both lanes and 15 items/s per lane, matching prototype speed 0.0625 tiles/tick x 480. transport-belt is 15/s (7.5 per lane) and express is 45/s (22.5 per lane).",
+  "measurement": null,
+  "measurement_interval_s": null,
+  "notes": [
+    "Two independent documented sources agree: the prototype docs give the speed x 480 formula and the wiki's physics page lists 15 items/s per lane for the fast belt.",
+    "No controlled game capture has been run for this checkout: task 02 had no Factorio installation or disposable save available, so nothing was measured.",
+    "Documented-only is sufficient to state the rate but not to close the release gate; the routing profile still needs the observation."
+  ],
+  "observation_method": "Planned (CAPTURE.md 4.1): a straight, saturated fast belt feeding one infinity chest through a loader-equivalent sink; count items removed over a fixed tick interval and divide by the interval.",
+  "profile": "base-2.0.76-normal-v1",
+  "record_id": "belt.straight.lane_capacity",
+  "references": [
+    "doc:lua-api-2.0.76-transport-belt-connectable",
+    "wiki:transport-belts-physics",
+    "source:data-raw-dump"
+  ],
+  "research_state": null,
+  "schema_version": "factoribot-mechanics-observation-1",
+  "setup_blueprint": null,
+  "supplied_items": [
+    {
+      "count": null,
+      "item": "iron-plate",
+      "rate_per_s": null,
+      "source": "planned: infinity chest set to provide iron plates without limit"
+    }
+  ],
+  "title": "Straight belt per-lane capacity and units"
+}

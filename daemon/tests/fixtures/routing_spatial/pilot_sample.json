@@ -1,0 +1,3173 @@
+{
+  "schema": "factoribot-spatial-sample-1",
+  "produced_by": "daemon/tests/fixtures/routing_spatial/generate.py (routing task 03)",
+  "source": {
+    "blueprint": "daemon/tests/fixtures/wip_science.txt",
+    "file_sha256": "e48fa3fad55155c184a63f70db62ff801e9ce39cd358b8c1cabfd9e99655f49a",
+    "document_content_hash": "sha256:e2dc8eedceac6fa4dd38ab976f559461fabc0ca2c0c6dd8fd0dc57b745fffab6",
+    "selection_path": [],
+    "total_entities_in_leaf": 2771
+  },
+  "windows": [
+    {
+      "name": "assembly-column",
+      "min_x": 428.0,
+      "min_y": -42.0,
+      "max_x": 442.0,
+      "max_y": -28.0
+    },
+    {
+      "name": "furnace-bank",
+      "min_x": 470.0,
+      "min_y": -38.0,
+      "max_x": 488.0,
+      "max_y": -26.0
+    }
+  ],
+  "geometry": {
+    "prototype_extract": "daemon/tests/fixtures/routing_prototypes/prototypes.json",
+    "note": "Footprints are prototype tile_width/tile_height centred on the entity position, with width and height swapped for east/west. No transport rule, lane or connection is asserted here."
+  },
+  "entity_count": 125,
+  "prototype_counts": {
+    "assembling-machine-2": 3,
+    "bulk-inserter": 25,
+    "ee-super-substation": 1,
+    "electric-furnace": 8,
+    "fast-splitter": 2,
+    "fast-transport-belt": 80,
+    "fast-underground-belt": 6
+  },
+  "view_limitations": [
+    "mod origin unidentified for: ee-super-substation (recorded as mod 'unknown'; the prototype extract carries no mod manifest)"
+  ],
+  "entities": [
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1608",
+      "book_path": [],
+      "entity_number": 1608,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 431.5,
+        "y": -41.5
+      },
+      "footprint": {
+        "min_x": 431.0,
+        "min_y": -42.0,
+        "max_x": 432.0,
+        "max_y": -41.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1609",
+      "book_path": [],
+      "entity_number": 1609,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 431.5,
+        "y": -40.5
+      },
+      "footprint": {
+        "min_x": 431.0,
+        "min_y": -41.0,
+        "max_x": 432.0,
+        "max_y": -40.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1610",
+      "book_path": [],
+      "entity_number": 1610,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 435.5,
+        "y": -41.5
+      },
+      "footprint": {
+        "min_x": 435.0,
+        "min_y": -42.0,
+        "max_x": 436.0,
+        "max_y": -41.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1611",
+      "book_path": [],
+      "entity_number": 1611,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 435.5,
+        "y": -40.5
+      },
+      "footprint": {
+        "min_x": 435.0,
+        "min_y": -41.0,
+        "max_x": 436.0,
+        "max_y": -40.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1612",
+      "book_path": [],
+      "entity_number": 1612,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 436.5,
+        "y": -41.5
+      },
+      "footprint": {
+        "min_x": 436.0,
+        "min_y": -42.0,
+        "max_x": 437.0,
+        "max_y": -41.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1613",
+      "book_path": [],
+      "entity_number": 1613,
+      "prototype": "assembling-machine-2",
+      "position": {
+        "x": 438.5,
+        "y": -41.5
+      },
+      "footprint": {
+        "min_x": 437.0,
+        "min_y": -43.0,
+        "max_x": 440.0,
+        "max_y": -40.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "production",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1614",
+      "book_path": [],
+      "entity_number": 1614,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 441.5,
+        "y": -41.5
+      },
+      "footprint": {
+        "min_x": 441.0,
+        "min_y": -42.0,
+        "max_x": 442.0,
+        "max_y": -41.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1615",
+      "book_path": [],
+      "entity_number": 1615,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 440.5,
+        "y": -41.5
+      },
+      "footprint": {
+        "min_x": 440.0,
+        "min_y": -42.0,
+        "max_x": 441.0,
+        "max_y": -41.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1616",
+      "book_path": [],
+      "entity_number": 1616,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 441.5,
+        "y": -40.5
+      },
+      "footprint": {
+        "min_x": 441.0,
+        "min_y": -41.0,
+        "max_x": 442.0,
+        "max_y": -40.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1652",
+      "book_path": [],
+      "entity_number": 1652,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 431.5,
+        "y": -38.5
+      },
+      "footprint": {
+        "min_x": 431.0,
+        "min_y": -39.0,
+        "max_x": 432.0,
+        "max_y": -38.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1653",
+      "book_path": [],
+      "entity_number": 1653,
+      "prototype": "fast-splitter",
+      "position": {
+        "x": 432,
+        "y": -39.5
+      },
+      "footprint": {
+        "min_x": 431.0,
+        "min_y": -40.0,
+        "max_x": 433.0,
+        "max_y": -39.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1654",
+      "book_path": [],
+      "entity_number": 1654,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 432.5,
+        "y": -38.5
+      },
+      "footprint": {
+        "min_x": 432.0,
+        "min_y": -39.0,
+        "max_x": 433.0,
+        "max_y": -38.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1655",
+      "book_path": [],
+      "entity_number": 1655,
+      "prototype": "fast-underground-belt",
+      "position": {
+        "x": 433.5,
+        "y": -38.5
+      },
+      "footprint": {
+        "min_x": 433.0,
+        "min_y": -39.0,
+        "max_x": 434.0,
+        "max_y": -38.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1656",
+      "book_path": [],
+      "entity_number": 1656,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 435.5,
+        "y": -39.5
+      },
+      "footprint": {
+        "min_x": 435.0,
+        "min_y": -40.0,
+        "max_x": 436.0,
+        "max_y": -39.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1657",
+      "book_path": [],
+      "entity_number": 1657,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 435.5,
+        "y": -38.5
+      },
+      "footprint": {
+        "min_x": 435.0,
+        "min_y": -39.0,
+        "max_x": 436.0,
+        "max_y": -38.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1658",
+      "book_path": [],
+      "entity_number": 1658,
+      "prototype": "fast-underground-belt",
+      "position": {
+        "x": 437.5,
+        "y": -38.5
+      },
+      "footprint": {
+        "min_x": 437.0,
+        "min_y": -39.0,
+        "max_x": 438.0,
+        "max_y": -38.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1659",
+      "book_path": [],
+      "entity_number": 1659,
+      "prototype": "fast-underground-belt",
+      "position": {
+        "x": 439.5,
+        "y": -38.5
+      },
+      "footprint": {
+        "min_x": 439.0,
+        "min_y": -39.0,
+        "max_x": 440.0,
+        "max_y": -38.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1660",
+      "book_path": [],
+      "entity_number": 1660,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 438.5,
+        "y": -39.5
+      },
+      "footprint": {
+        "min_x": 438.0,
+        "min_y": -40.0,
+        "max_x": 439.0,
+        "max_y": -39.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1661",
+      "book_path": [],
+      "entity_number": 1661,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 438.5,
+        "y": -38.5
+      },
+      "footprint": {
+        "min_x": 438.0,
+        "min_y": -39.0,
+        "max_x": 439.0,
+        "max_y": -38.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1662",
+      "book_path": [],
+      "entity_number": 1662,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 441.5,
+        "y": -39.5
+      },
+      "footprint": {
+        "min_x": 441.0,
+        "min_y": -40.0,
+        "max_x": 442.0,
+        "max_y": -39.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1663",
+      "book_path": [],
+      "entity_number": 1663,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 441.5,
+        "y": -38.5
+      },
+      "footprint": {
+        "min_x": 441.0,
+        "min_y": -39.0,
+        "max_x": 442.0,
+        "max_y": -38.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1716",
+      "book_path": [],
+      "entity_number": 1716,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 431.5,
+        "y": -37.5
+      },
+      "footprint": {
+        "min_x": 431.0,
+        "min_y": -38.0,
+        "max_x": 432.0,
+        "max_y": -37.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1717",
+      "book_path": [],
+      "entity_number": 1717,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 431.5,
+        "y": -36.5
+      },
+      "footprint": {
+        "min_x": 431.0,
+        "min_y": -37.0,
+        "max_x": 432.0,
+        "max_y": -36.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1718",
+      "book_path": [],
+      "entity_number": 1718,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 435.5,
+        "y": -36.5
+      },
+      "footprint": {
+        "min_x": 435.0,
+        "min_y": -37.0,
+        "max_x": 436.0,
+        "max_y": -36.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1719",
+      "book_path": [],
+      "entity_number": 1719,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 435.5,
+        "y": -37.5
+      },
+      "footprint": {
+        "min_x": 435.0,
+        "min_y": -38.0,
+        "max_x": 436.0,
+        "max_y": -37.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1720",
+      "book_path": [],
+      "entity_number": 1720,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 438.5,
+        "y": -37.5
+      },
+      "footprint": {
+        "min_x": 438.0,
+        "min_y": -38.0,
+        "max_x": 439.0,
+        "max_y": -37.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1721",
+      "book_path": [],
+      "entity_number": 1721,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 441.5,
+        "y": -36.5
+      },
+      "footprint": {
+        "min_x": 441.0,
+        "min_y": -37.0,
+        "max_x": 442.0,
+        "max_y": -36.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1722",
+      "book_path": [],
+      "entity_number": 1722,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 441.5,
+        "y": -37.5
+      },
+      "footprint": {
+        "min_x": 441.0,
+        "min_y": -38.0,
+        "max_x": 442.0,
+        "max_y": -37.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1760",
+      "book_path": [],
+      "entity_number": 1760,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 431.5,
+        "y": -35.5
+      },
+      "footprint": {
+        "min_x": 431.0,
+        "min_y": -36.0,
+        "max_x": 432.0,
+        "max_y": -35.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1761",
+      "book_path": [],
+      "entity_number": 1761,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 431.5,
+        "y": -34.5
+      },
+      "footprint": {
+        "min_x": 431.0,
+        "min_y": -35.0,
+        "max_x": 432.0,
+        "max_y": -34.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1762",
+      "book_path": [],
+      "entity_number": 1762,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 435.5,
+        "y": -35.5
+      },
+      "footprint": {
+        "min_x": 435.0,
+        "min_y": -36.0,
+        "max_x": 436.0,
+        "max_y": -35.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1763",
+      "book_path": [],
+      "entity_number": 1763,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 435.5,
+        "y": -34.5
+      },
+      "footprint": {
+        "min_x": 435.0,
+        "min_y": -35.0,
+        "max_x": 436.0,
+        "max_y": -34.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1764",
+      "book_path": [],
+      "entity_number": 1764,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 436.5,
+        "y": -35.5
+      },
+      "footprint": {
+        "min_x": 436.0,
+        "min_y": -36.0,
+        "max_x": 437.0,
+        "max_y": -35.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1765",
+      "book_path": [],
+      "entity_number": 1765,
+      "prototype": "assembling-machine-2",
+      "position": {
+        "x": 438.5,
+        "y": -35.5
+      },
+      "footprint": {
+        "min_x": 437.0,
+        "min_y": -37.0,
+        "max_x": 440.0,
+        "max_y": -34.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "production",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1766",
+      "book_path": [],
+      "entity_number": 1766,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 441.5,
+        "y": -35.5
+      },
+      "footprint": {
+        "min_x": 441.0,
+        "min_y": -36.0,
+        "max_x": 442.0,
+        "max_y": -35.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1767",
+      "book_path": [],
+      "entity_number": 1767,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 440.5,
+        "y": -35.5
+      },
+      "footprint": {
+        "min_x": 440.0,
+        "min_y": -36.0,
+        "max_x": 441.0,
+        "max_y": -35.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1768",
+      "book_path": [],
+      "entity_number": 1768,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 441.5,
+        "y": -34.5
+      },
+      "footprint": {
+        "min_x": 441.0,
+        "min_y": -35.0,
+        "max_x": 442.0,
+        "max_y": -34.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1804",
+      "book_path": [],
+      "entity_number": 1804,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 431.5,
+        "y": -33.5
+      },
+      "footprint": {
+        "min_x": 431.0,
+        "min_y": -34.0,
+        "max_x": 432.0,
+        "max_y": -33.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1805",
+      "book_path": [],
+      "entity_number": 1805,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 431.5,
+        "y": -32.5
+      },
+      "footprint": {
+        "min_x": 431.0,
+        "min_y": -33.0,
+        "max_x": 432.0,
+        "max_y": -32.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1806",
+      "book_path": [],
+      "entity_number": 1806,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 435.5,
+        "y": -33.5
+      },
+      "footprint": {
+        "min_x": 435.0,
+        "min_y": -34.0,
+        "max_x": 436.0,
+        "max_y": -33.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1807",
+      "book_path": [],
+      "entity_number": 1807,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 435.5,
+        "y": -32.5
+      },
+      "footprint": {
+        "min_x": 435.0,
+        "min_y": -33.0,
+        "max_x": 436.0,
+        "max_y": -32.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1808",
+      "book_path": [],
+      "entity_number": 1808,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 436.5,
+        "y": -32.5
+      },
+      "footprint": {
+        "min_x": 436.0,
+        "min_y": -33.0,
+        "max_x": 437.0,
+        "max_y": -32.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1809",
+      "book_path": [],
+      "entity_number": 1809,
+      "prototype": "assembling-machine-2",
+      "position": {
+        "x": 438.5,
+        "y": -32.5
+      },
+      "footprint": {
+        "min_x": 437.0,
+        "min_y": -34.0,
+        "max_x": 440.0,
+        "max_y": -31.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "production",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1810",
+      "book_path": [],
+      "entity_number": 1810,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 441.5,
+        "y": -33.5
+      },
+      "footprint": {
+        "min_x": 441.0,
+        "min_y": -34.0,
+        "max_x": 442.0,
+        "max_y": -33.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1811",
+      "book_path": [],
+      "entity_number": 1811,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 441.5,
+        "y": -32.5
+      },
+      "footprint": {
+        "min_x": 441.0,
+        "min_y": -33.0,
+        "max_x": 442.0,
+        "max_y": -32.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1812",
+      "book_path": [],
+      "entity_number": 1812,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 440.5,
+        "y": -32.5
+      },
+      "footprint": {
+        "min_x": 440.0,
+        "min_y": -33.0,
+        "max_x": 441.0,
+        "max_y": -32.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1860",
+      "book_path": [],
+      "entity_number": 1860,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 431.5,
+        "y": -31.5
+      },
+      "footprint": {
+        "min_x": 431.0,
+        "min_y": -32.0,
+        "max_x": 432.0,
+        "max_y": -31.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1861",
+      "book_path": [],
+      "entity_number": 1861,
+      "prototype": "fast-splitter",
+      "position": {
+        "x": 432,
+        "y": -30.5
+      },
+      "footprint": {
+        "min_x": 431.0,
+        "min_y": -31.0,
+        "max_x": 433.0,
+        "max_y": -30.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1862",
+      "book_path": [],
+      "entity_number": 1862,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 435.5,
+        "y": -31.5
+      },
+      "footprint": {
+        "min_x": 435.0,
+        "min_y": -32.0,
+        "max_x": 436.0,
+        "max_y": -31.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1863",
+      "book_path": [],
+      "entity_number": 1863,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 435.5,
+        "y": -30.5
+      },
+      "footprint": {
+        "min_x": 435.0,
+        "min_y": -31.0,
+        "max_x": 436.0,
+        "max_y": -30.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1864",
+      "book_path": [],
+      "entity_number": 1864,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 438.5,
+        "y": -30.5
+      },
+      "footprint": {
+        "min_x": 438.0,
+        "min_y": -31.0,
+        "max_x": 439.0,
+        "max_y": -30.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1865",
+      "book_path": [],
+      "entity_number": 1865,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 441.5,
+        "y": -31.5
+      },
+      "footprint": {
+        "min_x": 441.0,
+        "min_y": -32.0,
+        "max_x": 442.0,
+        "max_y": -31.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1866",
+      "book_path": [],
+      "entity_number": 1866,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 441.5,
+        "y": -30.5
+      },
+      "footprint": {
+        "min_x": 441.0,
+        "min_y": -31.0,
+        "max_x": 442.0,
+        "max_y": -30.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1905",
+      "book_path": [],
+      "entity_number": 1905,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 431.5,
+        "y": -29.5
+      },
+      "footprint": {
+        "min_x": 431.0,
+        "min_y": -30.0,
+        "max_x": 432.0,
+        "max_y": -29.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1906",
+      "book_path": [],
+      "entity_number": 1906,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 431.5,
+        "y": -28.5
+      },
+      "footprint": {
+        "min_x": 431.0,
+        "min_y": -29.0,
+        "max_x": 432.0,
+        "max_y": -28.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1907",
+      "book_path": [],
+      "entity_number": 1907,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 432.5,
+        "y": -29.5
+      },
+      "footprint": {
+        "min_x": 432.0,
+        "min_y": -30.0,
+        "max_x": 433.0,
+        "max_y": -29.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1908",
+      "book_path": [],
+      "entity_number": 1908,
+      "prototype": "fast-underground-belt",
+      "position": {
+        "x": 433.5,
+        "y": -29.5
+      },
+      "footprint": {
+        "min_x": 433.0,
+        "min_y": -30.0,
+        "max_x": 434.0,
+        "max_y": -29.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1909",
+      "book_path": [],
+      "entity_number": 1909,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 435.5,
+        "y": -29.5
+      },
+      "footprint": {
+        "min_x": 435.0,
+        "min_y": -30.0,
+        "max_x": 436.0,
+        "max_y": -29.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1910",
+      "book_path": [],
+      "entity_number": 1910,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 435.5,
+        "y": -28.5
+      },
+      "footprint": {
+        "min_x": 435.0,
+        "min_y": -29.0,
+        "max_x": 436.0,
+        "max_y": -28.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1911",
+      "book_path": [],
+      "entity_number": 1911,
+      "prototype": "fast-underground-belt",
+      "position": {
+        "x": 437.5,
+        "y": -29.5
+      },
+      "footprint": {
+        "min_x": 437.0,
+        "min_y": -30.0,
+        "max_x": 438.0,
+        "max_y": -29.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1912",
+      "book_path": [],
+      "entity_number": 1912,
+      "prototype": "fast-underground-belt",
+      "position": {
+        "x": 439.5,
+        "y": -29.5
+      },
+      "footprint": {
+        "min_x": 439.0,
+        "min_y": -30.0,
+        "max_x": 440.0,
+        "max_y": -29.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1913",
+      "book_path": [],
+      "entity_number": 1913,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 438.5,
+        "y": -29.5
+      },
+      "footprint": {
+        "min_x": 438.0,
+        "min_y": -30.0,
+        "max_x": 439.0,
+        "max_y": -29.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1914",
+      "book_path": [],
+      "entity_number": 1914,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 438.5,
+        "y": -28.5
+      },
+      "footprint": {
+        "min_x": 438.0,
+        "min_y": -29.0,
+        "max_x": 439.0,
+        "max_y": -28.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1915",
+      "book_path": [],
+      "entity_number": 1915,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 441.5,
+        "y": -29.5
+      },
+      "footprint": {
+        "min_x": 441.0,
+        "min_y": -30.0,
+        "max_x": 442.0,
+        "max_y": -29.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "assembly-column",
+      "key": "bp/root/e/1916",
+      "book_path": [],
+      "entity_number": 1916,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 441.5,
+        "y": -28.5
+      },
+      "footprint": {
+        "min_x": 441.0,
+        "min_y": -29.0,
+        "max_x": 442.0,
+        "max_y": -28.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1736",
+      "book_path": [],
+      "entity_number": 1736,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 471.5,
+        "y": -36.5
+      },
+      "footprint": {
+        "min_x": 471.0,
+        "min_y": -37.0,
+        "max_x": 472.0,
+        "max_y": -36.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1737",
+      "book_path": [],
+      "entity_number": 1737,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 471.5,
+        "y": -37.5
+      },
+      "footprint": {
+        "min_x": 471.0,
+        "min_y": -38.0,
+        "max_x": 472.0,
+        "max_y": -37.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1738",
+      "book_path": [],
+      "entity_number": 1738,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 477.5,
+        "y": -36.5
+      },
+      "footprint": {
+        "min_x": 477.0,
+        "min_y": -37.0,
+        "max_x": 478.0,
+        "max_y": -36.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1739",
+      "book_path": [],
+      "entity_number": 1739,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 477.5,
+        "y": -37.5
+      },
+      "footprint": {
+        "min_x": 477.0,
+        "min_y": -38.0,
+        "max_x": 478.0,
+        "max_y": -37.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1740",
+      "book_path": [],
+      "entity_number": 1740,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 478.5,
+        "y": -36.5
+      },
+      "footprint": {
+        "min_x": 478.0,
+        "min_y": -37.0,
+        "max_x": 479.0,
+        "max_y": -36.0
+      },
+      "direction": 12,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1741",
+      "book_path": [],
+      "entity_number": 1741,
+      "prototype": "electric-furnace",
+      "position": {
+        "x": 480.5,
+        "y": -36.5
+      },
+      "footprint": {
+        "min_x": 479.0,
+        "min_y": -38.0,
+        "max_x": 482.0,
+        "max_y": -35.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "production",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1742",
+      "book_path": [],
+      "entity_number": 1742,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 483.5,
+        "y": -37.5
+      },
+      "footprint": {
+        "min_x": 483.0,
+        "min_y": -38.0,
+        "max_x": 484.0,
+        "max_y": -37.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1743",
+      "book_path": [],
+      "entity_number": 1743,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 483.5,
+        "y": -36.5
+      },
+      "footprint": {
+        "min_x": 483.0,
+        "min_y": -37.0,
+        "max_x": 484.0,
+        "max_y": -36.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1744",
+      "book_path": [],
+      "entity_number": 1744,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 482.5,
+        "y": -36.5
+      },
+      "footprint": {
+        "min_x": 482.0,
+        "min_y": -37.0,
+        "max_x": 483.0,
+        "max_y": -36.0
+      },
+      "direction": 12,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1745",
+      "book_path": [],
+      "entity_number": 1745,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 484.5,
+        "y": -36.5
+      },
+      "footprint": {
+        "min_x": 484.0,
+        "min_y": -37.0,
+        "max_x": 485.0,
+        "max_y": -36.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1746",
+      "book_path": [],
+      "entity_number": 1746,
+      "prototype": "electric-furnace",
+      "position": {
+        "x": 486.5,
+        "y": -36.5
+      },
+      "footprint": {
+        "min_x": 485.0,
+        "min_y": -38.0,
+        "max_x": 488.0,
+        "max_y": -35.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "production",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1791",
+      "book_path": [],
+      "entity_number": 1791,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 470.5,
+        "y": -35.5
+      },
+      "footprint": {
+        "min_x": 470.0,
+        "min_y": -36.0,
+        "max_x": 471.0,
+        "max_y": -35.0
+      },
+      "direction": 12,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1792",
+      "book_path": [],
+      "entity_number": 1792,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 471.5,
+        "y": -35.5
+      },
+      "footprint": {
+        "min_x": 471.0,
+        "min_y": -36.0,
+        "max_x": 472.0,
+        "max_y": -35.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1793",
+      "book_path": [],
+      "entity_number": 1793,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 471.5,
+        "y": -34.5
+      },
+      "footprint": {
+        "min_x": 471.0,
+        "min_y": -35.0,
+        "max_x": 472.0,
+        "max_y": -34.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1794",
+      "book_path": [],
+      "entity_number": 1794,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 477.5,
+        "y": -34.5
+      },
+      "footprint": {
+        "min_x": 477.0,
+        "min_y": -35.0,
+        "max_x": 478.0,
+        "max_y": -34.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1795",
+      "book_path": [],
+      "entity_number": 1795,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 477.5,
+        "y": -35.5
+      },
+      "footprint": {
+        "min_x": 477.0,
+        "min_y": -36.0,
+        "max_x": 478.0,
+        "max_y": -35.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1796",
+      "book_path": [],
+      "entity_number": 1796,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 483.5,
+        "y": -34.5
+      },
+      "footprint": {
+        "min_x": 483.0,
+        "min_y": -35.0,
+        "max_x": 484.0,
+        "max_y": -34.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1797",
+      "book_path": [],
+      "entity_number": 1797,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 483.5,
+        "y": -35.5
+      },
+      "footprint": {
+        "min_x": 483.0,
+        "min_y": -36.0,
+        "max_x": 484.0,
+        "max_y": -35.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1835",
+      "book_path": [],
+      "entity_number": 1835,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 470.5,
+        "y": -32.5
+      },
+      "footprint": {
+        "min_x": 470.0,
+        "min_y": -33.0,
+        "max_x": 471.0,
+        "max_y": -32.0
+      },
+      "direction": 12,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1836",
+      "book_path": [],
+      "entity_number": 1836,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 471.5,
+        "y": -33.5
+      },
+      "footprint": {
+        "min_x": 471.0,
+        "min_y": -34.0,
+        "max_x": 472.0,
+        "max_y": -33.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1837",
+      "book_path": [],
+      "entity_number": 1837,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 471.5,
+        "y": -32.5
+      },
+      "footprint": {
+        "min_x": 471.0,
+        "min_y": -33.0,
+        "max_x": 472.0,
+        "max_y": -32.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1838",
+      "book_path": [],
+      "entity_number": 1838,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 477.5,
+        "y": -32.5
+      },
+      "footprint": {
+        "min_x": 477.0,
+        "min_y": -33.0,
+        "max_x": 478.0,
+        "max_y": -32.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1839",
+      "book_path": [],
+      "entity_number": 1839,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 477.5,
+        "y": -33.5
+      },
+      "footprint": {
+        "min_x": 477.0,
+        "min_y": -34.0,
+        "max_x": 478.0,
+        "max_y": -33.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1840",
+      "book_path": [],
+      "entity_number": 1840,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 478.5,
+        "y": -33.5
+      },
+      "footprint": {
+        "min_x": 478.0,
+        "min_y": -34.0,
+        "max_x": 479.0,
+        "max_y": -33.0
+      },
+      "direction": 12,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1841",
+      "book_path": [],
+      "entity_number": 1841,
+      "prototype": "electric-furnace",
+      "position": {
+        "x": 480.5,
+        "y": -33.5
+      },
+      "footprint": {
+        "min_x": 479.0,
+        "min_y": -35.0,
+        "max_x": 482.0,
+        "max_y": -32.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "production",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1842",
+      "book_path": [],
+      "entity_number": 1842,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 482.5,
+        "y": -33.5
+      },
+      "footprint": {
+        "min_x": 482.0,
+        "min_y": -34.0,
+        "max_x": 483.0,
+        "max_y": -33.0
+      },
+      "direction": 12,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1843",
+      "book_path": [],
+      "entity_number": 1843,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 483.5,
+        "y": -33.5
+      },
+      "footprint": {
+        "min_x": 483.0,
+        "min_y": -34.0,
+        "max_x": 484.0,
+        "max_y": -33.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1844",
+      "book_path": [],
+      "entity_number": 1844,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 483.5,
+        "y": -32.5
+      },
+      "footprint": {
+        "min_x": 483.0,
+        "min_y": -33.0,
+        "max_x": 484.0,
+        "max_y": -32.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1845",
+      "book_path": [],
+      "entity_number": 1845,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 484.5,
+        "y": -33.5
+      },
+      "footprint": {
+        "min_x": 484.0,
+        "min_y": -34.0,
+        "max_x": 485.0,
+        "max_y": -33.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1846",
+      "book_path": [],
+      "entity_number": 1846,
+      "prototype": "electric-furnace",
+      "position": {
+        "x": 486.5,
+        "y": -33.5
+      },
+      "footprint": {
+        "min_x": 485.0,
+        "min_y": -35.0,
+        "max_x": 488.0,
+        "max_y": -32.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "production",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1880",
+      "book_path": [],
+      "entity_number": 1880,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 471.5,
+        "y": -31.5
+      },
+      "footprint": {
+        "min_x": 471.0,
+        "min_y": -32.0,
+        "max_x": 472.0,
+        "max_y": -31.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1881",
+      "book_path": [],
+      "entity_number": 1881,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 471.5,
+        "y": -30.5
+      },
+      "footprint": {
+        "min_x": 471.0,
+        "min_y": -31.0,
+        "max_x": 472.0,
+        "max_y": -30.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1882",
+      "book_path": [],
+      "entity_number": 1882,
+      "prototype": "ee-super-substation",
+      "position": {
+        "x": 474,
+        "y": -32
+      },
+      "footprint": {
+        "min_x": 473.0,
+        "min_y": -33.0,
+        "max_x": 475.0,
+        "max_y": -31.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "unsupported",
+      "subsystem": "power",
+      "mod": "unknown",
+      "geometry_source": "prototype",
+      "limitations": [
+        "unidentified_mod_origin"
+      ]
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1883",
+      "book_path": [],
+      "entity_number": 1883,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 477.5,
+        "y": -31.5
+      },
+      "footprint": {
+        "min_x": 477.0,
+        "min_y": -32.0,
+        "max_x": 478.0,
+        "max_y": -31.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1884",
+      "book_path": [],
+      "entity_number": 1884,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 477.5,
+        "y": -30.5
+      },
+      "footprint": {
+        "min_x": 477.0,
+        "min_y": -31.0,
+        "max_x": 478.0,
+        "max_y": -30.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1885",
+      "book_path": [],
+      "entity_number": 1885,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 478.5,
+        "y": -30.5
+      },
+      "footprint": {
+        "min_x": 478.0,
+        "min_y": -31.0,
+        "max_x": 479.0,
+        "max_y": -30.0
+      },
+      "direction": 12,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1886",
+      "book_path": [],
+      "entity_number": 1886,
+      "prototype": "electric-furnace",
+      "position": {
+        "x": 480.5,
+        "y": -30.5
+      },
+      "footprint": {
+        "min_x": 479.0,
+        "min_y": -32.0,
+        "max_x": 482.0,
+        "max_y": -29.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "production",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1887",
+      "book_path": [],
+      "entity_number": 1887,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 483.5,
+        "y": -31.5
+      },
+      "footprint": {
+        "min_x": 483.0,
+        "min_y": -32.0,
+        "max_x": 484.0,
+        "max_y": -31.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1888",
+      "book_path": [],
+      "entity_number": 1888,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 483.5,
+        "y": -30.5
+      },
+      "footprint": {
+        "min_x": 483.0,
+        "min_y": -31.0,
+        "max_x": 484.0,
+        "max_y": -30.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1889",
+      "book_path": [],
+      "entity_number": 1889,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 482.5,
+        "y": -30.5
+      },
+      "footprint": {
+        "min_x": 482.0,
+        "min_y": -31.0,
+        "max_x": 483.0,
+        "max_y": -30.0
+      },
+      "direction": 12,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1890",
+      "book_path": [],
+      "entity_number": 1890,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 484.5,
+        "y": -30.5
+      },
+      "footprint": {
+        "min_x": 484.0,
+        "min_y": -31.0,
+        "max_x": 485.0,
+        "max_y": -30.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1891",
+      "book_path": [],
+      "entity_number": 1891,
+      "prototype": "electric-furnace",
+      "position": {
+        "x": 486.5,
+        "y": -30.5
+      },
+      "footprint": {
+        "min_x": 485.0,
+        "min_y": -32.0,
+        "max_x": 488.0,
+        "max_y": -29.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "production",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1945",
+      "book_path": [],
+      "entity_number": 1945,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 471.5,
+        "y": -29.5
+      },
+      "footprint": {
+        "min_x": 471.0,
+        "min_y": -30.0,
+        "max_x": 472.0,
+        "max_y": -29.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1946",
+      "book_path": [],
+      "entity_number": 1946,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 471.5,
+        "y": -28.5
+      },
+      "footprint": {
+        "min_x": 471.0,
+        "min_y": -29.0,
+        "max_x": 472.0,
+        "max_y": -28.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1947",
+      "book_path": [],
+      "entity_number": 1947,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 477.5,
+        "y": -29.5
+      },
+      "footprint": {
+        "min_x": 477.0,
+        "min_y": -30.0,
+        "max_x": 478.0,
+        "max_y": -29.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1948",
+      "book_path": [],
+      "entity_number": 1948,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 477.5,
+        "y": -28.5
+      },
+      "footprint": {
+        "min_x": 477.0,
+        "min_y": -29.0,
+        "max_x": 478.0,
+        "max_y": -28.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1949",
+      "book_path": [],
+      "entity_number": 1949,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 483.5,
+        "y": -28.5
+      },
+      "footprint": {
+        "min_x": 483.0,
+        "min_y": -29.0,
+        "max_x": 484.0,
+        "max_y": -28.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1950",
+      "book_path": [],
+      "entity_number": 1950,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 483.5,
+        "y": -29.5
+      },
+      "footprint": {
+        "min_x": 483.0,
+        "min_y": -30.0,
+        "max_x": 484.0,
+        "max_y": -29.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1988",
+      "book_path": [],
+      "entity_number": 1988,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 470.5,
+        "y": -26.5
+      },
+      "footprint": {
+        "min_x": 470.0,
+        "min_y": -27.0,
+        "max_x": 471.0,
+        "max_y": -26.0
+      },
+      "direction": 12,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1989",
+      "book_path": [],
+      "entity_number": 1989,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 471.5,
+        "y": -27.5
+      },
+      "footprint": {
+        "min_x": 471.0,
+        "min_y": -28.0,
+        "max_x": 472.0,
+        "max_y": -27.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1990",
+      "book_path": [],
+      "entity_number": 1990,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 471.5,
+        "y": -26.5
+      },
+      "footprint": {
+        "min_x": 471.0,
+        "min_y": -27.0,
+        "max_x": 472.0,
+        "max_y": -26.0
+      },
+      "direction": 8,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1991",
+      "book_path": [],
+      "entity_number": 1991,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 477.5,
+        "y": -27.5
+      },
+      "footprint": {
+        "min_x": 477.0,
+        "min_y": -28.0,
+        "max_x": 478.0,
+        "max_y": -27.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1992",
+      "book_path": [],
+      "entity_number": 1992,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 477.5,
+        "y": -26.5
+      },
+      "footprint": {
+        "min_x": 477.0,
+        "min_y": -27.0,
+        "max_x": 478.0,
+        "max_y": -26.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1993",
+      "book_path": [],
+      "entity_number": 1993,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 478.5,
+        "y": -27.5
+      },
+      "footprint": {
+        "min_x": 478.0,
+        "min_y": -28.0,
+        "max_x": 479.0,
+        "max_y": -27.0
+      },
+      "direction": 12,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1994",
+      "book_path": [],
+      "entity_number": 1994,
+      "prototype": "electric-furnace",
+      "position": {
+        "x": 480.5,
+        "y": -27.5
+      },
+      "footprint": {
+        "min_x": 479.0,
+        "min_y": -29.0,
+        "max_x": 482.0,
+        "max_y": -26.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "production",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1995",
+      "book_path": [],
+      "entity_number": 1995,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 482.5,
+        "y": -27.5
+      },
+      "footprint": {
+        "min_x": 482.0,
+        "min_y": -28.0,
+        "max_x": 483.0,
+        "max_y": -27.0
+      },
+      "direction": 12,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1996",
+      "book_path": [],
+      "entity_number": 1996,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 483.5,
+        "y": -27.5
+      },
+      "footprint": {
+        "min_x": 483.0,
+        "min_y": -28.0,
+        "max_x": 484.0,
+        "max_y": -27.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1997",
+      "book_path": [],
+      "entity_number": 1997,
+      "prototype": "fast-transport-belt",
+      "position": {
+        "x": 483.5,
+        "y": -26.5
+      },
+      "footprint": {
+        "min_x": 483.0,
+        "min_y": -27.0,
+        "max_x": 484.0,
+        "max_y": -26.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "transport",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1998",
+      "book_path": [],
+      "entity_number": 1998,
+      "prototype": "bulk-inserter",
+      "position": {
+        "x": 484.5,
+        "y": -27.5
+      },
+      "footprint": {
+        "min_x": 484.0,
+        "min_y": -28.0,
+        "max_x": 485.0,
+        "max_y": -27.0
+      },
+      "direction": 4,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "inserter",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    },
+    {
+      "window": "furnace-bank",
+      "key": "bp/root/e/1999",
+      "book_path": [],
+      "entity_number": 1999,
+      "prototype": "electric-furnace",
+      "position": {
+        "x": 486.5,
+        "y": -27.5
+      },
+      "footprint": {
+        "min_x": 485.0,
+        "min_y": -29.0,
+        "max_x": 488.0,
+        "max_y": -26.0
+      },
+      "direction": 0,
+      "orientation": null,
+      "quality": "normal",
+      "support": "supported",
+      "subsystem": "production",
+      "mod": "base",
+      "geometry_source": "prototype",
+      "limitations": []
+    }
+  ]
+}

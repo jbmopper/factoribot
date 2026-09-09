@@ -9,6 +9,7 @@ whatever mods are currently enabled.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
@@ -20,6 +21,9 @@ from .units import parse_energy
 
 # A belt's per-second throughput (both lanes) = prototype speed (tiles/tick) x 480.
 _BELT_ITEMS_PER_SPEED = 480.0
+# Public name for the same constant, so prototype adapters share this convention
+# instead of forking a second belt-speed formula.
+BELT_ITEMS_PER_SPEED = _BELT_ITEMS_PER_SPEED
 
 # Recipe categories that aren't real production (editor tools, recipe params).
 EXCLUDED_CATEGORIES = {"parameters", "ee-testing-tool"}
@@ -177,3 +181,16 @@ def load_database(path: str | None = None) -> Database:
     with open(find_dump(path)) as f:
         raw = json.load(f)
     return build_database(raw)
+
+
+def read_dump(path: str | None = None) -> tuple[str, str, dict]:
+    """Locate and read the dump, returning ``(resolved_path, sha256, raw)``.
+
+    The digest is the SHA-256 of the file's bytes: the same identity the MCP
+    adapter records for the loaded game data. Callers that need to pin which
+    prototype environment produced a result should record this digest, not the
+    blueprint format version.
+    """
+    resolved = Path(find_dump(path)).resolve()
+    content = resolved.read_bytes()
+    return str(resolved), hashlib.sha256(content).hexdigest(), json.loads(content)

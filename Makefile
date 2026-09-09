@@ -9,11 +9,14 @@ FACTORIO_SCRIPT_OUTPUT ?= $(HOME)/Library/Application Support/factorio/script-ou
 DUMP_SRC := $(FACTORIO_SCRIPT_OUTPUT)/data-raw-dump.json
 
 .DEFAULT_GOAL := help
-.PHONY: help setup dump test ask chat analyze serve play clean
+.PHONY: help setup setup-codex dump test ask chat analyze serve mcp plan play clean
 
 help:
 	@echo "factoribot dev tasks:"
 	@echo "  make setup   create .venv and install the package (dev + openai extras)"
+	@echo "  make setup-codex   install planning/MCP and register the project skill + server"
+	@echo "  make plan SPEC=daemon/examples/balanced_six_outputs.json   offline optimization"
+	@echo "  make mcp     run the MCP stdio server (normally started by Codex)"
 	@echo "  make dump    copy data-raw-dump.json from Factorio's script-output"
 	@echo "  make test    run the test suite"
 	@echo "  make ask Q='purple science, AM2'   one-off LLM query"
@@ -28,6 +31,18 @@ setup:
 	$(PIP) install -U pip
 	$(PIP) install -e 'daemon[dev,openai]'
 	@echo "Installed. Next: 'make dump' (after a Factorio --dump-data), then 'make test'."
+
+setup-codex:
+	@test -x $(PY) || python3 -m venv $(VENV)
+	$(PIP) install -e 'daemon[dev,mcp]'
+	$(PY) scripts/configure-codex.py
+
+plan:
+	$(PY) -m factoribot.cli plan --spec $(SPEC)
+
+# Keep stdout exclusively for the MCP protocol.
+mcp:
+	@$(PY) -m factoribot.cli mcp
 
 dump:
 	@test -f "$(DUMP_SRC)" || { \

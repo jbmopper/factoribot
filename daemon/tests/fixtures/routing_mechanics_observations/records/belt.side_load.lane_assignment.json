@@ -1,0 +1,34 @@
+{
+  "blocking_gate": "The wiki physics page mentions side-loading only as a way items are squeezed into gaps and states no lane-assignment or throughput rule. No controlled game capture has been run for this checkout: task 02 had no Factorio installation or disposable save available, so nothing was measured.",
+  "control_state": "planned: no circuit wires",
+  "environment": {
+    "declared_mods": null,
+    "game_version": null,
+    "save": null
+  },
+  "evidence_status": "pending",
+  "expected_behavior": "A perpendicular side-load is expected to feed a specific lane of the target belt determined by the load's side, and the target's own upstream flow competes for that lane. Which lane, and the resulting split, is not established here.",
+  "measurement": null,
+  "measurement_interval_s": null,
+  "notes": [
+    "This rule decides whether a side-load is one arc or a per-lane arc in the transport graph; task 04 must keep both possibilities open until it is observed."
+  ],
+  "observation_method": "Planned (CAPTURE.md 4.3): a main belt saturated on one lane only, side-loaded from a perpendicular belt carrying a second item; separate the two items at the far end and count each per interval.",
+  "profile": "base-2.0.76-normal-v1",
+  "record_id": "belt.side_load.lane_assignment",
+  "references": [
+    "wiki:transport-belts-physics"
+  ],
+  "research_state": null,
+  "schema_version": "factoribot-mechanics-observation-1",
+  "setup_blueprint": null,
+  "supplied_items": [
+    {
+      "count": null,
+      "item": "iron-plate",
+      "rate_per_s": null,
+      "source": "planned: infinity chest set to provide iron plates without limit"
+    }
+  ],
+  "title": "Which lane a side-load feeds, and its rate"
+}

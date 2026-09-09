@@ -1,0 +1,112 @@
+{
+  "blueprint": {
+    "encoded_version": 562949958402048,
+    "encoded_version_decoded": "2.0.76.0",
+    "encoded_version_note": "The encoded format version is a 4x16-bit packing; it records the build that wrote the string, not the prototype environment, the enabled mods or the save's research.",
+    "entity_count": 2771,
+    "entity_record_keys": [
+      "direction",
+      "entity_number",
+      "filters",
+      "name",
+      "position",
+      "recipe",
+      "recipe_quality",
+      "type",
+      "use_filters"
+    ],
+    "file_sha256": "e48fa3fad55155c184a63f70db62ff801e9ce39cd358b8c1cabfd9e99655f49a",
+    "label": null,
+    "path": "daemon/tests/fixtures/wip_science.txt",
+    "tile_count": 0,
+    "wire_count": 2
+  },
+  "coverage": {
+    "assembling-machine-2": {
+      "count": 153,
+      "in_extract": true,
+      "origin": "unknown",
+      "prototype_type": "assembling-machine",
+      "subsystem": "production",
+      "support": "supported"
+    },
+    "bulk-inserter": {
+      "count": 608,
+      "in_extract": true,
+      "origin": "unknown",
+      "prototype_type": "inserter",
+      "subsystem": "inserter",
+      "support": "supported"
+    },
+    "ee-super-substation": {
+      "count": 3,
+      "in_extract": true,
+      "origin": "unknown",
+      "prototype_type": "electric-pole",
+      "subsystem": "power",
+      "support": "unsupported"
+    },
+    "electric-furnace": {
+      "count": 76,
+      "in_extract": true,
+      "origin": "unknown",
+      "prototype_type": "furnace",
+      "subsystem": "production",
+      "support": "supported"
+    },
+    "fast-splitter": {
+      "count": 15,
+      "in_extract": true,
+      "origin": "unknown",
+      "prototype_type": "splitter",
+      "subsystem": "transport",
+      "support": "supported"
+    },
+    "fast-transport-belt": {
+      "count": 1738,
+      "in_extract": true,
+      "origin": "unknown",
+      "prototype_type": "transport-belt",
+      "subsystem": "transport",
+      "support": "supported"
+    },
+    "fast-underground-belt": {
+      "count": 178,
+      "in_extract": true,
+      "origin": "unknown",
+      "prototype_type": "underground-belt",
+      "subsystem": "transport",
+      "support": "supported"
+    }
+  },
+  "entity_counts": {
+    "assembling-machine-2": 153,
+    "bulk-inserter": 608,
+    "ee-super-substation": 3,
+    "electric-furnace": 76,
+    "fast-splitter": 15,
+    "fast-transport-belt": 1738,
+    "fast-underground-belt": 178
+  },
+  "schema_version": "factoribot-routing-prototypes-1",
+  "unavailable_information": [
+    "Which endpoints are fed from outside the blueprint, and at what rate: unknown. No feed is inferred.",
+    "Which endpoints export or dispose of material, and the external service that removes it: unknown.",
+    "Global per-material input budgets for the pilot: unknown. The design's stone 30/s, copper plate 30/s, plastic 30/s, iron plate 60/s scenario is a motivating hand-check target, not a measured property of this blueprint.",
+    "Research levels (inserter capacity, productivity, speed): unknown, not zero.",
+    "Enabled mods and exact game build for the save this blueprint came from: unknown.",
+    "Power availability and network coverage: unknown; the 3 ee-super-substation entities are unsupported topology, not evidence of a powered network.",
+    "Circuit control state: the blueprint carries 2 wire entries whose enabled or disabled effect is unresolved.",
+    "Per-entity recipe assignment is present for assembling machines, but the 76 electric furnaces carry no recipe: their candidate set is unresolved."
+  ],
+  "unresolved_prototypes": {
+    "ee-super-substation": {
+      "count": 3,
+      "reason": "present in this dump but its defining mod and version are unknown; recorded as unsupported topology with unknown origin",
+      "subsystem": "power"
+    }
+  },
+  "unsupported_entities": [
+    "ee-super-substation"
+  ]
+}
