@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from pathlib import Path
 
 from . import report
 from .gamedata import load_database
@@ -135,6 +136,190 @@ def _cmd_analyze(args: argparse.Namespace) -> int:
     return 0
 
 
+# ---------------------------------------------------------------------------
+# Blueprint routing audit (task 07 public integration)
+#
+# These are the *host* actions of the routing surface: they may write local
+# artifacts and open a local file in a browser. The MCP tools of the same name
+# stay pure and never do either.
+# ---------------------------------------------------------------------------
+
+def _routes_read(path: str) -> str:
+    return sys.stdin.read() if path == "-" else open(path).read()
+
+
+def _routes_json(path: str):
+    return json.loads(_routes_read(path))
+
+
+def _routes_layout(args: argparse.Namespace):
+    """Build the layout named by --bp, reusing the loaded recipe database."""
+    from .routing import RecipeSource
+    from .routing_public import resolve_layout
+
+    recipes = None
+    try:
+        recipes = RecipeSource(load_database(args.data))
+    except (OSError, ValueError) as e:  # no dump: machines get no activities, and say so
+        print(f"note: no prototype dump ({e}); machines get no recipe activities.", file=sys.stderr)
+    request = {
+        "blueprint_string": _routes_read(args.bp),
+        "book_path": args.book_path,
+        "furnace_candidates": args.furnace_candidate or [],
+        "provenance": args.provenance,
+    }
+    return resolve_layout(request, recipes=recipes)
+
+
+def _routes_write(path: str | None, text: str, label: str) -> None:
+    if not path:
+        return
+    with open(path, "w") as handle:
+        handle.write(text)
+    print(f"wrote {label}: {path} ({len(text.encode('utf-8'))} bytes)", file=sys.stderr)
+
+
+def _routes_open(path: str | None, wanted: bool) -> None:
+    if not (path and wanted):
+        return
+    import webbrowser
+
+    webbrowser.open(Path(path).resolve().as_uri())
+
+
+def _routes_detail(args: argparse.Namespace, graph):
+    from .routing_public import parse_detail
+
+    entity_ids = [{"book_path": list(args.book_path or []), "entity_number": n}
+                  for n in (args.entity or [])]
+    return parse_detail({
+        "kind": "entities" if entity_ids else ("full" if args.section != "summary" else "summary"),
+        "entity_ids": entity_ids,
+        "cursor": args.cursor,
+        "limit": args.limit,
+    }, graph)
+
+
+def _cmd_routes_inspect(args: argparse.Namespace) -> int:
+    """Import a blueprint, build the routing graph, report it, write artifacts."""
+    from .blueprint_contract import to_dict
+    from .routing_public import PublicError, layout_summary
+
+    try:
+        layout = _routes_layout(args)
+        summary = layout_summary(layout, _routes_detail(args, layout.graph), args.section)
+    except PublicError as e:
+        print(json.dumps(e.as_dict(), indent=2), file=sys.stderr)
+        return 2
+    print(json.dumps(summary, indent=2, allow_nan=False))
+    _routes_write(args.graph_out, json.dumps(to_dict(layout.graph), allow_nan=False), "graph")
+    _routes_write(args.json_out, json.dumps(summary, indent=2, allow_nan=False), "summary")
+    if args.view:
+        from .blueprint_view import render_view
+
+        assignments = _routes_json(args.assignments) if args.assignments else None
+        _routes_write(args.view, render_view(to_dict(layout.graph), None, assignments,
+                                             title=f"Routing layout {layout.graph_hash[7:19]}"), "viewer page")
+        _routes_open(args.view, args.open)
+    return 0
+
+
+def _cmd_routes_request(args: argparse.Namespace) -> int:
+    """Seal a saved request from a template plus the viewer's assignment export."""
+    from .blueprint_contract import canonical_json
+    from .routing_public import PublicError, request_unresolved, seal_request
+
+    try:
+        layout = _routes_layout(args)
+        assignments = _routes_json(args.assignments) if args.assignments else None
+        document = seal_request(_routes_json(args.template), layout, assignments)
+        unresolved = request_unresolved(document, layout)
+    except PublicError as e:
+        print(json.dumps(e.as_dict(), indent=2), file=sys.stderr)
+        return 2
+    print(json.dumps({
+        "ok": True,
+        "request_hash": document["request_hash"],
+        "graph_hash": document["graph_hash"],
+        "blueprint_hash": document["blueprint_hash"],
+        "unresolved_reasons": list(unresolved),
+        "bounds_advertisable": not unresolved,
+        "note": ("No bound can be advertised for this request until every reason above is resolved."
+                 if unresolved else
+                 "unresolved_reasons is empty: a certified bound may be advertised if a stage certifies one."),
+    }, indent=2))
+    _routes_write(args.out, canonical_json(document), "sealed request")
+    return 0
+
+
+def _cmd_routes_analyze(args: argparse.Namespace) -> int:
+    """Analyze a saved request against a blueprint and write report artifacts."""
+    from .blueprint_contract import canonical_json, to_dict
+    from .routing_public import PublicError, analysis_summary, analyze_layout
+
+    try:
+        layout = _routes_layout(args)
+        document = _routes_json(args.request)
+        report = analyze_layout(layout, document)
+        summary = analysis_summary(layout, report, section=args.section,
+                                   page_args={"cursor": args.cursor, "limit": args.limit})
+    except PublicError as e:
+        print(json.dumps(e.as_dict(), indent=2), file=sys.stderr)
+        return 2
+    print(json.dumps(summary, indent=2, allow_nan=False))
+    result_document = to_dict(report.result)
+    _routes_write(args.result_out, canonical_json(result_document), "result")
+    _routes_write(args.json_out, json.dumps(summary, indent=2, allow_nan=False), "summary")
+    if args.view:
+        from .blueprint_view import render_view
+
+        assignments = document.get("assignments") if isinstance(document, dict) else None
+        _routes_write(args.view, render_view(to_dict(layout.graph), result_document, assignments,
+                                             title=f"Routing audit {report.result.result_hash[7:19]}"), "viewer page")
+        _routes_open(args.view, args.open)
+    return 2 if report.result.status == "invalid_request" else 0
+
+
+def _cmd_routes_finding(args: argparse.Namespace) -> int:
+    """Show one finding from a saved result and every entity location it names."""
+    from .findings import parse_result
+    from .routing_public import PublicError, entity_row, finding_row
+
+    try:
+        layout = _routes_layout(args)
+    except PublicError as e:
+        print(json.dumps(e.as_dict(), indent=2), file=sys.stderr)
+        return 2
+    findings = list(layout.findings)
+    source = "graph"
+    if args.result:
+        try:
+            result = parse_result(_routes_json(args.result), layout.graph)
+        except Exception as e:  # noqa: BLE001 - a stale or invalid result must be explained
+            print(json.dumps({"error": "bad_result", "message": f"{type(e).__name__}: {e}"}, indent=2),
+                  file=sys.stderr)
+            return 2
+        findings, source = list(result.findings), "result"
+    selected = [f for f in findings if args.finding in (f.id, f.code)]
+    if not selected:
+        print(json.dumps({"error": "unknown_finding", "message": f"no {source} finding matches {args.finding!r}",
+                          "available_codes": sorted({f.code for f in findings})}, indent=2), file=sys.stderr)
+        return 2
+    entities = {e.id: e for e in layout.graph.entities}
+    out = []
+    for finding in selected[:args.limit]:
+        row = finding_row(finding)
+        row["source"] = source
+        row["entities"] = [entity_row(entities[i], include_raw=True) for i in finding.entity_ids if i in entities]
+        row["endpoint_entities"] = [entity_row(entities[e.entity], include_raw=True)
+                                    for e in finding.endpoint_ids if e.entity in entities
+                                    and e.entity not in set(finding.entity_ids)]
+        out.append(row)
+    print(json.dumps({"ok": True, "matched": len(selected), "shown": len(out), "findings": out},
+                     indent=2, allow_nan=False))
+    return 0
+
+
 def _cmd_chat(args: argparse.Namespace) -> int:
     """Interactive, multi-turn REPL. Same agent + memory model as the daemon."""
     from .agent import run_agent
@@ -250,6 +435,85 @@ def _cmd_info(args: argparse.Namespace) -> int:
     return 0
 
 
+def _add_routes(sub) -> None:
+    """`factoribot routes ...` -- the blueprint routing audit, offline and no LLM."""
+    from .routing_public import ANALYSIS_SECTIONS, DEFAULT_PAGE_LIMIT, LAYOUT_SECTIONS
+
+    parser = sub.add_parser(
+        "routes",
+        help="blueprint routing audit: structural graph, strict delivery analysis, viewer artifacts",
+        description=(
+            "Import a blueprint, build its routing graph, analyze a saved strict request, and write "
+            "local report/viewer artifacts. Nothing is inferred: feeds, exports, disposal, furnace "
+            "recipes, research, control state and power all come from the request you supply. Every "
+            "advertised value is an upper bound under stated relaxations, never an achievable rate."
+        ),
+    )
+    routes = parser.add_subparsers(dest="routes_cmd", required=True)
+
+    def common(p, *, blueprint=True):
+        if blueprint:
+            p.add_argument("--bp", required=True, help="file with the blueprint string, or - for stdin")
+            p.add_argument("--book-path", type=_book_path_arg, default=(),
+                           help="book entry index values selecting one leaf, e.g. 2/7 (NOT array offsets)")
+            p.add_argument("--furnace-candidate", action="append", default=[],
+                           help="candidate recipe for recipe-less furnaces; repeatable, never inferred")
+            p.add_argument("--provenance", default="game_export",
+                           choices=["game_export", "development_pilot", "synthetic"])
+
+    ins = routes.add_parser("inspect", help="build and report the routing graph; optionally write a viewer page")
+    common(ins)
+    ins.add_argument("--section", default="summary", choices=list(LAYOUT_SECTIONS))
+    ins.add_argument("--entity", action="append", type=int, default=[],
+                     help="scope to this entity_number (repeatable); includes its original blueprint record")
+    ins.add_argument("--limit", type=int, default=DEFAULT_PAGE_LIMIT)
+    ins.add_argument("--cursor", default=None, help="page cursor from a previous call")
+    ins.add_argument("--json", dest="json_out", default=None, help="write the summary JSON here")
+    ins.add_argument("--graph", dest="graph_out", default=None, help="write the full contract graph document here")
+    ins.add_argument("--view", default=None, help="write a standalone viewer page here")
+    ins.add_argument("--assignments", default=None, help="assignment document to preload into the page")
+    ins.add_argument("--open", action="store_true", help="open the written page in a browser")
+    ins.set_defaults(func=_cmd_routes_inspect)
+
+    req = routes.add_parser("request", help="seal a saved request from a template plus an assignment export")
+    common(req)
+    req.add_argument("--template", required=True,
+                     help="JSON with budgets, exports, surplus, objective, protected, assumptions, detail")
+    req.add_argument("--assignments", default=None,
+                     help="the viewer's assignment export (bare set or draft envelope)")
+    req.add_argument("--out", default=None, help="write the sealed request document here")
+    req.set_defaults(func=_cmd_routes_request)
+
+    ana = routes.add_parser("analyze", help="analyze a saved request; write result and viewer artifacts")
+    common(ana)
+    ana.add_argument("--request", required=True, help="a sealed request document (from `routes request`)")
+    ana.add_argument("--section", default="summary", choices=list(ANALYSIS_SECTIONS))
+    ana.add_argument("--limit", type=int, default=DEFAULT_PAGE_LIMIT)
+    ana.add_argument("--cursor", default=None)
+    ana.add_argument("--json", dest="json_out", default=None, help="write the summary JSON here")
+    ana.add_argument("--result", dest="result_out", default=None, help="write the sealed result document here")
+    ana.add_argument("--view", default=None, help="write a standalone viewer page here (graph + result)")
+    ana.add_argument("--open", action="store_true")
+    ana.set_defaults(func=_cmd_routes_analyze)
+
+    fnd = routes.add_parser("finding", help="show a finding and the original location of every entity it names")
+    common(fnd)
+    fnd.add_argument("--finding", required=True, help="a finding ID or a finding code")
+    fnd.add_argument("--result", default=None,
+                     help="a saved result document; without it the graph's own findings are searched")
+    fnd.add_argument("--limit", type=int, default=5)
+    fnd.set_defaults(func=_cmd_routes_finding)
+
+
+def _book_path_arg(value: str):
+    from .routing_public import PublicError, parse_book_path
+
+    try:
+        return parse_book_path(value)
+    except PublicError as e:
+        raise argparse.ArgumentTypeError(str(e)) from e
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="factoribot")
     p.add_argument("--data", default=None, help="path to data-raw-dump.json")
@@ -293,6 +557,8 @@ def main(argv: list[str] | None = None) -> int:
     sb.add_argument("--bp", required=True, help="file with the blueprint string, or - for stdin")
     sb.add_argument("--product", default=None, help="optional output item to analyze")
     sb.set_defaults(func=_cmd_analyze)
+
+    _add_routes(sub)
 
     sv = sub.add_parser("serve", help="run the UDP daemon for the in-game mod")
     sv.add_argument("--host", default="127.0.0.1")

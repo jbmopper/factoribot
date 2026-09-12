@@ -305,3 +305,150 @@ make test                                                             # 280 pass
 Unchanged gates: everything in §5 (no real graphs, no game validation, no MCP/CLI
 surface). The viewer (task 06) may want to render a null-ID routing scenario as
 "infeasible under a feasibility request"; that is its file, not changed here.
+
+## Follow-up (audit F-3) — aggregate `unknown_capacity_relaxed` findings
+
+Starting snapshot: `main` at `0b0f3da` plus the full uncommitted working tree (planner,
+MCP adapter, skill, contract 1.1.1, Fix B finding-ID codes/merge). Contract version
+consumed: **1.1.1**, unchanged; no contract, bound, status or certificate logic changed.
+Model: Claude (Sonnet 5).
+
+### What changed
+
+Task 08's audit (`docs/blueprint-routing-release-review.md`, finding F-3, low severity)
+found that `analyze_delivery` emitted one `unknown_capacity_relaxed` finding per
+unknown-capacity *group* and per unknown-capacity *activity*. On the pilot that is 623
+near-identical findings (608 bulk-inserter hand-offs + 15 splitter bodies) out of 626
+total, burying the two findings a user actually needs (`zero_objective` and
+`delivery_upper_bound`).
+
+Owned change: `daemon/factoribot/blueprint_plan.py` only.
+
+- `_Scope.__init__` now also indexes `self.entities = {e.id: e for e in graph.entities}`
+  (needed to classify unknown activities by their owning entity's prototype).
+- A new `_sample_ids` helper (module level, cap `_ID_SAMPLE_CAP = 20`) renders a message
+  fragment that lists up to 20 raw group/activity IDs and then "`, and N more`" — the
+  "capped sample plus a total" the audit's own acceptance test suggests.
+- The two loops at the old `blueprint_plan.py:719-730` (one finding per
+  `inputs.unknown_groups` entry, one per `inputs.unknown_activities` entry) are replaced
+  by two aggregating loops:
+  - Unknown capacity **groups** are bucketed by `CapacityGroup.kind` (the contract's own
+    vocabulary: `lane`, `splitter`, `inserter`, `machine_time`, `boundary`, `other` —
+    material-independent by construction). One finding per kind carries every affected
+    entity in `entity_ids` (uncapped, structured field — nothing is dropped) and a
+    message stating the group count, the entity count, the relaxation direction
+    ("treat each as unlimited (optimistic)... never used as a ceiling"), and a capped
+    sample of the raw group IDs.
+  - Unknown capacity **activities** are bucketed by the owning entity's `prototype`
+    (also material-independent). Same shape: one finding per prototype, full entity
+    scope, message with counts, direction and a capped sample of activity IDs.
+- Finding identity is unchanged (`code + sorted entity/endpoint scope + material + sorted
+  evidence`, contract §"Finding IDs"); the code stays `unknown_capacity_relaxed` for both
+  loops, exactly as before. Aggregating by kind/prototype is what keeps scope (and thus
+  identity) small instead of one entry per group — Fix B's `_merge_findings`, applied at
+  `_base_result` as before, is unchanged and still the single choke point for anything
+  that still collides after this (e.g. two graphs that happen to produce the same kind
+  class with identical scope/evidence — already exercised by the existing
+  `test_two_unknown_capacity_groups_on_one_arc_keep_both_messages` regression, which
+  still passes unmodified because it already used a single kind, `inserter`, for both of
+  its two groups).
+- Evidence: each group's own `evidence_ids` (not its users') were already what the
+  pre-fix code attached per group; the aggregated finding takes the union across the
+  class, same as before but merged instead of duplicated. Raw group/activity IDs are
+  **not** legal `Finding.evidence_ids` values (`validate_result` requires
+  `finding.evidence_ids <= graph.evidence.keys()`, and a capacity-group ID is not an
+  `Evidence` record), so they cannot be pushed into that field; per-group detail is kept
+  retrievable instead via (a) the finding's full, uncapped `entity_ids` and (b) the
+  message's capped ID sample, both cross-referenceable against the graph's own
+  `capacity_groups`/`activities`. Checked directly: `BoundScenario.relaxations` (the
+  place the assignment asked to verify first) only ever carries relaxation *labels*
+  (`unknown_capacity_unlimited`, `conditional_connections_open`,
+  `transport_semantics_relaxed`), never group IDs — so that field was not already a
+  source of per-group detail and nothing there needed to change.
+
+### Commands and results
+
+```sh
+.venv/bin/python -m pytest daemon/tests/test_blueprint_plan.py -q                                    # 32 passed
+.venv/bin/python -m pytest daemon/tests/test_routing_findings_aggregation.py -q                       # 5 passed
+.venv/bin/python -m pytest daemon/tests/test_routing_audit.py daemon/tests/test_routing_reporting_regressions.py -q
+                                                                                                        # 85 passed
+.venv/bin/python -m pytest daemon/tests/test_routing_audit.py daemon/tests/test_routing_reporting_regressions.py \
+    daemon/tests/test_blueprint_plan.py daemon/tests/test_routing_findings_aggregation.py -q          # 122 passed
+make test                                                                                              # 625 passed, 0 skipped, 0 failed
+```
+
+(`make test` baseline at task start was 617 passed, 0 skipped; the +8 includes this
+task's 5 new tests plus tests added meanwhile by another agent working concurrently in
+`tools.py`/`routing_public.py`/`test_routing_public.py`/`test_mcp_routing.py`, which this
+task did not touch.) No test was skipped and no dependency was reported absent.
+
+New test file: `daemon/tests/test_routing_findings_aggregation.py` (5 tests, all against
+the synthetic `routing_plan` fixture builder plus one pilot case):
+
+- `test_unknown_groups_aggregate_into_one_finding_per_kind` — a synthetic layout with
+  three unknown-capacity `inserter`-kind groups on three distinct entities and one
+  unknown-capacity `splitter`-kind group on a fourth: exactly 2
+  `unknown_capacity_relaxed` findings, each with the exact expected `entity_ids` set,
+  each message naming its count and every one of its (small) group IDs, total finding
+  count for the whole result under 6.
+- `test_finding_ids_are_unique_and_recomputable` — every finding ID matches
+  `finding_id(code, entity_ids, endpoint_ids, material, evidence_ids)` on the same graph.
+- `test_repeated_analysis_is_deterministic` — `analyze_delivery` run 3 times on the same
+  graph/request produces one `result_hash`, one finding-ID order, one message-sequence.
+- `test_unknown_activities_aggregate_by_prototype` — two unknown-capacity
+  `assembling-machine-2` activities and one `electric-furnace` activity: exactly 2
+  findings (AM2 pair merged, furnace separate), exact entity scope each.
+- `test_pilot_finding_count_drops_to_a_handful` — the exact F-3 counterexample
+  (reproduces `test_routing_audit.py`'s
+  `test_pilot_bound_under_a_declaration_is_only_as_good_as_the_declaration`: the pinned
+  pilot `wip_science.txt` with the three `ee-super-substation` poles declared irrelevant
+  under `power_assumed_available`). Asserts the total finding count is now `<= 10` (was
+  626), exactly 2 `unknown_capacity_relaxed` findings (inserter class with 579 distinct
+  pickup entities across 608 groups, splitter class with 15 entities/groups),
+  `delivery_upper_bound` and `zero_objective` still present, the `audit_power`
+  irrelevance declaration still recorded in `result.assumptions`, and
+  `unknown_capacity_unlimited` still in the routing bound's `relaxations`
+  (`validate_result`'s "unknown capacities must be relaxed for upper bounds" check still
+  passes — confirmed by the explicit `validate_result(result, layout.graph)` call in the
+  test).
+
+### Before / after (measured directly on the pilot)
+
+Ran the pilot's declared-irrelevant request (same construction as
+`test_routing_audit.py::test_pilot_bound_under_a_declaration_is_only_as_good_as_the_declaration`)
+before and after the change:
+
+- **Before**: `status=feasible_relaxed`, **626** findings — 623 `unknown_capacity_relaxed`
+  (608 for individual bulk-inserter hand-off groups, 15 for individual splitter-body
+  groups), plus `conditional_connections_open`, `delivery_upper_bound`, `zero_objective`.
+- **After**: `status=feasible_relaxed` (unchanged), **5** findings —
+  `conditional_connections_open`, `delivery_upper_bound`,
+  2x `unknown_capacity_relaxed` (`"15 splitter capacity group(s) across 15 entities..."`,
+  `"608 inserter capacity group(s) across 579 entities..."`), `zero_objective`. Bounds
+  (`aggregate=unlimited, budget=60, routing=0`) and the `audit_power` declaration in
+  `result.assumptions` are byte-identical to before.
+
+Counterexample checked: the pre-existing
+`test_two_unknown_capacity_groups_on_one_arc_keep_both_messages` regression (Fix B, two
+unknown `inserter`-kind groups sharing one entity/evidence) still passes unmodified — it
+already exercised the same-kind collision this change generalizes, and its message-text
+assertions (`"inserter_a" in relaxed and "inserter_b" in relaxed`) still hold because
+group counts that small never hit the 20-ID sample cap.
+
+### Assumptions, limitations, unmet gates
+
+- Aggregation is presentation only; no bound, status, certificate or witness value
+  changed anywhere in `make test` (all pre-existing numeric assertions still pass
+  unmodified).
+- The classification keys (`CapacityGroup.kind` for groups, `Entity.prototype` for
+  activities) are drawn from data the contract already carries per entity/group; no new
+  adapter claim, no new contract field, no new finding code.
+- The message's 20-ID sample cap (`_ID_SAMPLE_CAP`) is an arbitrary, undocumented-in-the-
+  contract readability choice, not part of finding identity; a consumer wanting the full
+  raw ID list for a large class should cross-reference `entity_ids` (always complete)
+  against the graph's own `capacity_groups`/`activities`, not parse the message text.
+- Unmet gates are unchanged from the rest of this document and from Fix B's handoff: no
+  adapter-produced real-world graph beyond the pinned pilot, no additional game
+  observations, no MCP/CLI exercise of this specific path (the pilot test here calls
+  `analyze_delivery` directly, matching `test_routing_audit.py`'s own convention).

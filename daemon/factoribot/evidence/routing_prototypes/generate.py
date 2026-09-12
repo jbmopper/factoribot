@@ -3,8 +3,8 @@
 
 From the repository root::
 
-    .venv/bin/python daemon/tests/fixtures/routing_prototypes/generate.py
-    .venv/bin/python daemon/tests/fixtures/routing_prototypes/generate.py --from-slice
+    .venv/bin/python daemon/factoribot/evidence/routing_prototypes/generate.py
+    .venv/bin/python daemon/factoribot/evidence/routing_prototypes/generate.py --from-slice
 
 The first form re-cuts the pinned slice from the full ``data/data-raw-dump.json``
 and rebuilds everything from it. The second form needs no dump: it rebuilds the
@@ -34,7 +34,9 @@ from factoribot.transport_prototypes import (  # noqa: E402
 )
 
 OBSERVATION_DIR = HERE.parent / "routing_mechanics_observations"
-PILOT_PATH = HERE.parent / "wip_science.txt"
+# wip_science.txt is test data, not evidence, so it stays under daemon/tests/
+# even though this generator moved into the package with the evidence it builds.
+PILOT_PATH = REPO_ROOT / "daemon" / "tests" / "fixtures" / "wip_science.txt"
 
 # Observations about the source dump itself, recorded as provenance notes. They
 # describe the dump whose SHA-256 the manifest records, and nothing else.

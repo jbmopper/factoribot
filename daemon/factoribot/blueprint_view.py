@@ -808,6 +808,7 @@ def build_view_model(graph: Any, result: Any = None, assignments: Any = None,
             "analyzer_version": _generic(result.get("analyzer_version")),
             "schema_version": _generic(result.get("schema_version")),
             "blueprint_hash": _generic(result.get("blueprint_hash")),
+            "prototype_hash": _generic(result.get("prototype_hash")),
             "graph_hash": _generic(result.get("graph_hash")),
             "request_hash": _generic(result.get("request_hash")),
             "result_hash": _generic(result.get("result_hash")),
@@ -819,8 +820,15 @@ def build_view_model(graph: Any, result: Any = None, assignments: Any = None,
             "witness_validation": _generic(_obj(result.get("witness")).get("validation")) if result.get("witness") else None,
             "detail_kind": _generic(_obj(result.get("detail")).get("kind")),
             "request": request,
+            # findings.validate_result requires blueprint_hash, prototype_hash and
+            # graph_hash to all agree between a result and the graph it describes
+            # (a mismatch on any one of the three means the result is not sound
+            # provenance for what is loaded here); a missing hash on either side
+            # compares unequal and is treated the same as a mismatch, never as
+            # a match.
             "graph_match": (result.get("graph_hash") == graph.get("graph_hash")
-                            and result.get("blueprint_hash") == graph.get("blueprint_hash")),
+                            and result.get("blueprint_hash") == graph.get("blueprint_hash")
+                            and result.get("prototype_hash") == graph.get("prototype_hash")),
             "extra": _extra(result, "result"),
         }
     return model

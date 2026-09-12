@@ -4,10 +4,12 @@ Prepared 2026-09-08. These are implementation assignments, not claims that the
 features exist. The parent design is
 [blueprint-routing-design.md](../blueprint-routing-design.md).
 
-**Current dispatch plan: [Next steps after the Claude tranche](NEXT-STEPS.md).**
-It includes the three review fixes, model assignments, and the next parallel wave.
-The reviewed baseline is commit `76fd016`; tasks 00/01 and components of
-02/03/05/06 are already present. Do not restart them from scratch.
+**Current status and dispatch plan: [NEXT-STEPS.md](NEXT-STEPS.md).**
+As of 2026-09-11, tasks 00–07 are implemented (02's game observations remain
+unmet), fixes A/B/C and audit F-1/F-2/F-3 are complete, and task 08 has a
+conditional pass. The fresh suite has 625 passing tests. Use the
+[execution checklist](../blueprint-routing-next-run.md) for the remaining work;
+do not redispatch completed tasks from this historical catalog.
 
 Tasks 00–08 deliver the first routing audit; 09–14 are later releases.
 Manual furnace assignments and explicit optimistic treatment of unknown inserter
@@ -29,8 +31,9 @@ repository. The instructions are host-neutral: Codex and Cursor should use their
 own file, shell, test, and browser tools. These prompts do not configure a model
 or launch other agents automatically.
 
-The reviewed work is now committed in `76fd016`. Before dispatch, check for
-subsequent changes and provide the same reviewed starting snapshot to each
+The latest status check covers `664662e` plus an uncommitted implementation
+tranche. Before dispatch, check for subsequent changes and provide the same
+reviewed starting snapshot to each
 checkout, including required untracked files if any, and record the revision plus
 any patch manifest. A worktree from an older revision may omit required code.
 Transfer only relevant files;

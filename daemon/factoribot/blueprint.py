@@ -30,26 +30,15 @@ class BlueprintError(ValueError):
 
 
 def decode_blueprint_string(s: str) -> dict:
-    """Decode a blueprint export string (or raw JSON) into its dict form."""
-    s = (s or "").strip()
-    # Tolerate a pasted markdown fence around the string.
-    if s.startswith("```"):
-        s = s.strip("`").strip()
-    if not s:
-        raise BlueprintError("empty blueprint string")
-    if s[0] == "{":  # 2.0 accepts uncompressed JSON
-        try:
-            return json.loads(s)
-        except json.JSONDecodeError as e:
-            raise BlueprintError(f"looks like JSON but won't parse: {e}") from e
-    body = s[1:]  # skip the version byte
-    try:
-        return json.loads(zlib.decompress(base64.b64decode(body)).decode("utf-8"))
-    except (binascii.Error, zlib.error, UnicodeDecodeError, json.JSONDecodeError) as e:
-        raise BlueprintError(
-            "not a valid blueprint string "
-            "(expected a version byte followed by base64 of zlib-compressed JSON)"
-        ) from e
+    """Decode a blueprint export string (or raw JSON) into its dict form.
+
+    Delegates to the bounded `decode_blueprint` (task 03) so a pasted zip bomb
+    stops at `DEFAULT_LIMITS.max_decompressed_bytes` *during* inflation instead
+    of expanding in full. Behaviour is unchanged for every input the old body
+    accepted; the raised `BlueprintDecodeError` is a `BlueprintError` subclass,
+    so existing `except BlueprintError` callers are unaffected.
+    """
+    return decode_blueprint(s, DEFAULT_LIMITS)
 
 
 def find_blueprint_string(text: str) -> str | None:

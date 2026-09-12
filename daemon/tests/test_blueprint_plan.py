@@ -285,7 +285,8 @@ def test_unsupported_bridge_and_unknown_power_withhold_all_claims():
         check_result_contract(report, graph)
         assert report.result.status == "partial" and not report.result.bounds and report.result.witness is None
         assert not any(f.evidence_kind == "upper_bound" for f in report.result.findings)
-        assert any(f.code == "unresolved_model" for f in report.result.findings)
+        # One code per unresolved reason class (see test_routing_reporting_regressions).
+        assert any(f.code.startswith("unresolved_") for f in report.result.findings)
     graph = cases.competing_items()[0]
     request = cases.request(graph, [cases.feed("iron_feed", "iron", cases.ep(1, "ingredients", "inventory")),
                                     cases.feed("copper_feed", "copper", cases.ep(2, "ingredients", "inventory"))],

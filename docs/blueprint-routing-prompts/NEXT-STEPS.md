@@ -1,42 +1,71 @@
-# Next steps after the Claude tranche
+# Blueprint routing — current next steps
 
-Updated 2026-09-08 after reviewing commit `76fd016`. This is the current dispatch
-plan; [README.md](README.md) retains the full task catalog and model guidance.
+Updated 2026-09-11. This is the current dispatch record; the
+[task catalog](README.md) retains the original implementation prompts and model
+recommendations. Do not redispatch completed work from those prompts.
 
-## Reviewed state
+## Verified state
 
-- Tasks 00/01 are implemented. Prototype fixtures, spatial indexing, the synthetic
-  solver core, and viewer components from 02/03/05/06 are present.
-- The review reran `make test`: **330 passed**. Additional cases reproduced the
-  three defects below; they are not yet fixed by this document.
-- Task 04's actual transport connections and task 07's public integration remain.
-- Game-mechanics evidence is six documented-only records, ten pending records,
-  and zero observed records. Component tests do not close that gate.
+Status check covered HEAD `664662e` plus the current uncommitted implementation,
+fixtures, tests and handoffs. A fresh `make test` completed with **625 passed,
+0 failed, 0 skipped in 129.72 seconds** on 2026-09-11. This is software validation,
+not a game observation or a verification of the user's running MCP process.
 
-## Assignments
+| Work | Status |
+| --- | --- |
+| 00/01 contracts and calculation trust | Implemented |
+| 02 prototypes and evidence records | Implemented; game-observation gate remains open |
+| 02b installed evidence packaging | Implemented; installed-wheel validation recorded in its handoff |
+| 03 spatial model, 04 transport graph | Implemented |
+| 05 delivery bounds, 06 viewer | Implemented and integrated |
+| Fixes A/B/C | Fixed, regression coverage passes |
+| 07 CLI/MCP integration | Implemented; public tools, sealing and viewer workflow available |
+| 08 independent audit | Conditional pass; math tests pass, game validation unmet, pilot usefulness unverified |
+| Audit F-1 / F-2 | Fixed: MCP provenance argument and evidence-derived capability prose |
+| Audit F-3 | Fixed: pilot warning aggregation, 626 findings reduced to five |
+| Audit F-4 | Open, low severity: malformed internal LP RHS raises a SciPy error; not reachable from valid public requests |
+| 09–14 extensions | Deferred; do not treat the first-release gates as passed |
 
-| Work | Recommended model / effort | Alternative |
-| --- | --- | --- |
-| Fix A — numerical certificates | Astra high | Sol high |
-| Fix B — duplicate finding IDs | Terra medium | Luna high with the explicit cases below |
-| Fix C — viewer provenance | Luna medium | Terra medium |
-| [04 — Transport graph](04-transport-graph.md) | Grok 4.6 high for the cost-conscious allocation | Sol high |
-| Controlled game-mechanics captures for 02/04 | Terra medium | Grok 4.6 high |
-| [07 — Public integration](07-public-integration.md) | Grok 4.6 high | Terra high |
-| [08 — Independent audit](08-independent-audit.md) | Astra high or Sol high in a fresh session | Grok 4.6 high |
+Evidence remains **0 observed / 6 documented-only / 10 pending**. The pilot's
+actual feeds, exports, removal services, research, mod manifest, control state,
+power and 76 furnace recipe assignments remain undeclared. The illustrative
+fixtures do not supply those facts.
 
-These are workload-based recommendations, not measured comparisons on Factoribot.
-The roles and effort choices follow the previously checked
-[OpenAI model guidance](https://learn.chatgpt.com/docs/models) and
-[Cursor Grok 4.6 documentation](https://prod.cursor.com/docs/models/grok-4-6).
+## Next dispatch
 
-Run A/B/C in parallel in separate checkouts with distinct new regression test
-files. Task 04 can proceed independently against the existing contract. Serialize
-any shared contract changes through the coordinator. Integrate the fixes and
-task 04 before accepting task 07, then run task 08. Capture mechanics observations
-alongside task 04 in a controlled game environment, following the existing
-[capture procedure](../../daemon/tests/fixtures/routing_mechanics_observations/CAPTURE.md).
-Missing observations must stay explicit in the supported scope.
+Follow the [execution checklist](../blueprint-routing-next-run.md). The order is:
+
+1. Preserve and review the complete uncommitted tranche; checkpoint only the
+   intended files. Verify the connected MCP process exposes the new tools after
+   a host restart/reconnect.
+2. In parallel: collect the pilot's real declarations and run small, controlled
+   mechanics captures in a disposable Factorio environment. Start with the fast
+   belt and lane/connection rules used by the pilot. One observation does not
+   validate the entire mechanics profile.
+3. Have one integration owner validate evidence records, regenerate manifests,
+   review model and advertised-scope implications, reseal requests and rerun the
+   public pipeline. Evidence changes can change graph identity.
+4. Review the resulting pilot findings and remaining conditions. Keep every
+   number labelled as an upper bound under stated relaxations.
+
+F-4 is a separate bounded robustness patch, not a reason to delay collecting
+real inputs. Keep `routing_lp.py` ownership separate from evidence and pilot
+work. Use the audit's explicit reproduction and acceptance test; do not redesign
+the numerical certificate layer for it.
+
+## Records
+
+- [Release review and current follow-up status](../blueprint-routing-release-review.md)
+- [07 integration, including F-1/F-2](../blueprint-routing-handoffs/07-public-integration.md#11-audit-fixes-f-1f-2)
+- [05 bounds and F-3 aggregation](../blueprint-routing-handoffs/05-delivery-bounds.md)
+- [02b evidence packaging](../blueprint-routing-handoffs/02b-evidence-packaging.md)
+- [Controlled capture procedure](../../daemon/factoribot/evidence/routing_mechanics_observations/CAPTURE.md)
+
+## Historical fix prompts — completed, retained for reproduction
+
+The prompts below describe defects at `76fd016`, before their fixes. They are
+not outstanding assignments. Current handoffs and passing regressions supersede
+their before-state descriptions.
 
 ## Fix A — copy-paste prompt
 
@@ -123,11 +152,3 @@ the stale/mismatch state and preserves safe text rendering.
 Run focused tests and make test. Return the before/after result and task-specific
 diff. Keep this change bounded to provenance; defer unrelated viewer redesign.
 ```
-
-## Handoff and release gate
-
-Use the common handoff format. Keep every complete request, source hash, observed
-failure, and reproduction command available to the next agent. Task 08 must
-exercise these regressions as well as the new real-layout path. The next useful
-deliverable is one blueprint imported, connected, analyzed, and inspected through
-the public interface under explicit assumptions.

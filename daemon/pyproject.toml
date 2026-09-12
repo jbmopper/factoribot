@@ -24,3 +24,25 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 include = ["factoribot*"]
+
+# The routing viewer reads these through `importlib.resources.files`. Package
+# discovery alone ships them in an editable install but not in a wheel or sdist,
+# so `render_view` would fail from an installed package without this stanza.
+#
+# `evidence/` is the pinned routing-prototype extract and mechanics-observation
+# records that `transport_prototypes.py` resolves relative to its own file
+# (`Path(__file__).resolve().parent / "evidence" / ...`). Without this stanza
+# they ship in an editable install but not in a wheel or sdist, and
+# `load_pinned_extract()` fails from an installed package.
+[tool.setuptools.package-data]
+factoribot = [
+    "blueprint_view_assets/*.html",
+    "blueprint_view_assets/*.css",
+    "blueprint_view_assets/*.js",
+    "evidence/routing_prototypes/*.json",
+    "evidence/routing_prototypes/*.md",
+    "evidence/routing_prototypes/*.py",
+    "evidence/routing_mechanics_observations/*.json",
+    "evidence/routing_mechanics_observations/*.md",
+    "evidence/routing_mechanics_observations/records/*.json",
+]

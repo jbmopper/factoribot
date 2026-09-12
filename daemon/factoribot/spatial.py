@@ -11,7 +11,7 @@ belt/underground/splitter transport rules, lane connections, inserter capacity,
 recipe activities, or any viewer. `inserter_candidates` answers a *geometric*
 question ("which entities sit on the pickup/drop tiles") and says so; which lane
 an inserter uses and how fast it swings are gated on
-`daemon/tests/fixtures/routing_mechanics_observations/` records that are still
+`daemon/factoribot/evidence/routing_mechanics_observations/` records that are still
 `pending`.
 
 Prototype geometry comes from task 02's pinned extract
@@ -251,8 +251,13 @@ def _box_tiles(box: Box) -> tuple[tuple[int, int], ...]:
     return tuple((x, y) for y in range(y0, y1) for x in range(x0, x1))
 
 
-def _rotate(dx: float, dy: float, direction: int) -> tuple[float, float]:
-    """Rotate a north-facing offset clockwise into `direction` (screen y down)."""
+def rotate_offset(dx: float, dy: float, direction: int) -> tuple[float, float]:
+    """Rotate a north-facing offset clockwise into `direction` (screen y down).
+
+    Public so the transport layer can share this one definition of the rotation
+    sense instead of keeping a second copy of it (task 04 handoff, shared edit 1).
+    Cardinal directions only; anything else is unsupported by the first profile.
+    """
     if direction == 0:
         return dx, dy
     if direction == 4:
@@ -262,6 +267,10 @@ def _rotate(dx: float, dy: float, direction: int) -> tuple[float, float]:
     if direction == 12:
         return dy, -dx
     raise SpatialError("non_cardinal_direction", f"cannot rotate offset by direction {direction}")
+
+
+#: Backwards-compatible private alias; `rotate_offset` is the public name.
+_rotate = rotate_offset
 
 
 def _footprint(position: Point, width: int, height: int, direction: int) -> tuple[Box, bool]:

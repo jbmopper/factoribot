@@ -504,11 +504,77 @@ def _finding(code, severity, kind, message, *, entity_ids=(), endpoint_ids=(), m
                 evidence_ids=list(evidence_ids), assumptions=list(assumptions))
 
 
+# Finding identity is `code + entity/endpoint scope + material + evidence` (contract
+# §"Finding IDs"); message text and severity are deliberately outside it. Two rules keep
+# the emitted findings unique without inventing identity:
+#
+# 1. semantically distinct facts carry distinct codes, so what the hash can see already
+#    separates them (an unresolved reason class, the stage a solver limit occurred at);
+# 2. whatever still shares an identity is a discriminator the contract cannot express
+#    (a capacity group ID, a mod name, a budget ID). Those are merged on purpose by
+#    `_merge_findings`, which keeps every message rather than dropping all but one.
+_UNRESOLVED_CODES = {
+    "unsupported topology": "unresolved_topology_gap",
+    "unsupported entity": "unresolved_unsupported_entity",
+    "ambiguous furnace": "unresolved_ambiguous_furnace",
+    "power availability unknown": "unresolved_power",
+    "mod alters item mechanics": "unresolved_mod_mechanics",
+}
+_STAGE_LIMIT_CODES = {stage: f"solver_limit_{stage}" for stage in STAGES}
+_SEVERITY_ORDER = ("info", "warning", "error")
+# F-3 (audit): a real layout can carry hundreds of unknown-capacity groups (the
+# pilot has 608 bulk-inserter hand-offs and 15 splitter bodies) that would
+# otherwise each mint their own `unknown_capacity_relaxed` finding and bury the
+# findings that matter. `_sample_ids` caps how many raw IDs a message spells out
+# (a "capped sample plus a total", per the audit's acceptance test); the finding's
+# structured `entity_ids` field is never capped, so the full affected scope stays
+# machine-readable regardless of the cap.
+_ID_SAMPLE_CAP = 20
+
+
+def _sample_ids(ids) -> str:
+    ids = list(ids)
+    shown = ", ".join(ids[:_ID_SAMPLE_CAP])
+    if len(ids) > _ID_SAMPLE_CAP:
+        shown += f", and {len(ids) - _ID_SAMPLE_CAP} more"
+    return shown
+
+
+def _merge_findings(findings: list[dict]) -> list[dict]:
+    """Collapse findings that share a contract identity, keeping every explanation.
+
+    Same identity means same code, scope, material and evidence, so the merged record
+    keeps those references untouched; only the parts identity ignores are combined:
+    messages are concatenated in generation order (deterministic; a message already
+    contained in the merged text is not repeated, nothing is dropped), the
+    severity becomes the strongest of the group, and a structured rate/bound survives
+    only when the whole group agrees on it. A mixed evidence kind degrades to
+    ``conditional`` rather than claiming an observation or an upper bound.
+    """
+    merged: dict[str, dict] = {}
+    for finding in findings:
+        kept = merged.get(finding["id"])
+        if kept is None:
+            merged[finding["id"]] = dict(finding)
+            continue
+        if finding["message"] not in kept["message"]:
+            kept["message"] = f"{kept['message']} {finding['message']}"
+        kept["severity"] = max(kept["severity"], finding["severity"], key=_SEVERITY_ORDER.index)
+        if kept["evidence_kind"] != finding["evidence_kind"]:
+            kept["evidence_kind"] = "conditional"
+        for field in ("required_rate", "capacity_upper_bound"):
+            if kept[field] != finding[field]:
+                kept[field] = None
+        kept["assumptions"] = list(dict.fromkeys(kept["assumptions"] + finding["assumptions"]))
+    return sorted(merged.values(), key=lambda f: f["id"])
+
+
 class _Scope:
     """Maps constraint-cut labels to graph entities, endpoints and evidence."""
 
     def __init__(self, graph: SpatialGraph, request: RoutingRequest, inputs: ModelInputs):
         self.endpoints = _endpoints(graph)
+        self.entities = {e.id: e for e in graph.entities}
         self.groups = {g.id: g for g in graph.capacity_groups}
         self.activities = {a.id: a for a in graph.activities}
         self.arcs = {a.id: a for a in graph.arcs}
@@ -545,7 +611,7 @@ class _Scope:
                 for feed in self.feeds.values():
                     if feed.budget_id == label[1]:
                         endpoint(feed.endpoint)
-            elif kind in ("upper", "lower"):
+            elif kind in ("upper", "lower", "implied"):
                 inner = label[1:]
                 if inner[0] == "craft":
                     activity = self.activities[inner[1]]
@@ -585,7 +651,7 @@ def _base_result(graph: SpatialGraph, request: RoutingRequest | None, detail, st
                 request_hash=request.request_hash if request else None,
                 result_hash="sha256:" + "0" * 64,
                 interpreted_request=to_dict(request) if request else None, status=status,
-                findings=sorted(findings, key=lambda f: f["id"]), bounds=bounds, witness=witness,
+                findings=_merge_findings(findings), bounds=bounds, witness=witness,
                 assumptions=list(assumptions), limitations=list(limitations), detail=to_dict(detail))
 
 
@@ -646,13 +712,18 @@ def analyze_delivery(graph: SpatialGraph, request: RoutingRequest, options: Plan
         for reason in unresolved:
             entity_ids, evidence, kind = (), (), "conditional"
             head, _, tail = reason.partition(": ")
+            # One code per reason class: an entity-scoped reason is already distinguished by
+            # its entity and evidence, while `power`/`mod` reasons have no graph scope at all
+            # and would otherwise all hash to the same ID. An unknown future class keeps the
+            # generic code and is merged rather than colliding.
+            code = _UNRESOLVED_CODES.get(head, "unresolved_model")
             if head == "unsupported topology":
                 gap = gaps.get(tail.split(" ")[0])
                 if gap is not None:
                     entity_ids, evidence = gap.entity_ids, gap.evidence_ids
             elif head in ("unsupported entity", "ambiguous furnace") and tail in entities:
                 entity_ids, evidence = (entities[tail].id,), entities[tail].evidence_ids
-            findings.append(_finding("unresolved_model", "warning", kind,
+            findings.append(_finding(code, "warning", kind,
                                      f"No bound or insufficiency claim: {reason}. Resolve it (assignment, evidence, or a supported adapter) before numerical analysis.",
                                      entity_ids=entity_ids, evidence_ids=evidence))
         result = _seal_result(_base_result(graph, request, request.detail, "partial", findings, [], None, assumptions, limitations), graph)
@@ -663,17 +734,44 @@ def analyze_delivery(graph: SpatialGraph, request: RoutingRequest, options: Plan
     stages = {stage: solve_stage(graph, request, inputs, stage, options) for stage in options.stages}
 
     # Explanatory findings that hold regardless of outcome.
+    #
+    # F-3: aggregate deliberately instead of one finding per unknown-capacity
+    # group/activity. The aggregation key is material-independent (a `CapacityGroup.kind`
+    # such as "inserter"/"splitter", or the owning entity's `prototype` for activities),
+    # so it is stable and matches the contract's own vocabulary rather than an invented
+    # bucket. Every group/activity in a class shares one finding whose `entity_ids`
+    # lists every affected entity in full (nothing is dropped) and whose message states
+    # the count, the relaxation direction, and a capped sample of the raw group/activity
+    # IDs so per-group detail stays retrievable without spelling out hundreds of them.
+    groups_by_kind: dict[str, list[str]] = defaultdict(list)
     for group_id in inputs.unknown_groups:
-        users = scope.group_users[group_id]
-        findings.append(_finding("unknown_capacity_relaxed", "warning", "conditional",
-                                 f"Capacity group {group_id} has unknown capacity; bounds treat it as unlimited (optimistic). It is never used as a ceiling.",
-                                 entity_ids=[u.entity if hasattr(u, "entity") else u.source.entity for u in users],
-                                 evidence_ids=scope.groups[group_id].evidence_ids))
+        groups_by_kind[scope.groups[group_id].kind].append(group_id)
+    for kind in sorted(groups_by_kind):
+        group_ids = sorted(groups_by_kind[kind])
+        users = [u for gid in group_ids for u in scope.group_users[gid]]
+        entity_ids = sorted({u.entity if hasattr(u, "entity") else u.source.entity for u in users}, key=lambda e: e.key)
+        evidence_ids = sorted(set().union(*(set(scope.groups[gid].evidence_ids) for gid in group_ids)))
+        findings.append(_finding(
+            "unknown_capacity_relaxed", "warning", "conditional",
+            f"{len(group_ids)} {kind} capacity group(s) across {len(entity_ids)} entities have unknown capacity; "
+            f"bounds treat each as unlimited (optimistic) and none is ever used as a ceiling. "
+            f"Group IDs: {_sample_ids(group_ids)}.",
+            entity_ids=entity_ids, evidence_ids=evidence_ids))
+
+    activities_by_prototype: dict[str, list[str]] = defaultdict(list)
     for activity_id in inputs.unknown_activities:
-        activity = scope.activities[activity_id]
-        findings.append(_finding("unknown_capacity_relaxed", "warning", "conditional",
-                                 f"Activity {activity_id} has unknown craft capacity; bounds treat it as unlimited (optimistic).",
-                                 entity_ids=[activity.entity], evidence_ids=activity.evidence_ids))
+        prototype = scope.entities[scope.activities[activity_id].entity].prototype
+        activities_by_prototype[prototype].append(activity_id)
+    for prototype in sorted(activities_by_prototype):
+        activity_ids = sorted(activities_by_prototype[prototype])
+        entity_ids = sorted({scope.activities[aid].entity for aid in activity_ids}, key=lambda e: e.key)
+        evidence_ids = sorted(set().union(*(set(scope.activities[aid].evidence_ids) for aid in activity_ids)))
+        findings.append(_finding(
+            "unknown_capacity_relaxed", "warning", "conditional",
+            f"{len(activity_ids)} {prototype} activity(ies) across {len(entity_ids)} entities have unknown craft "
+            f"capacity; bounds treat each as unlimited (optimistic). "
+            f"Activity IDs: {_sample_ids(activity_ids)}.",
+            entity_ids=entity_ids, evidence_ids=evidence_ids))
     for arc_id in inputs.disabled_arcs:
         arc = scope.arcs[arc_id]
         findings.append(_finding("control_disabled_connection", "info", "structural",
@@ -708,10 +806,14 @@ def analyze_delivery(graph: SpatialGraph, request: RoutingRequest, options: Plan
         status = "solver_limit"
         for stage, solution in stages.items():
             if solution.state in ("limit", "size_limit", "uncertified"):
-                findings.append(_finding("solver_limit", "warning", "structural",
+                # Per-stage code: the stage is the only thing separating these findings and
+                # the contract identity cannot see it (no stage field, no graph scope).
+                findings.append(_finding(_STAGE_LIMIT_CODES.get(stage, "solver_limit"), "warning", "structural",
                                          f"Stage {stage}: {solution.certificate} {' '.join(solution.notes)}".strip()))
     elif infeasible and (routing is None or routing.state != "infeasible"):
         status = "solver_limit"  # a looser stage infeasible while routing is not: numerically inconsistent, claim nothing
+        # Generic code: this branch and the rejected-witness one below are single findings
+        # about the whole analysis, not per-stage records, and they exclude each other.
         findings.append(_finding("solver_limit", "warning", "structural",
                                  "A relaxed stage was reported infeasible while the routing stage was not; stages are nested, so no bound is claimed."))
     elif routing is not None and infeasible:

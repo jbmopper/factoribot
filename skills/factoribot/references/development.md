@@ -12,7 +12,16 @@ for it. Keep development separate from the runtime MCP tool surface.
    - `planner.py`: continuous optimization, resource budgets and verification.
    - `solver.py`: exact fixed-recipe balances and shared machine/module effects.
    - `model.py` / `gamedata.py`: mechanics missing from normalized prototypes.
-   - `bpanalyze.py`: blueprint-specific analysis.
+   - `bpanalyze.py`: blueprint-specific analysis (speed-only, no geometry).
+   - `blueprint_contract.py` / `findings.py`: the frozen routing contract types,
+     hashing and validation. Shared: changes need a versioned proposal.
+   - `spatial.py` / `transport.py` / `routing.py`: blueprint import, entity
+     geometry and the supported transport graph.
+   - `blueprint_plan.py` / `routing_lp.py`: the delivery LP, certificates and
+     result assembly.
+   - `blueprint_view.py`: the standalone viewer page.
+   - `routing_public.py`: the public routing surface (summaries, detail scope,
+     pagination, request sealing, capability metadata). Add no mechanics here.
    - `tools.py` / `mcp_server.py`: schemas, structured errors and transport.
    A wording problem belongs in the skill/tool descriptions, not in the math.
 3. Add a hand-checkable failing case with an independently derived expectation.

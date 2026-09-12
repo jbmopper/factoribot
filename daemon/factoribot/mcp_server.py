@@ -7,19 +7,17 @@ No model client, credentials, network listener, or source-editing tool is used.
 from __future__ import annotations
 
 import asyncio
-import hashlib
 import json
-from pathlib import Path
 
-from .gamedata import build_database, find_dump
+from .gamedata import build_database, read_dump
 from .tools import TOOL_SCHEMAS, Toolbox
 
 
 def load_toolbox(data: str | None = None) -> Toolbox:
-    path = Path(find_dump(data)).resolve()
-    content = path.read_bytes()
-    db = build_database(json.loads(content))
-    return Toolbox(db, data_source={"path": str(path), "sha256": hashlib.sha256(content).hexdigest()})
+    # `read_dump` owns the file-bytes SHA identity; inlining a second
+    # `sha256(path.read_bytes())` here risks two conventions drifting apart.
+    path, digest, raw = read_dump(data)
+    return Toolbox(build_database(raw), data_source={"path": path, "sha256": digest})
 
 
 def create_server(toolbox: Toolbox):

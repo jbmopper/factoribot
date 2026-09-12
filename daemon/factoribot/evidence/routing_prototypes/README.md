@@ -25,10 +25,10 @@ From the repository root:
 
 ```sh
 # re-cut the slice from the full dump, then rebuild everything from the slice
-.venv/bin/python daemon/tests/fixtures/routing_prototypes/generate.py
+.venv/bin/python daemon/factoribot/evidence/routing_prototypes/generate.py
 
 # rebuild without a dump, reusing the dump identity already in manifest.json
-.venv/bin/python daemon/tests/fixtures/routing_prototypes/generate.py --from-slice
+.venv/bin/python daemon/factoribot/evidence/routing_prototypes/generate.py --from-slice
 
 .venv/bin/python -m pytest daemon/tests/test_transport_prototypes.py -q
 ```

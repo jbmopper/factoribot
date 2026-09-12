@@ -18,10 +18,10 @@ Three rules shape everything here:
    supply them from outside the dump. The blueprint format version does not
    identify the prototype environment.
 
-The pinned fixtures under ``daemon/tests/fixtures/routing_prototypes/`` let the
-downstream spatial/transport/LP tasks run offline, without the 14 MB dump.
-Mechanics evidence records live in
-``daemon/tests/fixtures/routing_mechanics_observations/``; a rule with no
+The pinned fixtures under ``daemon/factoribot/evidence/routing_prototypes/`` let
+the downstream spatial/transport/LP tasks run offline, without the 14 MB dump,
+and ship inside the installed package. Mechanics evidence records live in
+``daemon/factoribot/evidence/routing_mechanics_observations/``; a rule with no
 recorded game observation is an unmet gate, not a passing default.
 
 Nothing in this module implements belt, splitter, inserter or power mechanics.
@@ -145,11 +145,17 @@ class PrototypeError(ValueError):
 
 # --------------------------------------------------------------------------
 # Fixture locations (adapter API for tasks 03/04/05)
+#
+# These directories live inside the ``factoribot`` package itself (not under
+# ``daemon/tests/``) and are declared in ``[tool.setuptools.package-data]`` in
+# ``daemon/pyproject.toml``, so they ship with an installed wheel and resolve
+# correctly from ``site-packages/factoribot/evidence/...`` as well as from a
+# repository checkout.
 # --------------------------------------------------------------------------
 
-_TESTS_ROOT = Path(__file__).resolve().parents[1] / "tests"
-PROTOTYPE_FIXTURE_DIR = _TESTS_ROOT / "fixtures" / "routing_prototypes"
-OBSERVATION_FIXTURE_DIR = _TESTS_ROOT / "fixtures" / "routing_mechanics_observations"
+_EVIDENCE_ROOT = Path(__file__).resolve().parent / "evidence"
+PROTOTYPE_FIXTURE_DIR = _EVIDENCE_ROOT / "routing_prototypes"
+OBSERVATION_FIXTURE_DIR = _EVIDENCE_ROOT / "routing_mechanics_observations"
 RAW_SLICE_PATH = PROTOTYPE_FIXTURE_DIR / "raw_prototype_slice.json"
 EXTRACT_PATH = PROTOTYPE_FIXTURE_DIR / "prototypes.json"
 MANIFEST_PATH = PROTOTYPE_FIXTURE_DIR / "manifest.json"

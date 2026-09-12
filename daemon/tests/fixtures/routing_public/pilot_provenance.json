@@ -1,0 +1,24 @@
+{
+ "activity_recipes": 3,
+ "blueprint_file": "daemon/tests/fixtures/wip_science.txt",
+ "blueprint_hash": "sha256:e2dc8eedceac6fa4dd38ab976f559461fabc0ca2c0c6dd8fd0dc57b745fffab6",
+ "counts": {
+  "activities": 153,
+  "arcs": 11660,
+  "capacity_groups": 4729,
+  "entities": 2771,
+  "evidence": 17,
+  "graph_findings": 377,
+  "inventories": 458,
+  "lanes": 3832,
+  "ports": 8392,
+  "topology_gaps": 0
+ },
+ "export_endpoint": "bp/root/e/334/port/out_left",
+ "feed_endpoint": "bp/root/e/2586/port/in_left",
+ "graph_hash": "sha256:9ad0536e3edb3972b8a111b33490f23f7deaf108ffbe60a9afb5d04c48e7cd87",
+ "mechanics_profile": "base-2.0.76-normal-v1",
+ "note": "ILLUSTRATIVE DECLARATION, not a measurement: the pilot's real feeds, exports, removal services, research, enabled mods, control state and power are unresolved.",
+ "prototype_hash": "sha256:756af0daaf0da4d68e414513bf18144b2638e9e6b76d3319fe1f7e38e126655e",
+ "schema_version": "1.1.1"
+}

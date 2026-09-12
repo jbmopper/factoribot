@@ -1,0 +1,95 @@
+{
+ "assumptions": {
+  "available_recipes": [
+   "advanced-circuit",
+   "electric-furnace",
+   "production-science-pack"
+  ],
+  "beacons": "none",
+  "control_policy": "relax_open",
+  "game_version": "2.0.76",
+  "irrelevant": [],
+  "mods": [
+   {
+    "alters_item_mechanics": false,
+    "name": "unknown",
+    "provides": [
+     "power"
+    ],
+    "version": "unknown"
+   },
+   {
+    "alters_item_mechanics": false,
+    "name": "base",
+    "provides": [],
+    "version": "2.0.76"
+   }
+  ],
+  "modules": "none",
+  "power": "assumed_available",
+  "quality": "normal",
+  "research": []
+ },
+ "budgets": [
+  {
+   "capacity": {
+    "kind": "finite",
+    "value": 60.0
+   },
+   "id": "iron",
+   "material": {
+    "kind": "item",
+    "name": "iron-plate",
+    "quality": "normal"
+   }
+  }
+ ],
+ "detail": {
+  "cursor": null,
+  "entity_ids": [],
+  "kind": "summary",
+  "limit": 100
+ },
+ "exports": [
+  {
+   "endpoint": {
+    "entity": {
+     "book_path": [],
+     "entity_number": 334
+    },
+    "kind": "port",
+    "name": "out_left"
+   },
+   "id": "pilot_export",
+   "material": {
+    "kind": "item",
+    "name": "iron-plate",
+    "quality": "normal"
+   },
+   "rate": 0.0,
+   "requirement": "minimum",
+   "sink": {
+    "capacity": {
+     "kind": "unlimited",
+     "value": null
+    },
+    "kind": "external",
+    "service": "ILLUSTRATIVE DECLARATION, not a measurement: the pilot's real feeds, exports, removal services, research, enabled mods, control state and power are unresolved."
+   }
+  }
+ ],
+ "note": "ILLUSTRATIVE DECLARATION, not a measurement: the pilot's real feeds, exports, removal services, research, enabled mods, control state and power are unresolved.",
+ "objective": {
+  "export_id": "pilot_export",
+  "kind": "maximize_export"
+ },
+ "protected": {
+  "areas": [],
+  "endpoints": [],
+  "entities": [],
+  "preserve_boundaries": true,
+  "preserve_unknown": true,
+  "preserve_wiring": true
+ },
+ "surplus": []
+}

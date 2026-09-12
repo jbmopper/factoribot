@@ -1,0 +1,30 @@
+{
+ "assignments": {
+  "blueprint_hash": "sha256:e2dc8eedceac6fa4dd38ab976f559461fabc0ca2c0c6dd8fd0dc57b745fffab6",
+  "controls": [],
+  "feeds": [
+   {
+    "budget_id": "iron",
+    "capacity": {
+     "kind": "unlimited",
+     "value": null
+    },
+    "endpoint": {
+     "entity": {
+      "book_path": [],
+      "entity_number": 2586
+     },
+     "kind": "port",
+     "name": "in_left"
+    },
+    "id": "pilot_feed"
+   }
+  ],
+  "furnaces": [],
+  "graph_hash": "sha256:9ad0536e3edb3972b8a111b33490f23f7deaf108ffbe60a9afb5d04c48e7cd87",
+  "schema_version": "1.1.1"
+ },
+ "document_kind": "factoribot.routing.assignment_draft",
+ "note": "ILLUSTRATIVE DECLARATION, not a measurement: the pilot's real feeds, exports, removal services, research, enabled mods, control state and power are unresolved. Shaped exactly like the viewer's assignment export.",
+ "selection_rule": "first transport_boundary_candidate endpoint resolving to an incoming port"
+}

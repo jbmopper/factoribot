@@ -46,7 +46,7 @@ installation or disposable save available, so every record is still unobserved.
    index:
 
    ```sh
-   .venv/bin/python daemon/tests/fixtures/routing_prototypes/generate.py --from-slice
+   .venv/bin/python daemon/factoribot/evidence/routing_prototypes/generate.py --from-slice
    .venv/bin/python -m pytest daemon/tests/test_transport_prototypes.py -q
    ```
 

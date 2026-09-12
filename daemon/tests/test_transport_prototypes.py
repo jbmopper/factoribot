@@ -17,7 +17,8 @@ from factoribot.blueprint import decode_blueprint_string
 from factoribot.blueprint_contract import content_hash
 from factoribot.transport_prototypes import (
     DEFAULT_REFERENCES, EXTRACT_PATH, FIRST_ENTITY_SET, MANIFEST_PATH,
-    OBSERVATION_INDEX_PATH, PILOT_COVERAGE_PATH, PROTOTYPE_SCHEMA_VERSION,
+    OBSERVATION_FIXTURE_DIR, OBSERVATION_INDEX_PATH, PILOT_COVERAGE_PATH,
+    PROTOTYPE_FIXTURE_DIR, PROTOTYPE_SCHEMA_VERSION,
     RAW_SLICE_PATH, REQUIRED_MECHANICS_RULES, REQUIRED_REFERENCE_IDS,
     TARGET_MECHANICS_PROFILE, Provenance, PrototypeError, build_observation_index,
     extract_prototypes, load_json, load_observations, load_pinned_extract,
@@ -335,6 +336,28 @@ def test_slice_is_small_enough_to_check_in():
     total = sum(p.stat().st_size for p in (RAW_SLICE_PATH, EXTRACT_PATH, MANIFEST_PATH,
                                            PILOT_COVERAGE_PATH))
     assert total < 1_000_000
+
+
+def test_fixture_locations_resolve_inside_the_installed_package():
+    """The evidence must ship with the package, not with the test tree.
+
+    `load_pinned_extract()` previously resolved its evidence relative to
+    `daemon/tests/fixtures/`, which no wheel ships -- an installed package has
+    no `tests` directory at all. The fixture directories must live inside the
+    `factoribot` package directory itself, where `[tool.setuptools.package-data]`
+    can (and does) ship them.
+    """
+    import factoribot
+
+    package_dir = Path(factoribot.__file__).resolve().parent
+    for fixture_dir in (PROTOTYPE_FIXTURE_DIR, OBSERVATION_FIXTURE_DIR):
+        resolved = Path(fixture_dir).resolve()
+        assert resolved.is_relative_to(package_dir), (
+            f"{fixture_dir} is not inside the factoribot package directory {package_dir}")
+        assert "tests" not in resolved.relative_to(package_dir).parts
+        assert resolved.is_dir()
+    assert Path(EXTRACT_PATH).resolve().is_relative_to(package_dir)
+    assert Path(MANIFEST_PATH).resolve().is_relative_to(package_dir)
 
 
 # ------------------------------------------------------- mechanics evidence

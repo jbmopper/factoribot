@@ -123,6 +123,61 @@ See the proposed [blueprint routing and design cleanup plan](docs/blueprint-rout
 for spatial analysis, delivery-capacity checks, smelting/power integration, a visual
 inspector, validated cleanup patches, and staged implementation milestones.
 
+## Blueprint routing audit
+
+A second, geometry-aware analysis under a strict frozen contract
+([1.1.1](docs/blueprint-routing-contract.md)): real entity positions, belt lanes,
+underground pairings, splitter paths and inserter reach become a transport graph,
+and a *declared* request is turned into certified upper bounds on delivery.
+`analyze_blueprint` is unchanged and still answers the speed-only question.
+
+```bash
+.venv/bin/factoribot routes inspect --bp data/bp1.txt --view /tmp/layout.html
+.venv/bin/factoribot routes request --bp data/bp1.txt --template t.json --assignments /tmp/export.json --out request.json
+.venv/bin/factoribot routes analyze --bp data/bp1.txt --request request.json --result result.json --view /tmp/audit.html
+.venv/bin/factoribot routes finding --bp data/bp1.txt --result result.json --finding unresolved_unsupported_entity
+```
+
+`inspect` writes a standalone viewer page; you declare budgets, feeds and outlets
+on it by clicking, export the assignment draft, and `request`/`analyze` seal it
+and hand the result back to a new page. The page never solves and never writes a
+file by itself. The same two calculations are exposed over MCP as
+`inspect_blueprint_layout` and `analyze_blueprint_routes`; those are **pure**
+(no file writes, no model calls) and return compact summaries with deterministic
+scoped, paginated detail.
+
+**What it may claim, and what it may not.** Every advertised value is an *upper
+bound under the stated relaxations* — never an achievable, measured or current
+rate, and never a lower bound. A bound is reported only when the contract's
+`unresolved_reasons` is empty *and* a stage returns a certified dual bound;
+otherwise the result is `partial`, `solver_limit`, `insufficient` or
+`invalid_request` with no numbers. Nothing is inferred: feeds, exports, removal
+services, furnace recipes, research, enabled mods, control state and power are
+all explicit request declarations.
+
+**The game-mechanics evidence gate is unmet.** Of 16 recorded mechanics rules,
+**0 are observed**, 6 are documented-only and 10 are pending
+([capture procedure](daemon/factoribot/evidence/routing_mechanics_observations/CAPTURE.md)).
+So no arc claims `exact` semantics, every transport arc is `relaxed` or
+`conditional`, inserter throughput is unknown and relaxed upward, and the
+underground reach, splitter distribution, side-load lane and inserter rotation
+sense stay open as named conditions. Filters and splitter priorities are recorded
+and relaxed, never applied. Unsupported entities and possible bridges stay
+visible: a `may_connect: true` bridge withholds every bound. Fluids, non-normal
+quality, modules, beacons and any version other than 2.0.76 are rejected. The
+synthetic fixtures are schema and interaction test data, not game evidence.
+
+The checked-in pilot `daemon/tests/fixtures/wip_science.txt` (2771 entities) is a
+development pilot, not a confirmed factory, and **no bound is advertisable for
+it**: analysis returns `partial` naming its three unidentified-mod power poles.
+Reproduce it with the commands in
+[`daemon/tests/fixtures/routing_public/README.md`](daemon/tests/fixtures/routing_public/README.md).
+
+These tools read the pinned prototype extract and mechanics records from
+`daemon/tests/fixtures/`, so they need the repository checkout; from an installed
+wheel they refuse with a structured `evidence_unavailable` error rather than
+guessing. The viewer's own assets do ship in the wheel.
+
 ## Usage
 
 ```bash
@@ -172,6 +227,9 @@ bridge entirely.
 ## Status
 
 Available: Codex skill and local MCP tools, continuous multi-input/multi-output
-optimization, the exact requirements solver, blueprint analysis, and the existing
-API-backed in-game chat. Integer machine optimization and physical layout/routing
-remain future model extensions.
+optimization, the exact requirements solver, speed-only blueprint analysis, the
+strict blueprint routing audit (structural transport graph, declared-request
+delivery upper bounds, viewer), and the existing API-backed in-game chat.
+Integer machine optimization remains a future model extension, and the routing
+audit's game-mechanics evidence gate is unmet: no bound it reports has been
+validated against a recorded game observation.

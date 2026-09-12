@@ -142,7 +142,7 @@
       soft.push("The displayed result carries no interpreted assignments, so these edits cannot be matched against it.");
     }
     if (R && R.graph_match === false) {
-      hard.push("The displayed result was produced for a different graph or blueprint than the one loaded here.");
+      hard.push("The displayed result's blueprint, prototype or graph provenance does not match what is loaded here (missing or mismatched hash).");
     }
     return { hard: hard, soft: soft, edited: canon(assignmentDoc()) !== LOADED };
   }
@@ -243,6 +243,9 @@
     add(root, E("p", "note", R.status_text));
     kv(root, "result hash", R.result_hash);
     kv(root, "request hash", R.request_hash);
+    kv(root, "result blueprint hash", R.blueprint_hash);
+    kv(root, "result prototype hash", R.prototype_hash);
+    kv(root, "result graph hash", R.graph_hash);
     kv(root, "detail scope", R.detail_kind);
     kv(root, "witness", R.witness_present ? ("present (" + dash(R.witness_validation) + ")") : "none");
     extras(root, R.extra, "Additional result fields");

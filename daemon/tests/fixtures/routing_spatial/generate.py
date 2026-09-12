@@ -243,7 +243,7 @@ def build_pilot_sample() -> dict:
             for n, x0, y0, x1, y1 in SAMPLE_WINDOWS
         ],
         "geometry": {
-            "prototype_extract": "daemon/tests/fixtures/routing_prototypes/prototypes.json",
+            "prototype_extract": "daemon/factoribot/evidence/routing_prototypes/prototypes.json",
             "note": (
                 "Footprints are prototype tile_width/tile_height centred on the "
                 "entity position, with width and height swapped for east/west. "

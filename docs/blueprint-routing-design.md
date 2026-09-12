@@ -1,7 +1,11 @@
 # Blueprint routing analysis and design cleanup
 
-Status: proposed; no routing implementation is implied by this document.  
-Date: 2026-09-08
+Status: design reference; the first routing pipeline is implemented with a
+conditional audit pass. Game validation and real-pilot acceptance remain open.
+Design date: 2026-09-08; status updated: 2026-09-11.
+See [current implementation status](blueprint-routing-prompts/NEXT-STEPS.md)
+and the [next-run checklist](blueprint-routing-next-run.md). Later phases below
+remain proposals; this document alone is not evidence that a feature exists.
 
 ## Purpose
 
