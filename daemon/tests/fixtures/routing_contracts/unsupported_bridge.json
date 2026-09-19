@@ -24,7 +24,7 @@
       }
     ],
     "furnaces": [],
-    "graph_hash": "sha256:fd6aa958b6131f9190bf12d854a5494ece8a48b24a14dcf9e31a3962f4697506",
+    "graph_hash": "sha256:e5feb8dfa4cbb39b1e6719841957a4bd8b5d2af081c9da8f59567d72678217fa",
     "schema_version": "1.1.1"
   },
   "description": "SYNTHETIC schema/interaction fixture; all assignments illustrative.",
@@ -482,7 +482,7 @@
         ]
       }
     ],
-    "graph_hash": "sha256:fd6aa958b6131f9190bf12d854a5494ece8a48b24a14dcf9e31a3962f4697506",
+    "graph_hash": "sha256:e5feb8dfa4cbb39b1e6719841957a4bd8b5d2af081c9da8f59567d72678217fa",
     "inventories": [
       {
         "eligibility": {
@@ -596,7 +596,7 @@
         "side": "left"
       }
     ],
-    "mechanics_profile": "base-2.0.76-normal-v1",
+    "mechanics_profile": "base-2.0.77-normal-v1",
     "ports": [
       {
         "boundary_candidate": true,
@@ -707,9 +707,9 @@
         "role": "outgoing"
       }
     ],
-    "prototype_hash": "sha256:c140ad8e5418c62a6e09151acf54102acb9e7ede71c47c35c11e6b1afc3ce717",
+    "prototype_hash": "sha256:64f8b4308136e1299820b0aa1f013d2c555ce26501c81e30fd7e9dacb915a71c",
     "prototypes": {
-      "canonical": "{\"entities\":[\"assembling-machine-2\",\"synthetic-unknown-bridge\",\"transport-belt\"],\"fixture\":\"synthetic\",\"note\":\"Hand-defined geometry, activities and capacities; NOT a Factorio prototype extract.\",\"profile\":\"base-2.0.76-normal-v1\"}"
+      "canonical": "{\"entities\":[\"assembling-machine-2\",\"synthetic-unknown-bridge\",\"transport-belt\"],\"fixture\":\"synthetic\",\"note\":\"Hand-defined geometry, activities and capacities; NOT a Factorio prototype extract.\",\"profile\":\"base-2.0.77-normal-v1\"}"
     },
     "provenance": "synthetic",
     "schema_version": "1.1.1",
@@ -791,7 +791,7 @@
         }
       ],
       "furnaces": [],
-      "graph_hash": "sha256:fd6aa958b6131f9190bf12d854a5494ece8a48b24a14dcf9e31a3962f4697506",
+      "graph_hash": "sha256:e5feb8dfa4cbb39b1e6719841957a4bd8b5d2af081c9da8f59567d72678217fa",
       "schema_version": "1.1.1"
     },
     "assumptions": {
@@ -801,14 +801,14 @@
       ],
       "beacons": "none",
       "control_policy": "explicit",
-      "game_version": "2.0.76",
+      "game_version": "2.0.77",
       "irrelevant": [],
       "mods": [
         {
           "alters_item_mechanics": false,
           "name": "base",
           "provides": [],
-          "version": "2.0.76"
+          "version": "2.0.77"
         }
       ],
       "modules": "none",
@@ -873,8 +873,8 @@
         }
       }
     ],
-    "graph_hash": "sha256:fd6aa958b6131f9190bf12d854a5494ece8a48b24a14dcf9e31a3962f4697506",
-    "mechanics_profile": "base-2.0.76-normal-v1",
+    "graph_hash": "sha256:e5feb8dfa4cbb39b1e6719841957a4bd8b5d2af081c9da8f59567d72678217fa",
+    "mechanics_profile": "base-2.0.77-normal-v1",
     "objective": {
       "export_id": "product",
       "kind": "maximize_export"
@@ -899,8 +899,8 @@
       "preserve_unknown": true,
       "preserve_wiring": true
     },
-    "prototype_hash": "sha256:c140ad8e5418c62a6e09151acf54102acb9e7ede71c47c35c11e6b1afc3ce717",
-    "request_hash": "sha256:e351525ee0588000baeb8186334e3900017f40f5d3088cd4b061d22fd064e3d7",
+    "prototype_hash": "sha256:64f8b4308136e1299820b0aa1f013d2c555ce26501c81e30fd7e9dacb915a71c",
+    "request_hash": "sha256:17c3f76341ae66e9fe705dc8af6068890292f69a932d1bd12af9bb0db2f0a099",
     "schema_version": "1.1.1",
     "surplus": []
   },
@@ -959,7 +959,7 @@
         "severity": "warning"
       }
     ],
-    "graph_hash": "sha256:fd6aa958b6131f9190bf12d854a5494ece8a48b24a14dcf9e31a3962f4697506",
+    "graph_hash": "sha256:e5feb8dfa4cbb39b1e6719841957a4bd8b5d2af081c9da8f59567d72678217fa",
     "interpreted_request": {
       "assignments": {
         "blueprint_hash": "sha256:60631a6f7f0bc5d1b5cfd03e50ba03ac2d39e6c15ae1d15833b99744ef566672",
@@ -986,7 +986,7 @@
           }
         ],
         "furnaces": [],
-        "graph_hash": "sha256:fd6aa958b6131f9190bf12d854a5494ece8a48b24a14dcf9e31a3962f4697506",
+        "graph_hash": "sha256:e5feb8dfa4cbb39b1e6719841957a4bd8b5d2af081c9da8f59567d72678217fa",
         "schema_version": "1.1.1"
       },
       "assumptions": {
@@ -996,14 +996,14 @@
         ],
         "beacons": "none",
         "control_policy": "explicit",
-        "game_version": "2.0.76",
+        "game_version": "2.0.77",
         "irrelevant": [],
         "mods": [
           {
             "alters_item_mechanics": false,
             "name": "base",
             "provides": [],
-            "version": "2.0.76"
+            "version": "2.0.77"
           }
         ],
         "modules": "none",
@@ -1068,8 +1068,8 @@
           }
         }
       ],
-      "graph_hash": "sha256:fd6aa958b6131f9190bf12d854a5494ece8a48b24a14dcf9e31a3962f4697506",
-      "mechanics_profile": "base-2.0.76-normal-v1",
+      "graph_hash": "sha256:e5feb8dfa4cbb39b1e6719841957a4bd8b5d2af081c9da8f59567d72678217fa",
+      "mechanics_profile": "base-2.0.77-normal-v1",
       "objective": {
         "export_id": "product",
         "kind": "maximize_export"
@@ -1094,17 +1094,17 @@
         "preserve_unknown": true,
         "preserve_wiring": true
       },
-      "prototype_hash": "sha256:c140ad8e5418c62a6e09151acf54102acb9e7ede71c47c35c11e6b1afc3ce717",
-      "request_hash": "sha256:e351525ee0588000baeb8186334e3900017f40f5d3088cd4b061d22fd064e3d7",
+      "prototype_hash": "sha256:64f8b4308136e1299820b0aa1f013d2c555ce26501c81e30fd7e9dacb915a71c",
+      "request_hash": "sha256:17c3f76341ae66e9fe705dc8af6068890292f69a932d1bd12af9bb0db2f0a099",
       "schema_version": "1.1.1",
       "surplus": []
     },
     "limitations": [
       "Not a game observation or computed routing solution; no achievable-throughput claim"
     ],
-    "prototype_hash": "sha256:c140ad8e5418c62a6e09151acf54102acb9e7ede71c47c35c11e6b1afc3ce717",
-    "request_hash": "sha256:e351525ee0588000baeb8186334e3900017f40f5d3088cd4b061d22fd064e3d7",
-    "result_hash": "sha256:68a726833ad59c4f45caa9ee04dc1c34b79c08012eb93ebda6e9451166a8d452",
+    "prototype_hash": "sha256:64f8b4308136e1299820b0aa1f013d2c555ce26501c81e30fd7e9dacb915a71c",
+    "request_hash": "sha256:17c3f76341ae66e9fe705dc8af6068890292f69a932d1bd12af9bb0db2f0a099",
+    "result_hash": "sha256:8d884289b0e80f46586a107c4ea598392cb01ae5813088118c1c2e35495d62b5",
     "schema_version": "1.1.1",
     "status": "partial",
     "witness": null

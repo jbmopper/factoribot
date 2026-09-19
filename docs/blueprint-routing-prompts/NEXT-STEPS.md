@@ -1,15 +1,120 @@
 # Blueprint routing — current next steps
 
-Updated 2026-09-11. This is the current dispatch record; the
+Updated 2026-09-13. This is the current dispatch record; the
 [task catalog](README.md) retains the original implementation prompts and model
 recommendations. Do not redispatch completed work from those prompts.
 
-## Verified state
+## Task 23 takeover completed — 2026-09-13
+
+The full [task 23 takeover](23-sol-takeover.md) has been executed. The concrete
+result, artifacts, reproduction commands, limitations and browser blocker are in
+[the task 23 handoff](../blueprint-routing-handoffs/23-sol-takeover.md). Do not
+redispatch the takeover prompt as unfinished work.
+
+Runtime and generated fixtures now target base 2.0.77. A sealed small-factory
+case completes blueprint → page draft → optional furnace inference → routing
+capacity result → restricted operating prediction → two real Factorio captures →
+comparison report. The routing upper bound and conditional prediction are both
+`0.125 steel-plate/s`; six 3,600-tick measured windows record 7/8/7 steel in each
+repeat and all pass the predeclared one-item/window tolerance. The captures also
+record 15 items/s on one fast-belt lane, 30 items/s on two lanes, and 2.5 items/s
+for a zero-bonus fast inserter. No finite-window result claims sustained recurrence.
+
+Current open product work is the permitted-environment browser click/export/import
+acceptance, real owner declarations for the modded pilot, broader mechanics
+evidence, and any later layout optimization. The restricted operating adapter
+does not support merges, splitters, turns, side-loading, cycles, competing shared
+budgets or arbitrary machine/inserter layouts.
+
+Final task-23 verification: **693 passed in 139.61 seconds** via `make test`,
+with no failures, expected failures, or skips.
+
+## Target version selected — 2026-09-12
+
+The user selected **2.0.77**. An isolated base-only export from the installed build
+84539 is now pinned in
+[the 2.0.77 profile staging directory](../../experiments/routing-measurements/profiles/base-2.0.77-normal-v1/README.md).
+All overlapping selected prototype fields match the previous slice; the modded
+`ee-super-substation` is absent. This closes the target-version decision and the
+fresh prototype-export prerequisite, not the mechanics validation gate.
+The version-bound runtime/fixture migration is complete. Historical 2.0.76
+mechanics records retain their provenance and are reported as incompatible
+legacy evidence rather than silently promoted. Do not ask the user to choose the
+version again.
+
+## Historical coordinator corrections — 2026-09-12
+
+Follow-up implementation is recorded in
+[22-coordinator-integration.md](../blueprint-routing-handoffs/22-coordinator-integration.md).
+Fresh final `make test`: **686 passed in 152.96 seconds**, with no expected
+failures or skips. The five previously expected failures are repaired: recipe oracles are checked
+against loaded craft coefficients, and the recorder validates inventory continuity,
+scenario settings and repeat consistency. Flat windows no longer claim sustained
+production. Capture v2 adds basic crafting and individual-boundary accounting;
+its scenario/timing validation remains incomplete. The original review below is
+historical and its test counts predate these corrections.
+
+At that checkpoint the CLI draft/request/result-page loop had been rerun, browser
+navigation was blocked by policy, and the discovered Factorio 2.0.77 binary did
+not match the then-current 2.0.76 profile. The version decision, migration, game
+observations, and restricted predictor were completed by task 23 above; the
+browser click/download/import acceptance remains open.
+
+## Historical tranche review — 2026-09-12
+
+Tasks 15–21 have artifacts in the working tree on `ab25b2a`; they are uncommitted.
+Their completion levels differ:
+
+| Task | Current acceptance |
+| --- | --- |
+| 15 / 18 | Full-input UI and CLI draft replay implemented; actual browser click/download/import acceptance remains unexecuted |
+| 16 | Reuse evaluation complete; concrete upstream failures support declining the evaluated throughput engine |
+| 17 | Offline recorder/scenarios implemented; no game observations; validator and evidence schema need R4/R5 repairs |
+| 19 | Furnace inference and CLI preparation implemented; illustrative pilot yields zero inferred assignments, not a solved factory |
+| 20 | Design/scaffolding only, no simulator or public sustained-rate prediction; independent review requests changes |
+| 21 | Design pass complete with R1–R5 findings; implementation pass not yet ready |
+
+Fresh full suite: **676 passed, 5 xfailed in 145.11 seconds**. The five expected
+failures are acknowledged defects, not passing acceptance tests.
+
+Coordinator reran the independent witnesses with `--runxfail`: **5 failed,
+6 passed**, confirming the known recipe-oracle and recorder defects. The retained
+reuse harness also passed all seven tests. These failures are not regressions in
+an already implemented simulator: that simulator does not exist yet.
+
+Next: task 20 revises R1–R3 (convergence claims, operating allocation/transitions,
+and recipe-coefficient-backed oracles); task 17 repairs R4 and versions richer R5
+observations. Those owners can work separately. Return the revised design to task
+21 before substantial mechanics implementation. Separately close task 15/18's
+browser interaction gate. See the
+[review's reproductions and required changes](../blueprint-routing-handoffs/21-independent-throughput-review.md).
+Do not redispatch the original prompts as though these artifacts were absent.
+
+## Revised product priority
+
+The user now prioritizes deterministic sustained-throughput analysis, convenient
+full-belt input declarations in the page, and furnace inference, followed by
+efficient/aesthetic layout alternatives. Keep the CLI loop. The
+[deterministic roadmap](../blueprint-routing-deterministic-roadmap.md) gives the
+new milestones and acceptance criteria. It supersedes the blanket deferral of
+09/10: bring forward their relevant supported subsets with explicit evidence
+requirements. Browser upload and a web backend remain deferred.
+
+Current checkout is `ab25b2a`; the earlier implementation tranche is committed.
+The connected MCP has since returned successful capabilities and a synthetic
+layout inspection; both new routing tools are available. The test and audit
+observations below retain their original scope and dates.
+
+## Previously verified state
 
 Status check covered HEAD `664662e` plus the current uncommitted implementation,
 fixtures, tests and handoffs. A fresh `make test` completed with **625 passed,
 0 failed, 0 skipped in 129.72 seconds** on 2026-09-11. This is software validation,
 not a game observation or a verification of the user's running MCP process.
+
+Task 18's later fresh full run completed with **644 passed in 146.80 seconds**.
+It covers the task-15 draft → CLI request → analysis → regenerated-page replay
+and a new stdio-MCP replay; browser interaction acceptance remains open.
 
 | Work | Status |
 | --- | --- |
@@ -25,28 +130,37 @@ not a game observation or a verification of the user's running MCP process.
 | Audit F-3 | Fixed: pilot warning aggregation, 626 findings reduced to five |
 | Audit F-4 | Open, low severity: malformed internal LP RHS raises a SciPy error; not reachable from valid public requests |
 | 09–14 extensions | Deferred; do not treat the first-release gates as passed |
+| 15/18 Milestone-1 declarations and CLI loop | Implemented through draft → sealed request → analysis → regenerated-page replay; browser interaction acceptance remains open |
 
 Evidence remains **0 observed / 6 documented-only / 10 pending**. The pilot's
 actual feeds, exports, removal services, research, mod manifest, control state,
 power and 76 furnace recipe assignments remain undeclared. The illustrative
 fixtures do not supply those facts.
 
-## Next dispatch
+## Historical next dispatch
 
-Follow the [execution checklist](../blueprint-routing-next-run.md). The order is:
+**Original paste-ready assignments: [DETERMINISTIC-DISPATCH.md](DETERMINISTIC-DISPATCH.md).**
+Tasks 15–21 and the task-23 integration now exist in the shared checkout. Retain
+this section for provenance; do not launch it as the current work queue.
 
-1. Preserve and review the complete uncommitted tranche; checkpoint only the
-   intended files. Verify the connected MCP process exposes the new tools after
-   a host restart/reconnect.
-2. In parallel: collect the pilot's real declarations and run small, controlled
-   mechanics captures in a disposable Factorio environment. Start with the fast
-   belt and lane/connection rules used by the pilot. One observation does not
-   validate the entire mechanics profile.
-3. Have one integration owner validate evidence records, regenerate manifests,
-   review model and advertised-scope implications, reseal requests and rerun the
-   public pipeline. Evidence changes can change graph identity.
-4. Review the resulting pilot findings and remaining conditions. Keep every
-   number labelled as an upper bound under stated relaxations.
+
+Use the [deterministic roadmap](../blueprint-routing-deterministic-roadmap.md):
+
+1. Implement recipe visibility and full-belt input designation with a replayable
+   page draft → CLI analysis loop. User supplies items; capacities come from the
+   imported belt tier, with lane sharing preserved.
+2. Add evidence-traceable furnace inference from declared feeds, retaining
+   ambiguity and explicit overrides.
+3. Evaluate existing analyzers for reuse and validate a bounded sustained-rate
+   model against Factorio. Preserve the existing upper-bound analysis separately.
+4. Optimize local layout alternatives only when their throughput can be evaluated
+   credibly; compare efficiency and appearance explicitly.
+
+The [execution checklist](../blueprint-routing-next-run.md) still describes the
+current CLI and capture mechanics. Full input means available supply at belt
+capacity, not forced consumption. Captures and real pilot declarations remain
+necessary, but the UI should not demand manual reconstruction of known recipes
+or numeric belt capacities.
 
 F-4 is a separate bounded robustness patch, not a reason to delay collecting
 real inputs. Keep `routing_lp.py` ownership separate from evidence and pilot

@@ -1,0 +1,243 @@
+{
+  "ok": true,
+  "status": "feasible_relaxed",
+  "status_meaning": "A feasible continuous allocation exists in the relaxed model. Not an achieved-rate claim.",
+  "identity": {
+    "schema_version": "1.1.1",
+    "analyzer_version": "blueprint-plan-0.1.0",
+    "integration_version": "factoribot-routing-integration-2",
+    "mechanics_profile": "base-2.0.77-normal-v1",
+    "blueprint_hash": "sha256:9cecb5ce1dc8c938e9e544678e61d50c88751a4ce6e4fb5dd12f45193aebfb60",
+    "prototype_hash": "sha256:4cb74412fc6a5d1b9b234c22c1cec60724b7de60b7a84aa007e243ad50297e75",
+    "graph_hash": "sha256:6c8fc431002aeaa994267c98b26f7822b0c32c1659077d147329da9acdb7dddb",
+    "request_hash": "sha256:262a99985cd70756bc3d0f7786e2c60de36b2d270b4f50ddf336fd1c6bfaec52",
+    "result_hash": "sha256:71e3909dcde855a94134c2eb70895d2df371d5a14d437327aceed573644b390e",
+    "repeat_with": "the same blueprint_string/graph and the same request document; the cursor is bound to result_hash"
+  },
+  "unresolved_reasons": [],
+  "bounds_advertised": true,
+  "bounds": [
+    {
+      "stage": "aggregate",
+      "direction": "upper",
+      "objective_export_id": "steel_output_right_lane",
+      "unit": "items/s",
+      "value": {
+        "kind": "finite",
+        "value": 0.12500000000000003
+      },
+      "solver_state": "optimal",
+      "certificate": "Certified upper bound 0.125 items/s at stage aggregate by weak duality from the constraint cut: craft capacity of activity e5_iron-plate ceiling (multiplier -0.2, contribution -0.125); conservation of steel-plate at pool (multiplier 1, contribution 0); conservation of iron-plate at pool (multiplier 0.2, contribution 0). Primal witness 0.125 items/s, gap 2.78e-17, tolerance 1e-07. Relaxations: delivery_unconstrained, budgets_unlimited.",
+      "relaxations": [
+        "delivery_unconstrained",
+        "budgets_unlimited"
+      ],
+      "assumptions": [
+        "power:assumed_available",
+        "control_policy:relax_open",
+        "quality:normal",
+        "modules:none",
+        "beacons:none",
+        "game_version:2.0.77",
+        "boundary: only declared feeds, exports and surplus outlets move material",
+        "model: continuous steady-state relaxation with per-entity activities and shared capacity groups"
+      ],
+      "evidence_ids": [
+        "mech_machine_furnace",
+        "prototype_geometry"
+      ],
+      "comparison_hash": "sha256:49b222ca890e3cb23e0f191a83d6cb4c243e1914a5953a6874d416b18860d87d",
+      "constraint_hash": "sha256:fec7280106456510d8bd5e1dc39a816a10ccb1e38e259f2edb8a3397d6a0ba4b",
+      "meaning": "upper bound under the stated relaxations; never an achievable or measured rate"
+    },
+    {
+      "stage": "budget",
+      "direction": "upper",
+      "objective_export_id": "steel_output_right_lane",
+      "unit": "items/s",
+      "value": {
+        "kind": "finite",
+        "value": 0.12500000000000003
+      },
+      "solver_state": "optimal",
+      "certificate": "Certified upper bound 0.125 items/s at stage budget by weak duality from the constraint cut: craft capacity of activity e5_iron-plate ceiling (multiplier -0.2, contribution -0.125); conservation of steel-plate at pool (multiplier 1, contribution 0); conservation of iron-plate at pool (multiplier 0.2, contribution 0). Primal witness 0.125 items/s, gap 2.78e-17, tolerance 1e-07. Relaxations: delivery_unconstrained.",
+      "relaxations": [
+        "delivery_unconstrained"
+      ],
+      "assumptions": [
+        "power:assumed_available",
+        "control_policy:relax_open",
+        "quality:normal",
+        "modules:none",
+        "beacons:none",
+        "game_version:2.0.77",
+        "boundary: only declared feeds, exports and surplus outlets move material",
+        "model: continuous steady-state relaxation with per-entity activities and shared capacity groups"
+      ],
+      "evidence_ids": [
+        "mech_machine_furnace",
+        "prototype_geometry"
+      ],
+      "comparison_hash": "sha256:49b222ca890e3cb23e0f191a83d6cb4c243e1914a5953a6874d416b18860d87d",
+      "constraint_hash": "sha256:1eba2efcb883069ca3611b1137823c154117bfff52d098560a5c38a8dbafacd6",
+      "meaning": "upper bound under the stated relaxations; never an achievable or measured rate"
+    },
+    {
+      "stage": "routing",
+      "direction": "upper",
+      "objective_export_id": "steel_output_right_lane",
+      "unit": "items/s",
+      "value": {
+        "kind": "finite",
+        "value": 0.12500000000000003
+      },
+      "solver_state": "optimal",
+      "certificate": "Certified upper bound 0.125 items/s at stage routing by weak duality from the constraint cut: craft capacity of activity e5_iron-plate ceiling (multiplier -0.2, contribution -0.125); conservation of steel-plate at bp/root/e/11/inventory/output (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/12/port/hand (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/13/port/in_left (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/13/port/in_right (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/13/port/out_left (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/13/port/out_right (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/14/port/in_left (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/14/port/in_right (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/14/port/out_left (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/14/port/out_right (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/15/port/in_left (multiplier 1, contribution 0); ... 44 more terms. Primal witness 0.125 items/s, gap 2.78e-17, tolerance 1e-07. Relaxations: unknown_capacity_unlimited, conditional_connections_open, transport_semantics_relaxed.",
+      "relaxations": [
+        "unknown_capacity_unlimited",
+        "conditional_connections_open",
+        "transport_semantics_relaxed"
+      ],
+      "assumptions": [
+        "power:assumed_available",
+        "control_policy:relax_open",
+        "quality:normal",
+        "modules:none",
+        "beacons:none",
+        "game_version:2.0.77",
+        "boundary: only declared feeds, exports and surplus outlets move material",
+        "model: continuous steady-state relaxation with per-entity activities and shared capacity groups"
+      ],
+      "evidence_ids": [
+        "blueprint_geometry",
+        "mech_machine_furnace",
+        "prototype_geometry"
+      ],
+      "comparison_hash": "sha256:49b222ca890e3cb23e0f191a83d6cb4c243e1914a5953a6874d416b18860d87d",
+      "constraint_hash": "sha256:e378e546c697d07e24e95e87646d5fe8f63a1562e6e5776c33af6254ea81ff75",
+      "meaning": "upper bound under the stated relaxations; never an achievable or measured rate"
+    }
+  ],
+  "findings": {
+    "total": 5,
+    "by_code": {
+      "conditional_connections_open": 1,
+      "delivery_upper_bound": 1,
+      "furnace_alternative_excluded": 2,
+      "unknown_capacity_relaxed": 1
+    },
+    "by_severity": {
+      "info": 3,
+      "warning": 2
+    }
+  },
+  "assumptions": [
+    "power:assumed_available",
+    "control_policy:relax_open",
+    "quality:normal",
+    "modules:none",
+    "beacons:none",
+    "game_version:2.0.77",
+    "boundary: only declared feeds, exports and surplus outlets move material",
+    "model: continuous steady-state relaxation with per-entity activities and shared capacity groups"
+  ],
+  "limitations": [
+    "Upper bounds from a continuous steady-state relaxation; no achieved-rate or positive lower bound is claimed.",
+    "Only declared feeds, exports and surplus outlets move material across the boundary; nothing is inferred.",
+    "Splitter scheduling, lane ordering, inserter timing and back-pressure are not modeled; feasibility of the relaxation does not prove game behaviour.",
+    "Unknown capacities are relaxed to unlimited where recorded; they are never used as restrictive ceilings.",
+    "Synthetic graph: capacities and recipe coefficients are fixture definitions, not game observations."
+  ],
+  "witness": {
+    "present": true,
+    "meaning": "a feasible continuous allocation of the relaxed model; never an achieved rate",
+    "exports": {
+      "steel_output_right_lane": 0.125
+    },
+    "imports": {
+      "ore_input_left_lane": 0.625
+    },
+    "validation": "independent_residual_check",
+    "arc_flows": 19,
+    "activities": 2
+  },
+  "stages": {
+    "aggregate": {
+      "state": "optimal",
+      "certificate": "Certified upper bound 0.125 items/s at stage aggregate by weak duality from the constraint cut: craft capacity of activity e5_iron-plate ceiling (multiplier -0.2, contribution -0.125); conservation of steel-plate at pool (multiplier 1, contribution 0); conservation of iron-plate at pool (multiplier 0.2, contribution 0). Primal witness 0.125 items/s, gap 2.78e-17, tolerance 1e-07. Relaxations: delivery_unconstrained, budgets_unlimited.",
+      "relaxations": [
+        "delivery_unconstrained",
+        "budgets_unlimited"
+      ],
+      "sizes": {
+        "variables": 4,
+        "rows": 5,
+        "nonzeros": 8
+      },
+      "timings": {
+        "build_s": 0.0,
+        "solve_s": 0.0061,
+        "cleanup_s": 0.0011,
+        "certificate_s": 0.0013,
+        "verify_s": 0.0
+      },
+      "verified": true
+    },
+    "budget": {
+      "state": "optimal",
+      "certificate": "Certified upper bound 0.125 items/s at stage budget by weak duality from the constraint cut: craft capacity of activity e5_iron-plate ceiling (multiplier -0.2, contribution -0.125); conservation of steel-plate at pool (multiplier 1, contribution 0); conservation of iron-plate at pool (multiplier 0.2, contribution 0). Primal witness 0.125 items/s, gap 2.78e-17, tolerance 1e-07. Relaxations: delivery_unconstrained.",
+      "relaxations": [
+        "delivery_unconstrained"
+      ],
+      "sizes": {
+        "variables": 4,
+        "rows": 6,
+        "nonzeros": 9
+      },
+      "timings": {
+        "build_s": 0.0,
+        "solve_s": 0.0006,
+        "cleanup_s": 0.0007,
+        "certificate_s": 0.0003,
+        "verify_s": 0.0
+      },
+      "verified": true
+    },
+    "routing": {
+      "state": "optimal",
+      "certificate": "Certified upper bound 0.125 items/s at stage routing by weak duality from the constraint cut: craft capacity of activity e5_iron-plate ceiling (multiplier -0.2, contribution -0.125); conservation of steel-plate at bp/root/e/11/inventory/output (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/12/port/hand (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/13/port/in_left (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/13/port/in_right (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/13/port/out_left (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/13/port/out_right (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/14/port/in_left (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/14/port/in_right (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/14/port/out_left (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/14/port/out_right (multiplier 1, contribution 0); conservation of steel-plate at bp/root/e/15/port/in_left (multiplier 1, contribution 0); ... 44 more terms. Primal witness 0.125 items/s, gap 2.78e-17, tolerance 1e-07. Relaxations: unknown_capacity_unlimited, conditional_connections_open, transport_semantics_relaxed.",
+      "relaxations": [
+        "unknown_capacity_unlimited",
+        "conditional_connections_open",
+        "transport_semantics_relaxed"
+      ],
+      "sizes": {
+        "variables": 190,
+        "rows": 153,
+        "nonzeros": 435
+      },
+      "timings": {
+        "build_s": 0.0004,
+        "solve_s": 0.001,
+        "cleanup_s": 0.0015,
+        "certificate_s": 0.0007,
+        "verify_s": 0.0001
+      },
+      "verified": true
+    }
+  },
+  "detail_scope_of_request": {
+    "kind": "summary",
+    "entities": 0,
+    "limit": 100
+  },
+  "page": {
+    "section": "summary",
+    "total": null,
+    "offset": 0,
+    "returned": 0,
+    "limit": 25,
+    "cursor": null,
+    "scope": "summary"
+  }
+}

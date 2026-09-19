@@ -289,6 +289,13 @@ def _entities_model(graph: dict) -> tuple[list, dict]:
         x, y = _float(position.get("x")), _float(position.get("y"))
         raw = _obj(record.get("raw")).get("canonical")
         raw_text = _str(raw, _generic(record.get("raw")))
+        try:
+            blueprint_record = json.loads(raw_text) if isinstance(raw, str) else {}
+        except (TypeError, ValueError):
+            blueprint_record = {}
+        blueprint_recipe = (blueprint_record.get("recipe")
+                            if isinstance(blueprint_record, dict)
+                            and isinstance(blueprint_record.get("recipe"), str) else None)
         truncated = len(raw_text) > _RAW_DISPLAY_LIMIT
         item = {
             "key": key,
@@ -309,8 +316,9 @@ def _entities_model(graph: dict) -> tuple[list, dict]:
             "furnace_candidates": [_generic(c) for c in _seq(record.get("furnace_candidates"))],
             "evidence_ids": [_generic(e) for e in _seq(record.get("evidence_ids"))],
             "raw_text": raw_text[:_RAW_DISPLAY_LIMIT] + ("… (truncated for display)" if truncated else ""),
+            "blueprint_recipe": blueprint_recipe,
             "extra": _extra(record, "entity"),
-            "ports": [], "lanes": [], "inventories": [], "arcs": [], "activities": [],
+            "ports": [], "lanes": [], "inventories": [], "arcs": [], "activities": [], "recipes": [],
         }
         index[key] = item
         entities.append(item)
@@ -470,7 +478,99 @@ def _activities_model(graph: dict, entities: dict) -> list:
         owner = entities.get(owner_key)
         if owner is not None:
             owner["activities"].append(item["id"])
+            # Activities are imported blueprint facts.  In particular, an
+            # assembler's declared recipe must remain visible even if a later
+            # analysis cannot use that activity.
+            if item["recipe"] not in owner.setdefault("recipes", []):
+                owner["recipes"].append(item["recipe"])
     return activities
+
+
+def _input_belts_model(graph: dict, entities: dict, endpoints: dict) -> None:
+    """Attach additive, evidence-backed full-input hints to two-lane belts.
+
+    The strict contract deliberately has no ``full belt`` record: an input is
+    still one feed per lane, drawing from an ordinary shared Budget.  This is a
+    view-only convenience description which locates the already-imported lane
+    capacity groups.  It neither guesses a belt tier nor creates a source.
+    """
+    groups = {_generic(_obj(group).get("id")): _obj(group)
+              for group in _seq(graph.get("capacity_groups"))}
+    arc_resources: dict[tuple[str, str], list[str]] = {}
+    for arc in _seq(graph.get("arcs")):
+        arc = _obj(arc)
+        key = (endpoint_key(arc.get("source")), endpoint_key(arc.get("target")))
+        arc_resources.setdefault(key, []).extend(
+            _generic(_obj(resource).get("group_id"))
+            for resource in _seq(arc.get("resources"))
+        )
+
+    for entity in entities.values():
+        entity["input_belt"] = None
+        entity.setdefault("recipes", [])
+        lanes = [endpoint for endpoint in endpoints.values()
+                 if endpoint.get("kind") == "lane" and endpoint.get("entity_key") == entity["key"]]
+        # A splitter has four lanes; it is not the simple two-lane belt shortcut.
+        if entity.get("support") != "supported" or len(lanes) != 2:
+            continue
+        described = []
+        for lane in sorted(lanes, key=lambda item: item.get("side", "")):
+            incoming = endpoints.get(lane.get("incoming_key"))
+            if incoming is None:
+                described = []
+                break
+            group_ids = arc_resources.get((lane.get("incoming_key"), lane.get("outgoing_key")), [])
+            lane_groups = [groups[group_id] for group_id in group_ids
+                           if _str(groups.get(group_id, {}).get("kind")) == "lane"
+                           and _str(groups.get(group_id, {}).get("unit")) == "items/s"]
+            capacity = _obj(lane_groups[0].get("capacity")) if len(lane_groups) == 1 else {}
+            available = (_str(capacity.get("kind")) == "finite"
+                         and isinstance(capacity.get("value"), (int, float))
+                         and not isinstance(capacity.get("value"), bool))
+            described.append({
+                "side": lane.get("side"),
+                "incoming_key": lane.get("incoming_key"),
+                "boundary_candidate": bool(incoming.get("boundary_candidate")),
+                "capacity": capacity if available else None,
+                "capacity_text": _capacity_text(capacity, "items/s") if available else "unavailable",
+                "capacity_group_ids": group_ids,
+                "available": available,
+            })
+        if len(described) != 2:
+            continue
+        all_available = all(item["available"] for item in described)
+        total = sum(float(_obj(item["capacity"]).get("value")) for item in described) if all_available else None
+        entity["input_belt"] = {
+            "lanes": described,
+            "whole_belt_available": all_available and all(item["boundary_candidate"] for item in described),
+            "whole_capacity": ({"kind": "finite", "value": total} if total is not None else None),
+            "whole_capacity_text": (_num(total) + " items/s" if total is not None else "unavailable"),
+            "reason": (None if all_available else
+                       "The imported lane capacity evidence is unavailable, so Full supply cannot be declared."),
+        }
+
+
+def _known_items_model(graph: dict, request: dict | None) -> list[dict]:
+    """Known choices are copied from imported material records, never inferred."""
+    seen: dict[str, set[str]] = {}
+
+    def add(material: Any, source: str) -> None:
+        material = _obj(material)
+        if (_str(material.get("kind")) != "item" or _str(material.get("quality")) != "normal"
+                or not _str(material.get("name"))):
+            return
+        seen.setdefault(_str(material["name"]), set()).add(source)
+
+    for activity in _seq(graph.get("activities")):
+        for part in _seq(_obj(activity).get("inputs")) + _seq(_obj(activity).get("outputs")):
+            add(_obj(part).get("material"), "imported recipe")
+    request = _obj(request)
+    for budget in _seq(request.get("budgets")):
+        add(_obj(budget).get("material"), "existing budget")
+    for outlet in _seq(request.get("exports")) + _seq(request.get("surplus")):
+        add(_obj(outlet).get("material"), "existing outlet")
+    return [{"name": name, "label": name + " (" + ", ".join(sorted(sources)) + ")"}
+            for name, sources in sorted(seen.items())]
 
 
 def _evidence_model(graph: dict) -> tuple[list, dict]:
@@ -721,9 +821,13 @@ def build_view_model(graph: Any, result: Any = None, assignments: Any = None,
     supplied = _plain(assignments) if assignments is not None else None
 
     entity_list, entity_index = _entities_model(graph)
+    for entity in entity_list:
+        if entity["blueprint_recipe"] is not None:
+            entity["recipes"].append(entity["blueprint_recipe"])
     ports, lanes, inventories, endpoint_index = _endpoints_model(graph, entity_index)
     arc_list, arc_index = _arcs_model(graph, endpoint_index, entity_index)
     activities = _activities_model(graph, entity_index)
+    _input_belts_model(graph, entity_index, endpoint_index)
     evidence_list, evidence_index = _evidence_model(graph)
 
     request = _request_model(result.get("interpreted_request"))
@@ -795,6 +899,7 @@ def build_view_model(graph: Any, result: Any = None, assignments: Any = None,
         "analyzed_assignments": (_assignment_state(analyzed, graph) if analyzed is not None else None),
         "assignments_source": ("supplied to the renderer" if supplied is not None
                                else ("the analysed request" if analyzed is not None else "empty (none supplied)")),
+        "known_items": _known_items_model(graph, _obj(result.get("interpreted_request"))),
         "notes": [
             "This page displays contract data. It performs no analysis, no solving and writes no files.",
             "Imported labels, descriptions, certificates and messages are shown as inert text.",

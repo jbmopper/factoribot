@@ -1,0 +1,15 @@
+{
+  "scenario_version": "factoribot-routing-measurement-scenario-1",
+  "scenario_id": "fast-inserter-chest-to-chest-fixed-research",
+  "purpose": "Measure one fixed endpoint geometry and fixed research level; do not generalize it to other inserter endpoints.",
+  "setup": {
+    "entities": ["editor infinity chest source", "fast-inserter", "steel chest counted collector"],
+    "supply_conditions": "Iron plates are available without supply starvation; source extraction is counted.",
+    "removal_conditions": "The destination steel chest is the collector and its count is read before clearing it after each window.",
+    "blueprint_export_required": true
+  },
+  "research": {"inserter-capacity-bonus": 0},
+  "power_control": {"power_available": true, "circuit_state": "no circuit wires or enable condition"},
+  "measurement": {"warmup_ticks": 3600, "window_ticks": 3600, "repeat_runs": 2, "stability_tolerance_items_per_s": 0.016666666666666666},
+  "expected_not_observed": "This is chest-to-chest only at inserter-capacity-bonus 0. It is not evidence for belt endpoints, another research level, or another inserter type."
+}

@@ -1,0 +1,6 @@
+{
+  "budgets": [{"id": "host_iron", "material": {"kind": "item", "name": "iron-plate", "quality": "normal"}, "capacity": {"kind": "finite", "value": 999.0}}],
+  "protected": {"entities": [], "endpoints": [], "areas": [], "preserve_wiring": true, "preserve_unknown": true, "preserve_boundaries": true},
+  "assumptions": {"game_version": "2.0.77", "mods": [{"name": "base", "version": "2.0.77", "provides": [], "alters_item_mechanics": false}], "quality": "normal", "available_recipes": [], "research": [], "control_policy": "relax_open", "power": "assumed_available", "modules": "none", "beacons": "none", "irrelevant": []},
+  "detail": {"kind": "summary", "entity_ids": [], "cursor": null, "limit": 100}
+}

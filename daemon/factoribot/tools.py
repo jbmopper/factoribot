@@ -288,8 +288,9 @@ TOOL_SCHEMAS: list[dict] = [
             "Use it before analyze_blueprint_routes, and to look up the original location and "
             "blueprint record of an entity named by a finding (detail.kind='entities'). "
             "SCOPE, VALIDATED: this reports possible structure, never current or achievable "
-            "behaviour. Zero of 16 recorded game-mechanics rules are observed (6 documented-only, "
-            "10 pending), so every transport arc is 'relaxed' or 'conditional', none is 'exact', "
+            "behaviour. No current 2.0.77 mechanics rule is observed; all 16 records are "
+            "incompatible legacy 2.0.76 evidence (6 documented-only, 10 pending). Therefore every "
+            "transport arc is 'relaxed' or 'conditional', none is 'exact', "
             "and inserter capacity is unknown. Filters and splitter priorities are recorded and "
             "relaxed, never applied. Fluids, non-normal quality, modules, beacons, power, rails "
             "and logistic bots are unsupported and stay visible as unsupported topology. "
@@ -390,7 +391,8 @@ TOOL_SCHEMAS: list[dict] = [
             "bounds. A bound appears only when unresolved_reasons is empty AND a stage returns a "
             "certified dual bound; unsupported possible bridges, undeclared unsupported entities, "
             "ambiguous furnaces, unknown power and mechanics-altering mods all force 'partial' with "
-            "no bound. Zero game-mechanics rules are observed, so no bound is currently advertisable "
+            "no bound. No compatible 2.0.77 game-mechanics rule is observed, so no bound is "
+            "currently advertisable "
             "for the pinned pilot blueprint. Synthetic fixtures are test data, not game evidence. "
             "Resend the identical request document (its request_hash seals it) for follow-up pages; "
             "page.cursor is bound to result_hash. Call get_capabilities for the finding-code set."
@@ -440,6 +442,44 @@ TOOL_SCHEMAS: list[dict] = [
                                        "description": "candidate recipes for recipe-less furnaces; never inferred"},
             },
             "required": ["request"],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "evaluate_blueprint_operating_rate",
+        "description": (
+            "Run the restricted deterministic serial-furnace operating-rate adapter against "
+            "a sealed scenario. With no captures, returns a conditional analytic prediction. "
+            "With the exact required independent v3 game captures, also validates recipe events, "
+            "named boundary/lane counters and inventory/hand conservation and returns the measured "
+            "finite-window comparison. Pure and read-only: no model is called and no file is written. "
+            "This is not the routing LP capacity bound and never claims recurrence-proved sustained rate."
+        ),
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "scenario": {
+                    "type": "object",
+                    "description": "sealed factoribot-routing-throughput-scenario-2 document",
+                    "additionalProperties": True,
+                },
+                "captures": {
+                    "type": "array",
+                    "description": "optional complete set of sealed v3 game observations",
+                    "items": {"type": "object", "additionalProperties": True},
+                },
+                "routing_request": {
+                    "type": "object",
+                    "description": "optional identity-matching sealed routing request",
+                    "additionalProperties": True,
+                },
+                "routing_result": {
+                    "type": "object",
+                    "description": "optional identity-matching routing LP result kept as a separate bound",
+                    "additionalProperties": True,
+                },
+            },
+            "required": ["scenario"],
             "additionalProperties": False,
         },
     },
@@ -666,6 +706,36 @@ class Toolbox:
         return analysis_summary(layout, report, section=str(args.get("section") or "summary"),
                                 page_args=args.get("page"))
 
+    def _t_evaluate_blueprint_operating_rate(self, args: dict) -> dict:
+        from .sustained_throughput import (
+            ThroughputError,
+            build_operating_report,
+            predict_operating_rate,
+        )
+
+        scenario = args.get("scenario")
+        captures = args.get("captures")
+        source_sha = None if self.data_source is None else self.data_source.get("sha256")
+        try:
+            if captures is None:
+                return predict_operating_rate(
+                    scenario,
+                    database=self.db,
+                    recipe_data_sha256=source_sha,
+                )
+            if not isinstance(captures, list):
+                raise ThroughputError("captures must be an array")
+            return build_operating_report(
+                scenario,
+                captures,
+                routing_request=args.get("routing_request"),
+                routing_result=args.get("routing_result"),
+                database=self.db,
+                recipe_data_sha256=source_sha,
+            )
+        except ThroughputError as exc:
+            return {"error": "bad_throughput_evidence", "message": str(exc)}
+
     def _t_get_capabilities(self, args: dict) -> dict:
         from importlib.util import find_spec
         from .planner import LIMITATIONS
@@ -697,7 +767,9 @@ class Toolbox:
                 "assumes material reaches them, modelling no geometry. inspect_blueprint_layout and "
                 "analyze_blueprint_routes are the routing audit: real entity geometry, lanes and arcs, and "
                 "upper bounds only under a strict declared request. The two answer different questions and "
-                "neither supersedes the other; see blueprint_routing for the routing surface's validated scope."
+                "neither supersedes the other. evaluate_blueprint_operating_rate is the separate restricted "
+                "serial-furnace predictor/capture validator; it does not relabel a bound or finite measurement "
+                "as achieved maximum or sustained rate. See blueprint_routing for the validated routing scope."
             ),
             "rate_units": {
                 "crafts_per_s": "recipe crafts/s",

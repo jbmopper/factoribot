@@ -1,0 +1,1775 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="factoribot-blueprint-view-1">
+<title>Routing layout 6c8fc431002a</title>
+<style>
+:root {
+  --bg: #f6f6f4; --panel: #ffffff; --ink: #16181d; --muted: #5b6270;
+  --line: #cfd3da; --accent: #1c4f9c; --accent-ink: #ffffff;
+  --map-bg: #fbfbf9; --warn-bg: #fff4d6; --warn-line: #a97b00;
+  --err-bg: #ffe6e3; --err-line: #a32118; --ok-bg: #e6f2e6; --ok-line: #276b2b;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161a; --panel: #1c1f25; --ink: #e9ecf1; --muted: #a4acba;
+    --line: #39404c; --accent: #7fb0ff; --accent-ink: #10131a;
+    --map-bg: #10131a; --warn-bg: #3a2f10; --warn-line: #e0b33c;
+    --err-bg: #3b1a17; --err-line: #ff8b80; --ok-bg: #16301b; --ok-line: #7fd08a;
+  }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 13px/1.45 var(--sans); }
+#app { display: flex; flex-direction: column; height: 100%; }
+
+header.top { border-bottom: 1px solid var(--line); background: var(--panel); padding: 8px 12px; }
+header.top h1 { font-size: 15px; margin: 0 0 4px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.chip { border: 1px solid var(--line); border-radius: 3px; padding: 1px 6px; font-size: 11px; color: var(--muted); }
+.chip.mono { font-family: var(--mono); }
+.banner { border: 1px solid var(--warn-line); background: var(--warn-bg); border-left-width: 6px;
+  padding: 6px 10px; margin: 6px 0 0; font-weight: 600; }
+.banner.err { border-color: var(--err-line); background: var(--err-bg); border-left-width: 6px; }
+.banner.ok { border-color: var(--ok-line); background: var(--ok-bg); border-left-width: 6px; }
+.banner.hidden { display: none; }
+
+main { display: flex; flex: 1; min-height: 0; }
+#side { width: 420px; min-width: 280px; max-width: 55%; border-right: 1px solid var(--line); background: var(--panel);
+  display: flex; flex-direction: column; min-height: 0; }
+#tabs { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+#tabs button { flex: 1 0 auto; border: 0; border-right: 1px solid var(--line); background: transparent;
+  color: var(--ink); font: inherit; padding: 6px 8px; cursor: pointer; }
+#tabs button[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+#panel { overflow: auto; padding: 10px 12px; flex: 1; }
+#stage { flex: 1; position: relative; min-width: 0; background: var(--map-bg); }
+#map { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+#map.drag { cursor: grabbing; }
+#tools { position: absolute; left: 8px; top: 8px; display: flex; gap: 4px; flex-wrap: wrap; max-width: 90%; }
+#tools button { font: inherit; padding: 3px 8px; border: 1px solid var(--line); background: var(--panel);
+  color: var(--ink); border-radius: 3px; cursor: pointer; }
+#legend { pointer-events: none; opacity: .95; position: absolute; right: 8px; bottom: 8px; background: var(--panel); border: 1px solid var(--line);
+  padding: 6px 8px; font-size: 11px; max-width: 300px; }
+#status { position: absolute; left: 8px; bottom: 8px; background: var(--panel); border: 1px solid var(--line);
+  padding: 4px 8px; font-size: 11px; font-family: var(--mono); }
+
+h2 { font-size: 13px; margin: 14px 0 6px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+h2:first-child { margin-top: 0; }
+p.note { color: var(--muted); margin: 4px 0; }
+ul.plain { margin: 4px 0; padding-left: 18px; }
+ul.plain li { margin: 2px 0; }
+.kv { display: flex; gap: 8px; padding: 1px 0; }
+.kv .k { color: var(--muted); flex: 0 0 42%; }
+.kv .v { flex: 1; word-break: break-word; font-family: var(--mono); font-size: 12px; }
+
+.card { border: 1px solid var(--line); border-left-width: 6px; border-radius: 3px; padding: 8px;
+  margin: 6px 0; background: var(--panel); cursor: pointer; }
+.card.plain { cursor: default; }
+.card.sel { outline: 3px solid var(--accent); outline-offset: 1px; }
+.card .msg { margin: 4px 0; }
+.sev-error { border-left-style: solid; border-left-color: var(--err-line); background: var(--err-bg); }
+.sev-warning { border-left-style: dashed; border-left-color: var(--warn-line); background: var(--warn-bg); }
+.sev-info { border-left-style: dotted; border-left-color: var(--accent); }
+.badge { display: inline-block; border: 1px solid currentColor; border-radius: 3px; padding: 0 5px;
+  font-size: 11px; font-weight: 700; letter-spacing: .04em; margin-right: 6px; }
+.badge.error { color: var(--err-line); }
+.badge.warning { color: var(--warn-line); }
+.badge.info { color: var(--accent); }
+.badge.kind { font-weight: 500; color: var(--muted); }
+
+label.field { display: block; margin: 5px 0; }
+label.field span { display: block; color: var(--muted); font-size: 11px; }
+input[type=text], select, textarea { width: 100%; font: 12px var(--mono); padding: 3px 5px;
+  border: 1px solid var(--line); border-radius: 3px; background: var(--panel); color: var(--ink); }
+textarea { min-height: 120px; resize: vertical; }
+button.act { font: inherit; padding: 4px 10px; border: 1px solid var(--line); border-radius: 3px;
+  background: var(--accent); color: var(--accent-ink); cursor: pointer; margin: 4px 4px 4px 0; }
+button.act.sub { background: var(--panel); color: var(--ink); }
+button.mini { font: 11px var(--sans); padding: 1px 6px; border: 1px solid var(--line); border-radius: 3px;
+  background: var(--panel); color: var(--ink); cursor: pointer; margin-left: 6px; }
+.row { display: flex; gap: 6px; align-items: baseline; padding: 3px 0; border-bottom: 1px dotted var(--line); }
+.row .grow { flex: 1; word-break: break-word; }
+.row.sel { background: var(--ok-bg); outline: 2px solid var(--accent); }
+.mono { font-family: var(--mono); font-size: 12px; }
+.small { font-size: 11px; color: var(--muted); }
+pre.raw { font: 11px var(--mono); white-space: pre-wrap; word-break: break-all; background: var(--bg);
+  border: 1px solid var(--line); padding: 6px; margin: 4px 0; max-height: 220px; overflow: auto; }
+.err-text { color: var(--err-line); font-weight: 600; }
+
+@media (max-width: 900px) { #side { width: 46%; min-width: 240px; } }
+@media (max-width: 640px) {
+  main { flex-direction: column-reverse; }
+  #side { width: auto; max-width: none; min-width: 0; border-right: 0; border-top: 1px solid var(--line); flex: 1; }
+  #stage { flex: 0 0 45vh; }
+}
+
+</style>
+</head>
+<body>
+<noscript>This routing map needs JavaScript. The underlying analysis data is embedded in this file as JSON.</noscript>
+<div id="app"></div>
+<script id="factoribot-view-data" type="application/json">{"analyzed_assignments":null,"assignments":{"blueprint_hash":"sha256:9cecb5ce1dc8c938e9e544678e61d50c88751a4ce6e4fb5dd12f45193aebfb60","canonical":"{\"assignments\":{\"blueprint_hash\":\"sha256:9cecb5ce1dc8c938e9e544678e61d50c88751a4ce6e4fb5dd12f45193aebfb60\",\"controls\":[],\"feeds\":[{\"budget_id\":\"iron_ore\",\"capacity\":{\"kind\":\"finite\",\"value\":15},\"endpoint\":{\"entity\":{\"book_path\":[],\"entity_number\":1},\"kind\":\"port\",\"name\":\"in_left\"},\"id\":\"ore_input_left_lane\"}],\"furnaces\":[{\"entity\":{\"book_path\":[],\"entity_number\":5},\"recipe\":\"iron-plate\"},{\"entity\":{\"book_path\":[],\"entity_number\":11},\"recipe\":\"steel-plate\"}],\"graph_hash\":\"sha256:6c8fc431002aeaa994267c98b26f7822b0c32c1659077d147329da9acdb7dddb\",\"schema_version\":\"1.1.1\"},\"blueprint_hash\":\"sha256:9cecb5ce1dc8c938e9e544678e61d50c88751a4ce6e4fb5dd12f45193aebfb60\",\"document_kind\":\"factoribot.routing.assignment_draft\",\"graph_hash\":\"sha256:6c8fc431002aeaa994267c98b26f7822b0c32c1659077d147329da9acdb7dddb\",\"notes\":[\"Measured-case declaration: supply is available up to 15/s on one fast-belt lane, never forced.\",\"Furnace recipes are explicit overrides because current inserter paths are conditional, so inference alone cannot justify them.\"],\"proposed_request\":{\"budgets\":[{\"capacity\":{\"kind\":\"finite\",\"value\":15},\"id\":\"iron_ore\",\"material\":{\"kind\":\"item\",\"name\":\"iron-ore\",\"quality\":\"normal\"}}],\"exports\":[{\"endpoint\":{\"entity\":{\"book_path\":[],\"entity_number\":15},\"kind\":\"port\",\"name\":\"out_right\"},\"id\":\"steel_output_right_lane\",\"material\":{\"kind\":\"item\",\"name\":\"steel-plate\",\"quality\":\"normal\"},\"rate\":0,\"requirement\":\"minimum\",\"sink\":{\"capacity\":{\"kind\":\"unlimited\",\"value\":null},\"kind\":\"external\",\"service\":\"Counted unbounded removal in the named disposable 2.0.77 trial\"}}],\"objective\":{\"export_id\":\"steel_output_right_lane\",\"kind\":\"maximize_export\"},\"surplus\":[]},\"view_version\":\"factoribot-blueprint-view-1\"}","controls":[],"document":{"assignments":{"blueprint_hash":"sha256:9cecb5ce1dc8c938e9e544678e61d50c88751a4ce6e4fb5dd12f45193aebfb60","controls":[],"feeds":[{"budget_id":"iron_ore","capacity":{"kind":"finite","value":15.0},"endpoint":{"entity":{"book_path":[],"entity_number":1},"kind":"port","name":"in_left"},"id":"ore_input_left_lane"}],"furnaces":[{"entity":{"book_path":[],"entity_number":5},"recipe":"iron-plate"},{"entity":{"book_path":[],"entity_number":11},"recipe":"steel-plate"}],"graph_hash":"sha256:6c8fc431002aeaa994267c98b26f7822b0c32c1659077d147329da9acdb7dddb","schema_version":"1.1.1"},"blueprint_hash":"sha256:9cecb5ce1dc8c938e9e544678e61d50c88751a4ce6e4fb5dd12f45193aebfb60","document_kind":"factoribot.routing.assignment_draft","graph_hash":"sha256:6c8fc431002aeaa994267c98b26f7822b0c32c1659077d147329da9acdb7dddb","notes":["Measured-case declaration: supply is available up to 15/s on one fast-belt lane, never forced.","Furnace recipes are explicit overrides because current inserter paths are conditional, so inference alone cannot justify them."],"proposed_request":{"budgets":[{"capacity":{"kind":"finite","value":15.0},"id":"iron_ore","material":{"kind":"item","name":"iron-ore","quality":"normal"}}],"exports":[{"endpoint":{"entity":{"book_path":[],"entity_number":15},"kind":"port","name":"out_right"},"id":"steel_output_right_lane","material":{"kind":"item","name":"steel-plate","quality":"normal"},"rate":0.0,"requirement":"minimum","sink":{"capacity":{"kind":"unlimited","value":null},"kind":"external","service":"Counted unbounded removal in the named disposable 2.0.77 trial"}}],"objective":{"export_id":"steel_output_right_lane","kind":"maximize_export"},"surplus":[]},"view_version":"factoribot-blueprint-view-1"},"feeds":[],"furnaces":[],"graph_hash":"sha256:6c8fc431002aeaa994267c98b26f7822b0c32c1659077d147329da9acdb7dddb","schema_version":"1.1.1"},"assignments_source":"supplied to the renderer","document_kind":"factoribot.routing.assignment_draft","graph":{"activities":[{"craft_capacity_text":"0.625 crafts/s","entity_key":"bp/root/e/11","evidence_ids":["mech_machine_furnace","prototype_geometry"],"extra":{},"id":"e11_iron-plate","inputs":[{"amount_text":"1","endpoint_key":"bp/root/e/11/inventory/input","material_text":"iron-ore"}],"outputs":[{"amount_text":"1","endpoint_key":"bp/root/e/11/inventory/output","material_text":"iron-plate"}],"recipe":"iron-plate","resources":[{"coefficient_text":"1.6","group_id":"e11_time"}]},{"craft_capacity_text":"0.125 crafts/s","entity_key":"bp/root/e/11","evidence_ids":["mech_machine_furnace","prototype_geometry"],"extra":{},"id":"e11_steel-plate","inputs":[{"amount_text":"5","endpoint_key":"bp/root/e/11/inventory/input","material_text":"iron-plate"}],"outputs":[{"amount_text":"1","endpoint_key":"bp/root/e/11/inventory/output","material_text":"steel-plate"}],"recipe":"steel-plate","resources":[{"coefficient_text":"8","group_id":"e11_time"}]},{"craft_capacity_text":"0.625 crafts/s","entity_key":"bp/root/e/5","evidence_ids":["mech_machine_furnace","prototype_geometry"],"extra":{},"id":"e5_iron-plate","inputs":[{"amount_text":"1","endpoint_key":"bp/root/e/5/inventory/input","material_text":"iron-ore"}],"outputs":[{"amount_text":"1","endpoint_key":"bp/root/e/5/inventory/output","material_text":"iron-plate"}],"recipe":"iron-plate","resources":[{"coefficient_text":"1.6","group_id":"e5_time"}]},{"craft_capacity_text":"0.125 crafts/s","entity_key":"bp/root/e/5","evidence_ids":["mech_machine_furnace","prototype_geometry"],"extra":{},"id":"e5_steel-plate","inputs":[{"amount_text":"5","endpoint_key":"bp/root/e/5/inventory/input","material_text":"iron-plate"}],"outputs":[{"amount_text":"1","endpoint_key":"bp/root/e/5/inventory/output","material_text":"steel-plate"}],"recipe":"steel-plate","resources":[{"coefficient_text":"8","group_id":"e5_time"}]}],"arcs":[{"conditions":["inserter_rotation_documented"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[11.0,14.0,13.0,14.0],"id":"e10_drop_doc_0","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"conditional","source_key":"bp/root/e/10/port/hand","target_key":"bp/root/e/11/inventory/input"},{"conditions":["inserter_rotation_reversed"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[11.0,14.0,9.5,13.75],"id":"e10_drop_rev_0","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"conditional","source_key":"bp/root/e/10/port/hand","target_key":"bp/root/e/9/lane/left"},{"conditions":["inserter_rotation_reversed"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[11.0,14.0,9.5,14.25],"id":"e10_drop_rev_1","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"conditional","source_key":"bp/root/e/10/port/hand","target_key":"bp/root/e/9/lane/right"},{"conditions":["inserter_rotation_documented"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","mech_inserter_rate","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[10.5,13.75,11.0,14.0],"id":"e10_pick_doc_0","resources":[{"coefficient_text":"1","group_id":"e10_hand"}],"semantics":"conditional","source_key":"bp/root/e/9/lane/left","target_key":"bp/root/e/10/port/hand"},{"conditions":["inserter_rotation_documented"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","mech_inserter_rate","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[10.5,14.25,11.0,14.0],"id":"e10_pick_doc_1","resources":[{"coefficient_text":"1","group_id":"e10_hand"}],"semantics":"conditional","source_key":"bp/root/e/9/lane/right","target_key":"bp/root/e/10/port/hand"},{"conditions":["inserter_rotation_reversed"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","mech_inserter_rate","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[13.0,14.0,11.0,14.0],"id":"e10_pick_rev_0","resources":[{"coefficient_text":"1","group_id":"e10_hand"}],"semantics":"conditional","source_key":"bp/root/e/11/inventory/output","target_key":"bp/root/e/10/port/hand"},{"conditions":["inserter_rotation_documented"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[15.0,14.0,15.5,13.75],"id":"e12_drop_doc_0","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"conditional","source_key":"bp/root/e/12/port/hand","target_key":"bp/root/e/13/lane/left"},{"conditions":["inserter_rotation_documented"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[15.0,14.0,15.5,14.25],"id":"e12_drop_doc_1","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"conditional","source_key":"bp/root/e/12/port/hand","target_key":"bp/root/e/13/lane/right"},{"conditions":["inserter_rotation_documented"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[15.0,14.0,16.5,13.75],"id":"e12_drop_doc_2","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"conditional","source_key":"bp/root/e/12/port/hand","target_key":"bp/root/e/14/lane/left"},{"conditions":["inserter_rotation_documented"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[15.0,14.0,16.5,14.25],"id":"e12_drop_doc_3","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"conditional","source_key":"bp/root/e/12/port/hand","target_key":"bp/root/e/14/lane/right"},{"conditions":["inserter_rotation_reversed"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[15.0,14.0,13.0,14.0],"id":"e12_drop_rev_0","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"conditional","source_key":"bp/root/e/12/port/hand","target_key":"bp/root/e/11/inventory/input"},{"conditions":["inserter_rotation_documented"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","mech_inserter_rate","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[13.0,14.0,15.0,14.0],"id":"e12_pick_doc_0","resources":[{"coefficient_text":"1","group_id":"e12_hand"}],"semantics":"conditional","source_key":"bp/root/e/11/inventory/output","target_key":"bp/root/e/12/port/hand"},{"conditions":["inserter_rotation_reversed"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","mech_inserter_rate","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[16.5,13.75,15.0,14.0],"id":"e12_pick_rev_0","resources":[{"coefficient_text":"1","group_id":"e12_hand"}],"semantics":"conditional","source_key":"bp/root/e/13/lane/left","target_key":"bp/root/e/12/port/hand"},{"conditions":["inserter_rotation_reversed"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","mech_inserter_rate","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[16.5,14.25,15.0,14.0],"id":"e12_pick_rev_1","resources":[{"coefficient_text":"1","group_id":"e12_hand"}],"semantics":"conditional","source_key":"bp/root/e/13/lane/right","target_key":"bp/root/e/12/port/hand"},{"conditions":["inserter_rotation_reversed"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","mech_inserter_rate","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[17.5,13.75,15.0,14.0],"id":"e12_pick_rev_2","resources":[{"coefficient_text":"1","group_id":"e12_hand"}],"semantics":"conditional","source_key":"bp/root/e/14/lane/left","target_key":"bp/root/e/12/port/hand"},{"conditions":["inserter_rotation_reversed"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","mech_inserter_rate","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[17.5,14.25,15.0,14.0],"id":"e12_pick_rev_3","resources":[{"coefficient_text":"1","group_id":"e12_hand"}],"semantics":"conditional","source_key":"bp/root/e/14/lane/right","target_key":"bp/root/e/12/port/hand"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_transfer","blueprint_geometry"],"extra":{},"geometry":[16.5,13.75,16.5,13.75],"id":"e13_centre_to_e14_centre_left","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"relaxed","source_key":"bp/root/e/13/port/out_left","target_key":"bp/root/e/14/port/in_left"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_transfer","blueprint_geometry"],"extra":{},"geometry":[16.5,14.25,16.5,14.25],"id":"e13_centre_to_e14_centre_right","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"relaxed","source_key":"bp/root/e/13/port/out_right","target_key":"bp/root/e/14/port/in_right"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[15.5,13.75,16.5,13.75],"id":"e13_lane_left","resources":[{"coefficient_text":"1","group_id":"e13_left"}],"semantics":"relaxed","source_key":"bp/root/e/13/port/in_left","target_key":"bp/root/e/13/port/out_left"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[15.5,14.25,16.5,14.25],"id":"e13_lane_right","resources":[{"coefficient_text":"1","group_id":"e13_right"}],"semantics":"relaxed","source_key":"bp/root/e/13/port/in_right","target_key":"bp/root/e/13/port/out_right"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_transfer","blueprint_geometry"],"extra":{},"geometry":[17.5,13.75,17.5,13.75],"id":"e14_centre_to_e15_centre_left","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"relaxed","source_key":"bp/root/e/14/port/out_left","target_key":"bp/root/e/15/port/in_left"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_transfer","blueprint_geometry"],"extra":{},"geometry":[17.5,14.25,17.5,14.25],"id":"e14_centre_to_e15_centre_right","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"relaxed","source_key":"bp/root/e/14/port/out_right","target_key":"bp/root/e/15/port/in_right"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[16.5,13.75,17.5,13.75],"id":"e14_lane_left","resources":[{"coefficient_text":"1","group_id":"e14_left"}],"semantics":"relaxed","source_key":"bp/root/e/14/port/in_left","target_key":"bp/root/e/14/port/out_left"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[16.5,14.25,17.5,14.25],"id":"e14_lane_right","resources":[{"coefficient_text":"1","group_id":"e14_right"}],"semantics":"relaxed","source_key":"bp/root/e/14/port/in_right","target_key":"bp/root/e/14/port/out_right"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[17.5,13.75,18.5,13.75],"id":"e15_lane_left","resources":[{"coefficient_text":"1","group_id":"e15_left"}],"semantics":"relaxed","source_key":"bp/root/e/15/port/in_left","target_key":"bp/root/e/15/port/out_left"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[17.5,14.25,18.5,14.25],"id":"e15_lane_right","resources":[{"coefficient_text":"1","group_id":"e15_right"}],"semantics":"relaxed","source_key":"bp/root/e/15/port/in_right","target_key":"bp/root/e/15/port/out_right"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_transfer","blueprint_geometry"],"extra":{},"geometry":[0.5,13.75,0.5,13.75],"id":"e1_centre_to_e2_centre_left","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"relaxed","source_key":"bp/root/e/1/port/out_left","target_key":"bp/root/e/2/port/in_left"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_transfer","blueprint_geometry"],"extra":{},"geometry":[0.5,14.25,0.5,14.25],"id":"e1_centre_to_e2_centre_right","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"relaxed","source_key":"bp/root/e/1/port/out_right","target_key":"bp/root/e/2/port/in_right"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[-0.5,13.75,0.5,13.75],"id":"e1_lane_left","resources":[{"coefficient_text":"1","group_id":"e1_left"}],"semantics":"relaxed","source_key":"bp/root/e/1/port/in_left","target_key":"bp/root/e/1/port/out_left"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[-0.5,14.25,0.5,14.25],"id":"e1_lane_right","resources":[{"coefficient_text":"1","group_id":"e1_right"}],"semantics":"relaxed","source_key":"bp/root/e/1/port/in_right","target_key":"bp/root/e/1/port/out_right"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_transfer","blueprint_geometry"],"extra":{},"geometry":[1.5,13.75,1.5,13.75],"id":"e2_centre_to_e3_centre_left","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"relaxed","source_key":"bp/root/e/2/port/out_left","target_key":"bp/root/e/3/port/in_left"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_transfer","blueprint_geometry"],"extra":{},"geometry":[1.5,14.25,1.5,14.25],"id":"e2_centre_to_e3_centre_right","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"relaxed","source_key":"bp/root/e/2/port/out_right","target_key":"bp/root/e/3/port/in_right"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[0.5,13.75,1.5,13.75],"id":"e2_lane_left","resources":[{"coefficient_text":"1","group_id":"e2_left"}],"semantics":"relaxed","source_key":"bp/root/e/2/port/in_left","target_key":"bp/root/e/2/port/out_left"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[0.5,14.25,1.5,14.25],"id":"e2_lane_right","resources":[{"coefficient_text":"1","group_id":"e2_right"}],"semantics":"relaxed","source_key":"bp/root/e/2/port/in_right","target_key":"bp/root/e/2/port/out_right"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[1.5,13.75,2.5,13.75],"id":"e3_lane_left","resources":[{"coefficient_text":"1","group_id":"e3_left"}],"semantics":"relaxed","source_key":"bp/root/e/3/port/in_left","target_key":"bp/root/e/3/port/out_left"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[1.5,14.25,2.5,14.25],"id":"e3_lane_right","resources":[{"coefficient_text":"1","group_id":"e3_right"}],"semantics":"relaxed","source_key":"bp/root/e/3/port/in_right","target_key":"bp/root/e/3/port/out_right"},{"conditions":["inserter_rotation_documented"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[3.0,14.0,5.0,14.0],"id":"e4_drop_doc_0","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"conditional","source_key":"bp/root/e/4/port/hand","target_key":"bp/root/e/5/inventory/input"},{"conditions":["inserter_rotation_reversed"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[3.0,14.0,1.5,13.75],"id":"e4_drop_rev_0","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"conditional","source_key":"bp/root/e/4/port/hand","target_key":"bp/root/e/3/lane/left"},{"conditions":["inserter_rotation_reversed"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[3.0,14.0,1.5,14.25],"id":"e4_drop_rev_1","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"conditional","source_key":"bp/root/e/4/port/hand","target_key":"bp/root/e/3/lane/right"},{"conditions":["inserter_rotation_documented"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","mech_inserter_rate","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[2.5,13.75,3.0,14.0],"id":"e4_pick_doc_0","resources":[{"coefficient_text":"1","group_id":"e4_hand"}],"semantics":"conditional","source_key":"bp/root/e/3/lane/left","target_key":"bp/root/e/4/port/hand"},{"conditions":["inserter_rotation_documented"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","mech_inserter_rate","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[2.5,14.25,3.0,14.0],"id":"e4_pick_doc_1","resources":[{"coefficient_text":"1","group_id":"e4_hand"}],"semantics":"conditional","source_key":"bp/root/e/3/lane/right","target_key":"bp/root/e/4/port/hand"},{"conditions":["inserter_rotation_reversed"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","mech_inserter_rate","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[5.0,14.0,3.0,14.0],"id":"e4_pick_rev_0","resources":[{"coefficient_text":"1","group_id":"e4_hand"}],"semantics":"conditional","source_key":"bp/root/e/5/inventory/output","target_key":"bp/root/e/4/port/hand"},{"conditions":["inserter_rotation_documented"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[7.0,14.0,7.5,13.75],"id":"e6_drop_doc_0","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"conditional","source_key":"bp/root/e/6/port/hand","target_key":"bp/root/e/7/lane/left"},{"conditions":["inserter_rotation_documented"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[7.0,14.0,7.5,14.25],"id":"e6_drop_doc_1","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"conditional","source_key":"bp/root/e/6/port/hand","target_key":"bp/root/e/7/lane/right"},{"conditions":["inserter_rotation_documented"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[7.0,14.0,8.5,13.75],"id":"e6_drop_doc_2","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"conditional","source_key":"bp/root/e/6/port/hand","target_key":"bp/root/e/8/lane/left"},{"conditions":["inserter_rotation_documented"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[7.0,14.0,8.5,14.25],"id":"e6_drop_doc_3","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"conditional","source_key":"bp/root/e/6/port/hand","target_key":"bp/root/e/8/lane/right"},{"conditions":["inserter_rotation_reversed"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[7.0,14.0,5.0,14.0],"id":"e6_drop_rev_0","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"conditional","source_key":"bp/root/e/6/port/hand","target_key":"bp/root/e/5/inventory/input"},{"conditions":["inserter_rotation_documented"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","mech_inserter_rate","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[5.0,14.0,7.0,14.0],"id":"e6_pick_doc_0","resources":[{"coefficient_text":"1","group_id":"e6_hand"}],"semantics":"conditional","source_key":"bp/root/e/5/inventory/output","target_key":"bp/root/e/6/port/hand"},{"conditions":["inserter_rotation_reversed"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","mech_inserter_rate","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[8.5,13.75,7.0,14.0],"id":"e6_pick_rev_0","resources":[{"coefficient_text":"1","group_id":"e6_hand"}],"semantics":"conditional","source_key":"bp/root/e/7/lane/left","target_key":"bp/root/e/6/port/hand"},{"conditions":["inserter_rotation_reversed"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","mech_inserter_rate","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[8.5,14.25,7.0,14.0],"id":"e6_pick_rev_1","resources":[{"coefficient_text":"1","group_id":"e6_hand"}],"semantics":"conditional","source_key":"bp/root/e/7/lane/right","target_key":"bp/root/e/6/port/hand"},{"conditions":["inserter_rotation_reversed"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","mech_inserter_rate","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[9.5,13.75,7.0,14.0],"id":"e6_pick_rev_2","resources":[{"coefficient_text":"1","group_id":"e6_hand"}],"semantics":"conditional","source_key":"bp/root/e/8/lane/left","target_key":"bp/root/e/6/port/hand"},{"conditions":["inserter_rotation_reversed"],"eligibility_text":"any item","evidence_ids":["mech_inserter_endpoints","mech_inserter_rate","blueprint_geometry","prototype_geometry"],"extra":{},"geometry":[9.5,14.25,7.0,14.0],"id":"e6_pick_rev_3","resources":[{"coefficient_text":"1","group_id":"e6_hand"}],"semantics":"conditional","source_key":"bp/root/e/8/lane/right","target_key":"bp/root/e/6/port/hand"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_transfer","blueprint_geometry"],"extra":{},"geometry":[8.5,13.75,8.5,13.75],"id":"e7_centre_to_e8_centre_left","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"relaxed","source_key":"bp/root/e/7/port/out_left","target_key":"bp/root/e/8/port/in_left"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_transfer","blueprint_geometry"],"extra":{},"geometry":[8.5,14.25,8.5,14.25],"id":"e7_centre_to_e8_centre_right","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"relaxed","source_key":"bp/root/e/7/port/out_right","target_key":"bp/root/e/8/port/in_right"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[7.5,13.75,8.5,13.75],"id":"e7_lane_left","resources":[{"coefficient_text":"1","group_id":"e7_left"}],"semantics":"relaxed","source_key":"bp/root/e/7/port/in_left","target_key":"bp/root/e/7/port/out_left"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[7.5,14.25,8.5,14.25],"id":"e7_lane_right","resources":[{"coefficient_text":"1","group_id":"e7_right"}],"semantics":"relaxed","source_key":"bp/root/e/7/port/in_right","target_key":"bp/root/e/7/port/out_right"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_transfer","blueprint_geometry"],"extra":{},"geometry":[9.5,13.75,9.5,13.75],"id":"e8_centre_to_e9_centre_left","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"relaxed","source_key":"bp/root/e/8/port/out_left","target_key":"bp/root/e/9/port/in_left"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_transfer","blueprint_geometry"],"extra":{},"geometry":[9.5,14.25,9.5,14.25],"id":"e8_centre_to_e9_centre_right","resources":[{"coefficient_text":"1","group_id":"handover"}],"semantics":"relaxed","source_key":"bp/root/e/8/port/out_right","target_key":"bp/root/e/9/port/in_right"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[8.5,13.75,9.5,13.75],"id":"e8_lane_left","resources":[{"coefficient_text":"1","group_id":"e8_left"}],"semantics":"relaxed","source_key":"bp/root/e/8/port/in_left","target_key":"bp/root/e/8/port/out_left"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[8.5,14.25,9.5,14.25],"id":"e8_lane_right","resources":[{"coefficient_text":"1","group_id":"e8_right"}],"semantics":"relaxed","source_key":"bp/root/e/8/port/in_right","target_key":"bp/root/e/8/port/out_right"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[9.5,13.75,10.5,13.75],"id":"e9_lane_left","resources":[{"coefficient_text":"1","group_id":"e9_left"}],"semantics":"relaxed","source_key":"bp/root/e/9/port/in_left","target_key":"bp/root/e/9/port/out_left"},{"conditions":[],"eligibility_text":"any item","evidence_ids":["mech_belt_lane_capacity","blueprint_geometry"],"extra":{},"geometry":[9.5,14.25,10.5,14.25],"id":"e9_lane_right","resources":[{"coefficient_text":"1","group_id":"e9_right"}],"semantics":"relaxed","source_key":"bp/root/e/9/port/in_right","target_key":"bp/root/e/9/port/out_right"}],"blueprint_hash":"sha256:9cecb5ce1dc8c938e9e544678e61d50c88751a4ce6e4fb5dd12f45193aebfb60","blueprint_hash_short":"sha256:9cecb5ce1dc8…","bounds_box":[-0.5,12.5,18.5,15.5],"capacity_groups":[{"capacity_text":"unknown","evidence_ids":["mech_inserter_rate"],"extra":{},"id":"e10_hand","kind":"inserter","unit":"items/s"},{"capacity_text":"1 seconds/s","evidence_ids":["mech_machine_furnace","prototype_geometry"],"extra":{},"id":"e11_time","kind":"machine_time","unit":"seconds/s"},{"capacity_text":"unknown","evidence_ids":["mech_inserter_rate"],"extra":{},"id":"e12_hand","kind":"inserter","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e13_left","kind":"lane","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e13_right","kind":"lane","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e14_left","kind":"lane","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e14_right","kind":"lane","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e15_left","kind":"lane","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e15_right","kind":"lane","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e1_left","kind":"lane","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e1_right","kind":"lane","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e2_left","kind":"lane","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e2_right","kind":"lane","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e3_left","kind":"lane","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e3_right","kind":"lane","unit":"items/s"},{"capacity_text":"unknown","evidence_ids":["mech_inserter_rate"],"extra":{},"id":"e4_hand","kind":"inserter","unit":"items/s"},{"capacity_text":"1 seconds/s","evidence_ids":["mech_machine_furnace","prototype_geometry"],"extra":{},"id":"e5_time","kind":"machine_time","unit":"seconds/s"},{"capacity_text":"unknown","evidence_ids":["mech_inserter_rate"],"extra":{},"id":"e6_hand","kind":"inserter","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e7_left","kind":"lane","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e7_right","kind":"lane","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e8_left","kind":"lane","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e8_right","kind":"lane","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e9_left","kind":"lane","unit":"items/s"},{"capacity_text":"15 items/s","evidence_ids":["mech_belt_lane_capacity","prototype_geometry"],"extra":{},"id":"e9_right","kind":"lane","unit":"items/s"},{"capacity_text":"unlimited","evidence_ids":["mech_belt_transfer"],"extra":{},"id":"handover","kind":"other","unit":"items/s"}],"conditions":["inserter_rotation_documented","inserter_rotation_reversed"],"counts":{"activities":4,"arcs":62,"capacity_groups":25,"entities":15,"evidence":17,"inventories":4,"lanes":18,"ports":40,"topology_gaps":0,"unsupported_entities":0},"entities":[{"activities":[],"arcs":["e1_centre_to_e2_centre_left","e1_centre_to_e2_centre_right","e1_lane_left","e1_lane_right"],"blueprint_recipe":null,"box":[-0.5,13.5,0.5,14.5],"direction_text":"east","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"furnace_candidates":[],"id":{"book_path":[],"entity_number":1},"input_belt":{"lanes":[{"available":true,"boundary_candidate":true,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e1_left"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/1/port/in_left","side":"left"},{"available":true,"boundary_candidate":true,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e1_right"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/1/port/in_right","side":"right"}],"reason":null,"whole_belt_available":true,"whole_capacity":{"kind":"finite","value":30.0},"whole_capacity_text":"30 items/s"},"inventories":[],"key":"bp/root/e/1","lanes":["bp/root/e/1/lane/left","bp/root/e/1/lane/right"],"mod":"base","orientation_text":"null","ports":["bp/root/e/1/port/in_left","bp/root/e/1/port/in_right","bp/root/e/1/port/out_left","bp/root/e/1/port/out_right"],"position":[0.0,14.0],"position_text":"0, 14","prototype":"fast-transport-belt","quality":"normal","raw_text":"{\"direction\":4,\"entity_number\":1,\"name\":\"fast-transport-belt\",\"position\":{\"x\":0,\"y\":14}}","recipes":[],"subsystem":"transport","support":"supported"},{"activities":[],"arcs":["e1_centre_to_e2_centre_left","e1_centre_to_e2_centre_right","e2_centre_to_e3_centre_left","e2_centre_to_e3_centre_right","e2_lane_left","e2_lane_right"],"blueprint_recipe":null,"box":[0.5,13.5,1.5,14.5],"direction_text":"east","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"furnace_candidates":[],"id":{"book_path":[],"entity_number":2},"input_belt":{"lanes":[{"available":true,"boundary_candidate":false,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e2_left"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/2/port/in_left","side":"left"},{"available":true,"boundary_candidate":false,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e2_right"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/2/port/in_right","side":"right"}],"reason":null,"whole_belt_available":false,"whole_capacity":{"kind":"finite","value":30.0},"whole_capacity_text":"30 items/s"},"inventories":[],"key":"bp/root/e/2","lanes":["bp/root/e/2/lane/left","bp/root/e/2/lane/right"],"mod":"base","orientation_text":"null","ports":["bp/root/e/2/port/in_left","bp/root/e/2/port/in_right","bp/root/e/2/port/out_left","bp/root/e/2/port/out_right"],"position":[1.0,14.0],"position_text":"1, 14","prototype":"fast-transport-belt","quality":"normal","raw_text":"{\"direction\":4,\"entity_number\":2,\"name\":\"fast-transport-belt\",\"position\":{\"x\":1,\"y\":14}}","recipes":[],"subsystem":"transport","support":"supported"},{"activities":[],"arcs":["e2_centre_to_e3_centre_left","e2_centre_to_e3_centre_right","e3_lane_left","e3_lane_right","e4_drop_rev_0","e4_drop_rev_1","e4_pick_doc_0","e4_pick_doc_1"],"blueprint_recipe":null,"box":[1.5,13.5,2.5,14.5],"direction_text":"east","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"furnace_candidates":[],"id":{"book_path":[],"entity_number":3},"input_belt":{"lanes":[{"available":true,"boundary_candidate":false,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e3_left"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/3/port/in_left","side":"left"},{"available":true,"boundary_candidate":false,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e3_right"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/3/port/in_right","side":"right"}],"reason":null,"whole_belt_available":false,"whole_capacity":{"kind":"finite","value":30.0},"whole_capacity_text":"30 items/s"},"inventories":[],"key":"bp/root/e/3","lanes":["bp/root/e/3/lane/left","bp/root/e/3/lane/right"],"mod":"base","orientation_text":"null","ports":["bp/root/e/3/port/in_left","bp/root/e/3/port/in_right","bp/root/e/3/port/out_left","bp/root/e/3/port/out_right"],"position":[2.0,14.0],"position_text":"2, 14","prototype":"fast-transport-belt","quality":"normal","raw_text":"{\"direction\":4,\"entity_number\":3,\"name\":\"fast-transport-belt\",\"position\":{\"x\":2,\"y\":14}}","recipes":[],"subsystem":"transport","support":"supported"},{"activities":[],"arcs":["e4_drop_doc_0","e4_drop_rev_0","e4_drop_rev_1","e4_pick_doc_0","e4_pick_doc_1","e4_pick_rev_0"],"blueprint_recipe":null,"box":[2.5,13.5,3.5,14.5],"direction_text":"west","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"furnace_candidates":[],"id":{"book_path":[],"entity_number":4},"input_belt":null,"inventories":[],"key":"bp/root/e/4","lanes":[],"mod":"base","orientation_text":"null","ports":["bp/root/e/4/port/hand"],"position":[3.0,14.0],"position_text":"3, 14","prototype":"fast-inserter","quality":"normal","raw_text":"{\"direction\":12,\"entity_number\":4,\"name\":\"fast-inserter\",\"position\":{\"x\":3,\"y\":14}}","recipes":[],"subsystem":"inserter","support":"supported"},{"activities":["e5_iron-plate","e5_steel-plate"],"arcs":["e4_drop_doc_0","e4_pick_rev_0","e6_drop_rev_0","e6_pick_doc_0"],"blueprint_recipe":null,"box":[3.5,12.5,6.5,15.5],"direction_text":"north","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"furnace_candidates":["iron-plate","steel-plate"],"id":{"book_path":[],"entity_number":5},"input_belt":null,"inventories":["bp/root/e/5/inventory/input","bp/root/e/5/inventory/output"],"key":"bp/root/e/5","lanes":[],"mod":"base","orientation_text":"null","ports":[],"position":[5.0,14.0],"position_text":"5, 14","prototype":"electric-furnace","quality":"normal","raw_text":"{\"entity_number\":5,\"name\":\"electric-furnace\",\"position\":{\"x\":5,\"y\":14}}","recipes":["iron-plate","steel-plate"],"subsystem":"production","support":"supported"},{"activities":[],"arcs":["e6_drop_doc_0","e6_drop_doc_1","e6_drop_doc_2","e6_drop_doc_3","e6_drop_rev_0","e6_pick_doc_0","e6_pick_rev_0","e6_pick_rev_1","e6_pick_rev_2","e6_pick_rev_3"],"blueprint_recipe":null,"box":[6.5,13.5,7.5,14.5],"direction_text":"west","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"furnace_candidates":[],"id":{"book_path":[],"entity_number":6},"input_belt":null,"inventories":[],"key":"bp/root/e/6","lanes":[],"mod":"base","orientation_text":"null","ports":["bp/root/e/6/port/hand"],"position":[7.0,14.0],"position_text":"7, 14","prototype":"fast-inserter","quality":"normal","raw_text":"{\"direction\":12,\"entity_number\":6,\"name\":\"fast-inserter\",\"position\":{\"x\":7,\"y\":14}}","recipes":[],"subsystem":"inserter","support":"supported"},{"activities":[],"arcs":["e6_drop_doc_0","e6_drop_doc_1","e6_pick_rev_0","e6_pick_rev_1","e7_centre_to_e8_centre_left","e7_centre_to_e8_centre_right","e7_lane_left","e7_lane_right"],"blueprint_recipe":null,"box":[7.5,13.5,8.5,14.5],"direction_text":"east","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"furnace_candidates":[],"id":{"book_path":[],"entity_number":7},"input_belt":{"lanes":[{"available":true,"boundary_candidate":false,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e7_left"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/7/port/in_left","side":"left"},{"available":true,"boundary_candidate":false,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e7_right"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/7/port/in_right","side":"right"}],"reason":null,"whole_belt_available":false,"whole_capacity":{"kind":"finite","value":30.0},"whole_capacity_text":"30 items/s"},"inventories":[],"key":"bp/root/e/7","lanes":["bp/root/e/7/lane/left","bp/root/e/7/lane/right"],"mod":"base","orientation_text":"null","ports":["bp/root/e/7/port/in_left","bp/root/e/7/port/in_right","bp/root/e/7/port/out_left","bp/root/e/7/port/out_right"],"position":[8.0,14.0],"position_text":"8, 14","prototype":"fast-transport-belt","quality":"normal","raw_text":"{\"direction\":4,\"entity_number\":7,\"name\":\"fast-transport-belt\",\"position\":{\"x\":8,\"y\":14}}","recipes":[],"subsystem":"transport","support":"supported"},{"activities":[],"arcs":["e6_drop_doc_2","e6_drop_doc_3","e6_pick_rev_2","e6_pick_rev_3","e7_centre_to_e8_centre_left","e7_centre_to_e8_centre_right","e8_centre_to_e9_centre_left","e8_centre_to_e9_centre_right","e8_lane_left","e8_lane_right"],"blueprint_recipe":null,"box":[8.5,13.5,9.5,14.5],"direction_text":"east","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"furnace_candidates":[],"id":{"book_path":[],"entity_number":8},"input_belt":{"lanes":[{"available":true,"boundary_candidate":false,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e8_left"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/8/port/in_left","side":"left"},{"available":true,"boundary_candidate":false,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e8_right"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/8/port/in_right","side":"right"}],"reason":null,"whole_belt_available":false,"whole_capacity":{"kind":"finite","value":30.0},"whole_capacity_text":"30 items/s"},"inventories":[],"key":"bp/root/e/8","lanes":["bp/root/e/8/lane/left","bp/root/e/8/lane/right"],"mod":"base","orientation_text":"null","ports":["bp/root/e/8/port/in_left","bp/root/e/8/port/in_right","bp/root/e/8/port/out_left","bp/root/e/8/port/out_right"],"position":[9.0,14.0],"position_text":"9, 14","prototype":"fast-transport-belt","quality":"normal","raw_text":"{\"direction\":4,\"entity_number\":8,\"name\":\"fast-transport-belt\",\"position\":{\"x\":9,\"y\":14}}","recipes":[],"subsystem":"transport","support":"supported"},{"activities":[],"arcs":["e10_drop_rev_0","e10_drop_rev_1","e10_pick_doc_0","e10_pick_doc_1","e8_centre_to_e9_centre_left","e8_centre_to_e9_centre_right","e9_lane_left","e9_lane_right"],"blueprint_recipe":null,"box":[9.5,13.5,10.5,14.5],"direction_text":"east","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"furnace_candidates":[],"id":{"book_path":[],"entity_number":9},"input_belt":{"lanes":[{"available":true,"boundary_candidate":false,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e9_left"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/9/port/in_left","side":"left"},{"available":true,"boundary_candidate":false,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e9_right"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/9/port/in_right","side":"right"}],"reason":null,"whole_belt_available":false,"whole_capacity":{"kind":"finite","value":30.0},"whole_capacity_text":"30 items/s"},"inventories":[],"key":"bp/root/e/9","lanes":["bp/root/e/9/lane/left","bp/root/e/9/lane/right"],"mod":"base","orientation_text":"null","ports":["bp/root/e/9/port/in_left","bp/root/e/9/port/in_right","bp/root/e/9/port/out_left","bp/root/e/9/port/out_right"],"position":[10.0,14.0],"position_text":"10, 14","prototype":"fast-transport-belt","quality":"normal","raw_text":"{\"direction\":4,\"entity_number\":9,\"name\":\"fast-transport-belt\",\"position\":{\"x\":10,\"y\":14}}","recipes":[],"subsystem":"transport","support":"supported"},{"activities":[],"arcs":["e10_drop_doc_0","e10_drop_rev_0","e10_drop_rev_1","e10_pick_doc_0","e10_pick_doc_1","e10_pick_rev_0"],"blueprint_recipe":null,"box":[10.5,13.5,11.5,14.5],"direction_text":"west","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"furnace_candidates":[],"id":{"book_path":[],"entity_number":10},"input_belt":null,"inventories":[],"key":"bp/root/e/10","lanes":[],"mod":"base","orientation_text":"null","ports":["bp/root/e/10/port/hand"],"position":[11.0,14.0],"position_text":"11, 14","prototype":"fast-inserter","quality":"normal","raw_text":"{\"direction\":12,\"entity_number\":10,\"name\":\"fast-inserter\",\"position\":{\"x\":11,\"y\":14}}","recipes":[],"subsystem":"inserter","support":"supported"},{"activities":["e11_iron-plate","e11_steel-plate"],"arcs":["e10_drop_doc_0","e10_pick_rev_0","e12_drop_rev_0","e12_pick_doc_0"],"blueprint_recipe":null,"box":[11.5,12.5,14.5,15.5],"direction_text":"north","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"furnace_candidates":["iron-plate","steel-plate"],"id":{"book_path":[],"entity_number":11},"input_belt":null,"inventories":["bp/root/e/11/inventory/input","bp/root/e/11/inventory/output"],"key":"bp/root/e/11","lanes":[],"mod":"base","orientation_text":"null","ports":[],"position":[13.0,14.0],"position_text":"13, 14","prototype":"electric-furnace","quality":"normal","raw_text":"{\"entity_number\":11,\"name\":\"electric-furnace\",\"position\":{\"x\":13,\"y\":14}}","recipes":["iron-plate","steel-plate"],"subsystem":"production","support":"supported"},{"activities":[],"arcs":["e12_drop_doc_0","e12_drop_doc_1","e12_drop_doc_2","e12_drop_doc_3","e12_drop_rev_0","e12_pick_doc_0","e12_pick_rev_0","e12_pick_rev_1","e12_pick_rev_2","e12_pick_rev_3"],"blueprint_recipe":null,"box":[14.5,13.5,15.5,14.5],"direction_text":"west","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"furnace_candidates":[],"id":{"book_path":[],"entity_number":12},"input_belt":null,"inventories":[],"key":"bp/root/e/12","lanes":[],"mod":"base","orientation_text":"null","ports":["bp/root/e/12/port/hand"],"position":[15.0,14.0],"position_text":"15, 14","prototype":"fast-inserter","quality":"normal","raw_text":"{\"direction\":12,\"entity_number\":12,\"name\":\"fast-inserter\",\"position\":{\"x\":15,\"y\":14}}","recipes":[],"subsystem":"inserter","support":"supported"},{"activities":[],"arcs":["e12_drop_doc_0","e12_drop_doc_1","e12_pick_rev_0","e12_pick_rev_1","e13_centre_to_e14_centre_left","e13_centre_to_e14_centre_right","e13_lane_left","e13_lane_right"],"blueprint_recipe":null,"box":[15.5,13.5,16.5,14.5],"direction_text":"east","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"furnace_candidates":[],"id":{"book_path":[],"entity_number":13},"input_belt":{"lanes":[{"available":true,"boundary_candidate":false,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e13_left"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/13/port/in_left","side":"left"},{"available":true,"boundary_candidate":false,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e13_right"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/13/port/in_right","side":"right"}],"reason":null,"whole_belt_available":false,"whole_capacity":{"kind":"finite","value":30.0},"whole_capacity_text":"30 items/s"},"inventories":[],"key":"bp/root/e/13","lanes":["bp/root/e/13/lane/left","bp/root/e/13/lane/right"],"mod":"base","orientation_text":"null","ports":["bp/root/e/13/port/in_left","bp/root/e/13/port/in_right","bp/root/e/13/port/out_left","bp/root/e/13/port/out_right"],"position":[16.0,14.0],"position_text":"16, 14","prototype":"fast-transport-belt","quality":"normal","raw_text":"{\"direction\":4,\"entity_number\":13,\"name\":\"fast-transport-belt\",\"position\":{\"x\":16,\"y\":14}}","recipes":[],"subsystem":"transport","support":"supported"},{"activities":[],"arcs":["e12_drop_doc_2","e12_drop_doc_3","e12_pick_rev_2","e12_pick_rev_3","e13_centre_to_e14_centre_left","e13_centre_to_e14_centre_right","e14_centre_to_e15_centre_left","e14_centre_to_e15_centre_right","e14_lane_left","e14_lane_right"],"blueprint_recipe":null,"box":[16.5,13.5,17.5,14.5],"direction_text":"east","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"furnace_candidates":[],"id":{"book_path":[],"entity_number":14},"input_belt":{"lanes":[{"available":true,"boundary_candidate":false,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e14_left"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/14/port/in_left","side":"left"},{"available":true,"boundary_candidate":false,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e14_right"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/14/port/in_right","side":"right"}],"reason":null,"whole_belt_available":false,"whole_capacity":{"kind":"finite","value":30.0},"whole_capacity_text":"30 items/s"},"inventories":[],"key":"bp/root/e/14","lanes":["bp/root/e/14/lane/left","bp/root/e/14/lane/right"],"mod":"base","orientation_text":"null","ports":["bp/root/e/14/port/in_left","bp/root/e/14/port/in_right","bp/root/e/14/port/out_left","bp/root/e/14/port/out_right"],"position":[17.0,14.0],"position_text":"17, 14","prototype":"fast-transport-belt","quality":"normal","raw_text":"{\"direction\":4,\"entity_number\":14,\"name\":\"fast-transport-belt\",\"position\":{\"x\":17,\"y\":14}}","recipes":[],"subsystem":"transport","support":"supported"},{"activities":[],"arcs":["e14_centre_to_e15_centre_left","e14_centre_to_e15_centre_right","e15_lane_left","e15_lane_right"],"blueprint_recipe":null,"box":[17.5,13.5,18.5,14.5],"direction_text":"east","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"furnace_candidates":[],"id":{"book_path":[],"entity_number":15},"input_belt":{"lanes":[{"available":true,"boundary_candidate":false,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e15_left"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/15/port/in_left","side":"left"},{"available":true,"boundary_candidate":false,"capacity":{"kind":"finite","value":15.0},"capacity_group_ids":["e15_right"],"capacity_text":"15 items/s","incoming_key":"bp/root/e/15/port/in_right","side":"right"}],"reason":null,"whole_belt_available":false,"whole_capacity":{"kind":"finite","value":30.0},"whole_capacity_text":"30 items/s"},"inventories":[],"key":"bp/root/e/15","lanes":["bp/root/e/15/lane/left","bp/root/e/15/lane/right"],"mod":"base","orientation_text":"null","ports":["bp/root/e/15/port/in_left","bp/root/e/15/port/in_right","bp/root/e/15/port/out_left","bp/root/e/15/port/out_right"],"position":[18.0,14.0],"position_text":"18, 14","prototype":"fast-transport-belt","quality":"normal","raw_text":"{\"direction\":4,\"entity_number\":15,\"name\":\"fast-transport-belt\",\"position\":{\"x\":18,\"y\":14}}","recipes":[],"subsystem":"transport","support":"supported"}],"evidence":[{"arc_path":[],"description":"Entity positions, directions and footprints read losslessly from the selected blueprint leaf. Geometry only: adjacency is not a claim about engine behaviour.","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"blueprint_geometry","kind":"structural","kind_text":"structural - derived from static layout, not runtime behaviour","sources":[{"pointer":"/blueprint/entities","source":"blueprint","uri":"blueprint:sha256:9cecb5ce1dc8c938e9e544678e61d50c88751a4ce6e4fb5dd12f45193aebfb60"}]},{"arc_path":[],"description":"belt.straight.lane_capacity [documented-only]: A straight fast-transport-belt carries at most 30 items/s across both lanes and 15 items/s per lane, matching prototype speed 0.0625 tiles/tick x 480. transport-belt is 15/s (7.5 per lane) and express is 45/s (22.5 per lane). Blocking gate: legacy evidence targets base-2.0.76-normal-v1; obtain a compatible base-2.0.77-normal-v1 observation","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"mech_belt_lane_capacity","kind":"upper_bound","kind_text":"upper bound - a ceiling under the stated relaxations","sources":[{"pointer":"","source":"observation","uri":"routing_mechanics_observations/records/belt.straight.lane_capacity.json"}]},{"arc_path":[],"description":"belt.side_load.lane_assignment [pending]: A perpendicular side-load is expected to feed a specific lane of the target belt determined by the load's side, and the target's own upstream flow competes for that lane. Which lane, and the resulting split, is not established here. Blocking gate: legacy evidence targets base-2.0.76-normal-v1; obtain a compatible base-2.0.77-normal-v1 observation","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"mech_belt_side_load","kind":"estimated","kind_text":"estimated - approximate, not a certified bound","sources":[{"pointer":"","source":"observation","uri":"routing_mechanics_observations/records/belt.side_load.lane_assignment.json"}]},{"arc_path":[],"description":"belt.transfer.belt_to_belt [pending]: An end-to-end handover between two belts of the same direction preserves lane identity and is limited by the slower of the two belts. Neither the lane preservation nor the tier-boundary limit is established here. Blocking gate: legacy evidence targets base-2.0.76-normal-v1; obtain a compatible base-2.0.77-normal-v1 observation","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"mech_belt_transfer","kind":"estimated","kind_text":"estimated - approximate, not a certified bound","sources":[{"pointer":"","source":"observation","uri":"routing_mechanics_observations/records/belt.transfer.belt_to_belt.json"}]},{"arc_path":[],"description":"belt.turn.lane_behavior [pending]: A turn is expected not to reduce a saturated lane's throughput, but the inner and outer lanes traverse different path lengths, so per-lane timing differs. The magnitude, and whether any lane loses throughput, is not established here. Blocking gate: legacy evidence targets base-2.0.76-normal-v1; obtain a compatible base-2.0.77-normal-v1 observation","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"mech_belt_turn","kind":"estimated","kind_text":"estimated - approximate, not a certified bound","sources":[{"pointer":"","source":"observation","uri":"routing_mechanics_observations/records/belt.turn.lane_behavior.json"}]},{"arc_path":[],"description":"circuit.control_state [pending]: A circuit-disabled entity does not move items. An entity whose condition state is unknown must remain an explicit condition: relaxed open for an upper bound, or assigned explicitly, never silently enabled or deleted. Blocking gate: legacy evidence targets base-2.0.76-normal-v1; obtain a compatible base-2.0.77-normal-v1 observation","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"mech_circuit_control","kind":"estimated","kind_text":"estimated - approximate, not a certified bound","sources":[{"pointer":"","source":"observation","uri":"routing_mechanics_observations/records/circuit.control_state.json"}]},{"arc_path":[],"description":"inserter.endpoints.pickup_drop_tiles [documented-only]: Pickup and drop tiles follow the prototype's pickup_position [0, -1] and insert_position [0, 1.2] rotated by the entity direction, so a north-facing inserter takes from the tile one south and drops one north. Documented wiki behaviour adds that an inserter dropping onto a belt places items on the far lane. Blocking gate: legacy evidence targets base-2.0.76-normal-v1; obtain a compatible base-2.0.77-normal-v1 observation","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"mech_inserter_endpoints","kind":"estimated","kind_text":"estimated - approximate, not a certified bound","sources":[{"pointer":"","source":"observation","uri":"routing_mechanics_observations/records/inserter.endpoints.pickup_drop_tiles.json"}]},{"arc_path":[],"description":"inserter.rate.cycle_and_stack [documented-only]: Throughput is cycles per second times hand size. The wiki gives roughly 0.86 cycles/s for the inserter and 2.5 cycles/s for the fast and bulk inserters at normal quality, and hand size grows with inserter capacity research, which the blueprint does not record. The prototype exposes only extension_speed, rotation_speed and the bulk flag, so no items/s follows from it. Blocking gate: legacy evidence targets base-2.0.76-normal-v1; obtain a compatible base-2.0.77-normal-v1 observation","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"mech_inserter_rate","kind":"estimated","kind_text":"estimated - approximate, not a certified bound","sources":[{"pointer":"","source":"observation","uri":"routing_mechanics_observations/records/inserter.rate.cycle_and_stack.json"}]},{"arc_path":[],"description":"machine.activity.assembling_machine_2 [documented-only]: An AM2 crafts at crafting_speed 0.75 divided by the recipe's energy_required, with no modules and no beacons. The prototype also advertises 2 module slots and 150kW, which the first profile does not use. Blocking gate: legacy evidence targets base-2.0.76-normal-v1; obtain a compatible base-2.0.77-normal-v1 observation","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"mech_machine_am2","kind":"estimated","kind_text":"estimated - approximate, not a certified bound","sources":[{"pointer":"","source":"observation","uri":"routing_mechanics_observations/records/machine.activity.assembling_machine_2.json"}]},{"arc_path":[],"description":"machine.activity.electric_furnace [documented-only]: An electric furnace crafts smelting recipes at crafting_speed 2.0 divided by energy_required, with source and result inventory size 1. A furnace has no recipe field in a blueprint, so its recipe follows from what is inserted and is a candidate set until assigned. Blocking gate: legacy evidence targets base-2.0.76-normal-v1; obtain a compatible base-2.0.77-normal-v1 observation","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"mech_machine_furnace","kind":"estimated","kind_text":"estimated - approximate, not a certified bound","sources":[{"pointer":"","source":"observation","uri":"routing_mechanics_observations/records/machine.activity.electric_furnace.json"}]},{"arc_path":[],"description":"splitter.lane_split [pending]: A splitter occupies a 2x1 tile footprint with two input tiles and two output tiles, each carrying two lanes, and its total throughput is bounded by the belt tier. Which physical resource the four paths share, and how an unbalanced input is distributed, is not established here. Blocking gate: legacy evidence targets base-2.0.76-normal-v1; obtain a compatible base-2.0.77-normal-v1 observation","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"mech_splitter_lane_split","kind":"estimated","kind_text":"estimated - approximate, not a certified bound","sources":[{"pointer":"","source":"observation","uri":"routing_mechanics_observations/records/splitter.lane_split.json"}]},{"arc_path":[],"description":"splitter.priority_and_filter [pending]: Priorities and filters restrict how a splitter distributes items. For an optimistic upper bound they must be relaxed explicitly, and the relaxation recorded, rather than modelled as a hard split. The actual behaviour is not established here. Blocking gate: legacy evidence targets base-2.0.76-normal-v1; obtain a compatible base-2.0.77-normal-v1 observation","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"mech_splitter_priority","kind":"estimated","kind_text":"estimated - approximate, not a certified bound","sources":[{"pointer":"","source":"observation","uri":"routing_mechanics_observations/records/splitter.priority_and_filter.json"}]},{"arc_path":[],"description":"underground.pairing.conflict [pending]: An intervening same-tier underground entrance is expected to capture the pairing, splitting the original tunnel; a different tier is expected to pass through. Neither is established here. Blocking gate: legacy evidence targets base-2.0.76-normal-v1; obtain a compatible base-2.0.77-normal-v1 observation","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"mech_underground_conflict","kind":"estimated","kind_text":"estimated - approximate, not a certified bound","sources":[{"pointer":"","source":"observation","uri":"routing_mechanics_observations/records/underground.pairing.conflict.json"}]},{"arc_path":[],"description":"underground.lane_mapping [pending]: A tunnel is expected to preserve left and right lane identity end to end. Not established here. Blocking gate: legacy evidence targets base-2.0.76-normal-v1; obtain a compatible base-2.0.77-normal-v1 observation","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"mech_underground_lane_mapping","kind":"estimated","kind_text":"estimated - approximate, not a certified bound","sources":[{"pointer":"","source":"observation","uri":"routing_mechanics_observations/records/underground.lane_mapping.json"}]},{"arc_path":[],"description":"underground.pairing.range [pending]: The prototype's raw max_distance is 5 (underground-belt), 7 (fast) and 9 (express). Whether that number counts the tiles between the pair or the centre-to-centre separation determines the reach by exactly one tile, and the prototype documentation does not say which. Blocking gate: legacy evidence targets base-2.0.76-normal-v1; obtain a compatible base-2.0.77-normal-v1 observation","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"mech_underground_range","kind":"estimated","kind_text":"estimated - approximate, not a certified bound","sources":[{"pointer":"","source":"observation","uri":"routing_mechanics_observations/records/underground.pairing.range.json"}]},{"arc_path":[],"description":"unsupported.entity_visibility [documented-only]: An entity outside the first entity set stays visible in the graph as unsupported topology with a subsystem hint, and never becomes a supported activity or an implicit transport link. In the pilot this is the 3 ee-super-substation entities, classified as subsystem 'power', support 'unsupported', origin 'unknown'. Blocking gate: legacy evidence targets base-2.0.76-normal-v1; obtain a compatible base-2.0.77-normal-v1 observation","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"mech_unsupported_visibility","kind":"estimated","kind_text":"estimated - approximate, not a certified bound","sources":[{"pointer":"","source":"observation","uri":"routing_mechanics_observations/records/unsupported.entity_visibility.json"}]},{"arc_path":[],"description":"Task 02's pinned prototype extract: tile dimensions, belt speed, max_distance and inserter offsets, verbatim with their evidence status.","endpoint_keys":[],"entity_keys":[],"extra":{},"id":"prototype_geometry","kind":"structural","kind_text":"structural - derived from static layout, not runtime behaviour","sources":[{"pointer":"/prototypes","source":"prototype","uri":"prototype-extract:sha256:4cb74412fc6a5d1b9b234c22c1cec60724b7de60b7a84aa007e243ad50297e75"}]}],"extra":{},"graph_hash":"sha256:6c8fc431002aeaa994267c98b26f7822b0c32c1659077d147329da9acdb7dddb","graph_hash_short":"sha256:6c8fc431002a…","inventories":[{"anchor":[13.0,14.0],"eligibility_text":"any item","entity_key":"bp/root/e/11","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":11},"kind":"inventory","name":"input"},"key":"bp/root/e/11/inventory/input","kind":"inventory","name":"input","position_text":"13, 14","storage_text":"unknown"},{"anchor":[13.0,14.0],"eligibility_text":"any item","entity_key":"bp/root/e/11","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":11},"kind":"inventory","name":"output"},"key":"bp/root/e/11/inventory/output","kind":"inventory","name":"output","position_text":"13, 14","storage_text":"unknown"},{"anchor":[5.0,14.0],"eligibility_text":"any item","entity_key":"bp/root/e/5","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":5},"kind":"inventory","name":"input"},"key":"bp/root/e/5/inventory/input","kind":"inventory","name":"input","position_text":"5, 14","storage_text":"unknown"},{"anchor":[5.0,14.0],"eligibility_text":"any item","entity_key":"bp/root/e/5","evidence_ids":["blueprint_geometry","prototype_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":5},"kind":"inventory","name":"output"},"key":"bp/root/e/5/inventory/output","kind":"inventory","name":"output","position_text":"5, 14","storage_text":"unknown"}],"lanes":[{"anchor":[0.5,13.75],"eligibility_text":"any item","entity_key":"bp/root/e/1","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":1},"kind":"lane","name":"left"},"incoming_key":"bp/root/e/1/port/in_left","key":"bp/root/e/1/lane/left","kind":"lane","name":"left","outgoing_key":"bp/root/e/1/port/out_left","polyline":[[-0.5,13.75],[0.5,13.75]],"side":"left"},{"anchor":[0.5,14.25],"eligibility_text":"any item","entity_key":"bp/root/e/1","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":1},"kind":"lane","name":"right"},"incoming_key":"bp/root/e/1/port/in_right","key":"bp/root/e/1/lane/right","kind":"lane","name":"right","outgoing_key":"bp/root/e/1/port/out_right","polyline":[[-0.5,14.25],[0.5,14.25]],"side":"right"},{"anchor":[16.5,13.75],"eligibility_text":"any item","entity_key":"bp/root/e/13","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":13},"kind":"lane","name":"left"},"incoming_key":"bp/root/e/13/port/in_left","key":"bp/root/e/13/lane/left","kind":"lane","name":"left","outgoing_key":"bp/root/e/13/port/out_left","polyline":[[15.5,13.75],[16.5,13.75]],"side":"left"},{"anchor":[16.5,14.25],"eligibility_text":"any item","entity_key":"bp/root/e/13","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":13},"kind":"lane","name":"right"},"incoming_key":"bp/root/e/13/port/in_right","key":"bp/root/e/13/lane/right","kind":"lane","name":"right","outgoing_key":"bp/root/e/13/port/out_right","polyline":[[15.5,14.25],[16.5,14.25]],"side":"right"},{"anchor":[17.5,13.75],"eligibility_text":"any item","entity_key":"bp/root/e/14","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":14},"kind":"lane","name":"left"},"incoming_key":"bp/root/e/14/port/in_left","key":"bp/root/e/14/lane/left","kind":"lane","name":"left","outgoing_key":"bp/root/e/14/port/out_left","polyline":[[16.5,13.75],[17.5,13.75]],"side":"left"},{"anchor":[17.5,14.25],"eligibility_text":"any item","entity_key":"bp/root/e/14","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":14},"kind":"lane","name":"right"},"incoming_key":"bp/root/e/14/port/in_right","key":"bp/root/e/14/lane/right","kind":"lane","name":"right","outgoing_key":"bp/root/e/14/port/out_right","polyline":[[16.5,14.25],[17.5,14.25]],"side":"right"},{"anchor":[18.5,13.75],"eligibility_text":"any item","entity_key":"bp/root/e/15","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":15},"kind":"lane","name":"left"},"incoming_key":"bp/root/e/15/port/in_left","key":"bp/root/e/15/lane/left","kind":"lane","name":"left","outgoing_key":"bp/root/e/15/port/out_left","polyline":[[17.5,13.75],[18.5,13.75]],"side":"left"},{"anchor":[18.5,14.25],"eligibility_text":"any item","entity_key":"bp/root/e/15","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":15},"kind":"lane","name":"right"},"incoming_key":"bp/root/e/15/port/in_right","key":"bp/root/e/15/lane/right","kind":"lane","name":"right","outgoing_key":"bp/root/e/15/port/out_right","polyline":[[17.5,14.25],[18.5,14.25]],"side":"right"},{"anchor":[1.5,13.75],"eligibility_text":"any item","entity_key":"bp/root/e/2","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":2},"kind":"lane","name":"left"},"incoming_key":"bp/root/e/2/port/in_left","key":"bp/root/e/2/lane/left","kind":"lane","name":"left","outgoing_key":"bp/root/e/2/port/out_left","polyline":[[0.5,13.75],[1.5,13.75]],"side":"left"},{"anchor":[1.5,14.25],"eligibility_text":"any item","entity_key":"bp/root/e/2","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":2},"kind":"lane","name":"right"},"incoming_key":"bp/root/e/2/port/in_right","key":"bp/root/e/2/lane/right","kind":"lane","name":"right","outgoing_key":"bp/root/e/2/port/out_right","polyline":[[0.5,14.25],[1.5,14.25]],"side":"right"},{"anchor":[2.5,13.75],"eligibility_text":"any item","entity_key":"bp/root/e/3","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":3},"kind":"lane","name":"left"},"incoming_key":"bp/root/e/3/port/in_left","key":"bp/root/e/3/lane/left","kind":"lane","name":"left","outgoing_key":"bp/root/e/3/port/out_left","polyline":[[1.5,13.75],[2.5,13.75]],"side":"left"},{"anchor":[2.5,14.25],"eligibility_text":"any item","entity_key":"bp/root/e/3","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":3},"kind":"lane","name":"right"},"incoming_key":"bp/root/e/3/port/in_right","key":"bp/root/e/3/lane/right","kind":"lane","name":"right","outgoing_key":"bp/root/e/3/port/out_right","polyline":[[1.5,14.25],[2.5,14.25]],"side":"right"},{"anchor":[8.5,13.75],"eligibility_text":"any item","entity_key":"bp/root/e/7","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":7},"kind":"lane","name":"left"},"incoming_key":"bp/root/e/7/port/in_left","key":"bp/root/e/7/lane/left","kind":"lane","name":"left","outgoing_key":"bp/root/e/7/port/out_left","polyline":[[7.5,13.75],[8.5,13.75]],"side":"left"},{"anchor":[8.5,14.25],"eligibility_text":"any item","entity_key":"bp/root/e/7","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":7},"kind":"lane","name":"right"},"incoming_key":"bp/root/e/7/port/in_right","key":"bp/root/e/7/lane/right","kind":"lane","name":"right","outgoing_key":"bp/root/e/7/port/out_right","polyline":[[7.5,14.25],[8.5,14.25]],"side":"right"},{"anchor":[9.5,13.75],"eligibility_text":"any item","entity_key":"bp/root/e/8","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":8},"kind":"lane","name":"left"},"incoming_key":"bp/root/e/8/port/in_left","key":"bp/root/e/8/lane/left","kind":"lane","name":"left","outgoing_key":"bp/root/e/8/port/out_left","polyline":[[8.5,13.75],[9.5,13.75]],"side":"left"},{"anchor":[9.5,14.25],"eligibility_text":"any item","entity_key":"bp/root/e/8","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":8},"kind":"lane","name":"right"},"incoming_key":"bp/root/e/8/port/in_right","key":"bp/root/e/8/lane/right","kind":"lane","name":"right","outgoing_key":"bp/root/e/8/port/out_right","polyline":[[8.5,14.25],[9.5,14.25]],"side":"right"},{"anchor":[10.5,13.75],"eligibility_text":"any item","entity_key":"bp/root/e/9","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":9},"kind":"lane","name":"left"},"incoming_key":"bp/root/e/9/port/in_left","key":"bp/root/e/9/lane/left","kind":"lane","name":"left","outgoing_key":"bp/root/e/9/port/out_left","polyline":[[9.5,13.75],[10.5,13.75]],"side":"left"},{"anchor":[10.5,14.25],"eligibility_text":"any item","entity_key":"bp/root/e/9","evidence_ids":["blueprint_geometry","mech_belt_lane_capacity"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":9},"kind":"lane","name":"right"},"incoming_key":"bp/root/e/9/port/in_right","key":"bp/root/e/9/lane/right","kind":"lane","name":"right","outgoing_key":"bp/root/e/9/port/out_right","polyline":[[9.5,14.25],[10.5,14.25]],"side":"right"}],"mechanics_profile":"base-2.0.77-normal-v1","ports":[{"anchor":[-0.5,13.75],"boundary_candidate":true,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/1","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":1},"kind":"port","name":"in_left"},"key":"bp/root/e/1/port/in_left","kind":"port","name":"in_left","position_text":"-0.5, 13.75","role":"incoming"},{"anchor":[-0.5,14.25],"boundary_candidate":true,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/1","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":1},"kind":"port","name":"in_right"},"key":"bp/root/e/1/port/in_right","kind":"port","name":"in_right","position_text":"-0.5, 14.25","role":"incoming"},{"anchor":[0.5,13.75],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/1","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":1},"kind":"port","name":"out_left"},"key":"bp/root/e/1/port/out_left","kind":"port","name":"out_left","position_text":"0.5, 13.75","role":"outgoing"},{"anchor":[0.5,14.25],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/1","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":1},"kind":"port","name":"out_right"},"key":"bp/root/e/1/port/out_right","kind":"port","name":"out_right","position_text":"0.5, 14.25","role":"outgoing"},{"anchor":[11.0,14.0],"boundary_candidate":false,"direction_text":"west","eligibility_text":"any item","entity_key":"bp/root/e/10","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":10},"kind":"port","name":"hand"},"key":"bp/root/e/10/port/hand","kind":"port","name":"hand","position_text":"11, 14","role":"bidirectional"},{"anchor":[15.0,14.0],"boundary_candidate":false,"direction_text":"west","eligibility_text":"any item","entity_key":"bp/root/e/12","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":12},"kind":"port","name":"hand"},"key":"bp/root/e/12/port/hand","kind":"port","name":"hand","position_text":"15, 14","role":"bidirectional"},{"anchor":[15.5,13.75],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/13","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":13},"kind":"port","name":"in_left"},"key":"bp/root/e/13/port/in_left","kind":"port","name":"in_left","position_text":"15.5, 13.75","role":"incoming"},{"anchor":[15.5,14.25],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/13","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":13},"kind":"port","name":"in_right"},"key":"bp/root/e/13/port/in_right","kind":"port","name":"in_right","position_text":"15.5, 14.25","role":"incoming"},{"anchor":[16.5,13.75],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/13","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":13},"kind":"port","name":"out_left"},"key":"bp/root/e/13/port/out_left","kind":"port","name":"out_left","position_text":"16.5, 13.75","role":"outgoing"},{"anchor":[16.5,14.25],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/13","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":13},"kind":"port","name":"out_right"},"key":"bp/root/e/13/port/out_right","kind":"port","name":"out_right","position_text":"16.5, 14.25","role":"outgoing"},{"anchor":[16.5,13.75],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/14","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":14},"kind":"port","name":"in_left"},"key":"bp/root/e/14/port/in_left","kind":"port","name":"in_left","position_text":"16.5, 13.75","role":"incoming"},{"anchor":[16.5,14.25],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/14","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":14},"kind":"port","name":"in_right"},"key":"bp/root/e/14/port/in_right","kind":"port","name":"in_right","position_text":"16.5, 14.25","role":"incoming"},{"anchor":[17.5,13.75],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/14","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":14},"kind":"port","name":"out_left"},"key":"bp/root/e/14/port/out_left","kind":"port","name":"out_left","position_text":"17.5, 13.75","role":"outgoing"},{"anchor":[17.5,14.25],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/14","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":14},"kind":"port","name":"out_right"},"key":"bp/root/e/14/port/out_right","kind":"port","name":"out_right","position_text":"17.5, 14.25","role":"outgoing"},{"anchor":[17.5,13.75],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/15","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":15},"kind":"port","name":"in_left"},"key":"bp/root/e/15/port/in_left","kind":"port","name":"in_left","position_text":"17.5, 13.75","role":"incoming"},{"anchor":[17.5,14.25],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/15","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":15},"kind":"port","name":"in_right"},"key":"bp/root/e/15/port/in_right","kind":"port","name":"in_right","position_text":"17.5, 14.25","role":"incoming"},{"anchor":[18.5,13.75],"boundary_candidate":true,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/15","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":15},"kind":"port","name":"out_left"},"key":"bp/root/e/15/port/out_left","kind":"port","name":"out_left","position_text":"18.5, 13.75","role":"outgoing"},{"anchor":[18.5,14.25],"boundary_candidate":true,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/15","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":15},"kind":"port","name":"out_right"},"key":"bp/root/e/15/port/out_right","kind":"port","name":"out_right","position_text":"18.5, 14.25","role":"outgoing"},{"anchor":[0.5,13.75],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/2","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":2},"kind":"port","name":"in_left"},"key":"bp/root/e/2/port/in_left","kind":"port","name":"in_left","position_text":"0.5, 13.75","role":"incoming"},{"anchor":[0.5,14.25],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/2","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":2},"kind":"port","name":"in_right"},"key":"bp/root/e/2/port/in_right","kind":"port","name":"in_right","position_text":"0.5, 14.25","role":"incoming"},{"anchor":[1.5,13.75],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/2","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":2},"kind":"port","name":"out_left"},"key":"bp/root/e/2/port/out_left","kind":"port","name":"out_left","position_text":"1.5, 13.75","role":"outgoing"},{"anchor":[1.5,14.25],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/2","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":2},"kind":"port","name":"out_right"},"key":"bp/root/e/2/port/out_right","kind":"port","name":"out_right","position_text":"1.5, 14.25","role":"outgoing"},{"anchor":[1.5,13.75],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/3","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":3},"kind":"port","name":"in_left"},"key":"bp/root/e/3/port/in_left","kind":"port","name":"in_left","position_text":"1.5, 13.75","role":"incoming"},{"anchor":[1.5,14.25],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/3","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":3},"kind":"port","name":"in_right"},"key":"bp/root/e/3/port/in_right","kind":"port","name":"in_right","position_text":"1.5, 14.25","role":"incoming"},{"anchor":[2.5,13.75],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/3","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":3},"kind":"port","name":"out_left"},"key":"bp/root/e/3/port/out_left","kind":"port","name":"out_left","position_text":"2.5, 13.75","role":"outgoing"},{"anchor":[2.5,14.25],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/3","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":3},"kind":"port","name":"out_right"},"key":"bp/root/e/3/port/out_right","kind":"port","name":"out_right","position_text":"2.5, 14.25","role":"outgoing"},{"anchor":[3.0,14.0],"boundary_candidate":false,"direction_text":"west","eligibility_text":"any item","entity_key":"bp/root/e/4","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":4},"kind":"port","name":"hand"},"key":"bp/root/e/4/port/hand","kind":"port","name":"hand","position_text":"3, 14","role":"bidirectional"},{"anchor":[7.0,14.0],"boundary_candidate":false,"direction_text":"west","eligibility_text":"any item","entity_key":"bp/root/e/6","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":6},"kind":"port","name":"hand"},"key":"bp/root/e/6/port/hand","kind":"port","name":"hand","position_text":"7, 14","role":"bidirectional"},{"anchor":[7.5,13.75],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/7","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":7},"kind":"port","name":"in_left"},"key":"bp/root/e/7/port/in_left","kind":"port","name":"in_left","position_text":"7.5, 13.75","role":"incoming"},{"anchor":[7.5,14.25],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/7","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":7},"kind":"port","name":"in_right"},"key":"bp/root/e/7/port/in_right","kind":"port","name":"in_right","position_text":"7.5, 14.25","role":"incoming"},{"anchor":[8.5,13.75],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/7","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":7},"kind":"port","name":"out_left"},"key":"bp/root/e/7/port/out_left","kind":"port","name":"out_left","position_text":"8.5, 13.75","role":"outgoing"},{"anchor":[8.5,14.25],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/7","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":7},"kind":"port","name":"out_right"},"key":"bp/root/e/7/port/out_right","kind":"port","name":"out_right","position_text":"8.5, 14.25","role":"outgoing"},{"anchor":[8.5,13.75],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/8","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":8},"kind":"port","name":"in_left"},"key":"bp/root/e/8/port/in_left","kind":"port","name":"in_left","position_text":"8.5, 13.75","role":"incoming"},{"anchor":[8.5,14.25],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/8","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":8},"kind":"port","name":"in_right"},"key":"bp/root/e/8/port/in_right","kind":"port","name":"in_right","position_text":"8.5, 14.25","role":"incoming"},{"anchor":[9.5,13.75],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/8","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":8},"kind":"port","name":"out_left"},"key":"bp/root/e/8/port/out_left","kind":"port","name":"out_left","position_text":"9.5, 13.75","role":"outgoing"},{"anchor":[9.5,14.25],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/8","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":8},"kind":"port","name":"out_right"},"key":"bp/root/e/8/port/out_right","kind":"port","name":"out_right","position_text":"9.5, 14.25","role":"outgoing"},{"anchor":[9.5,13.75],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/9","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":9},"kind":"port","name":"in_left"},"key":"bp/root/e/9/port/in_left","kind":"port","name":"in_left","position_text":"9.5, 13.75","role":"incoming"},{"anchor":[9.5,14.25],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/9","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":9},"kind":"port","name":"in_right"},"key":"bp/root/e/9/port/in_right","kind":"port","name":"in_right","position_text":"9.5, 14.25","role":"incoming"},{"anchor":[10.5,13.75],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/9","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":9},"kind":"port","name":"out_left"},"key":"bp/root/e/9/port/out_left","kind":"port","name":"out_left","position_text":"10.5, 13.75","role":"outgoing"},{"anchor":[10.5,14.25],"boundary_candidate":false,"direction_text":"east","eligibility_text":"any item","entity_key":"bp/root/e/9","evidence_ids":["blueprint_geometry"],"extra":{},"id":{"entity":{"book_path":[],"entity_number":9},"kind":"port","name":"out_right"},"key":"bp/root/e/9/port/out_right","kind":"port","name":"out_right","position_text":"10.5, 14.25","role":"outgoing"}],"prototype_hash":"sha256:4cb74412fc6a5d1b9b234c22c1cec60724b7de60b7a84aa007e243ad50297e75","provenance":"synthetic","schema_version":"1.1.1","selected_paths":["[]"],"topology_gaps":[]},"known_items":[{"label":"iron-ore (imported recipe)","name":"iron-ore"},{"label":"iron-plate (imported recipe)","name":"iron-plate"},{"label":"steel-plate (imported recipe)","name":"steel-plate"}],"notes":["This page displays contract data. It performs no analysis, no solving and writes no files.","Imported labels, descriptions, certificates and messages are shown as inert text.","Upper bounds hold only under their stated relaxations; they are never achievable rates."],"result":null,"title":"Routing layout 6c8fc431002a","view_version":"factoribot-blueprint-view-1"}</script>
+<script>
+/* Routing audit viewer.
+ *
+ * Displays contract data only. Every analysis number shown here was formatted
+ * in Python and is copied verbatim; this script derives no finding, bound or
+ * rate. All imported text is inserted with textContent, never as markup.
+ * The map is one canvas: no DOM element is created per arc, lane or entity.
+ */
+(function () {
+  "use strict";
+
+  var D = JSON.parse(document.getElementById("factoribot-view-data").textContent);
+  var G = D.graph || {};
+  var R = D.result || null;
+  var REQ = R && R.request ? R.request : null;
+
+  /* ---------------------------------------------------------------- utils */
+
+  function E(tag, cls, text) {
+    var node = document.createElement(tag);
+    if (cls) { node.className = cls; }
+    if (text !== undefined && text !== null) { node.textContent = String(text); }
+    return node;
+  }
+  function add(parent, node) { parent.appendChild(node); return node; }
+  function dash(value) { return (value === undefined || value === null || value === "") ? "—" : String(value); }
+  function kv(parent, key, value) {
+    var wrap = E("div", "kv");
+    add(wrap, E("span", "k", key));
+    add(wrap, E("span", "v", dash(value)));
+    return add(parent, wrap);
+  }
+  function list(parent, values, empty) {
+    if (!values || !values.length) { add(parent, E("p", "note", empty || "none")); return; }
+    var ul = E("ul", "plain");
+    values.forEach(function (value) { add(ul, E("li", null, String(value))); });
+    add(parent, ul);
+  }
+  function extras(parent, extra, label) {
+    var keys = extra ? Object.keys(extra) : [];
+    if (!keys.length) { return; }
+    add(parent, E("p", "small", (label || "Additional fields in this record") + " (shown generically):"));
+    keys.sort().forEach(function (key) { kv(parent, key, extra[key]); });
+  }
+  function canon(value) {
+    if (value === null || typeof value !== "object") { return JSON.stringify(value === undefined ? null : value); }
+    if (Array.isArray(value)) { return "[" + value.map(canon).join(",") + "]"; }
+    return "{" + Object.keys(value).sort().map(function (key) {
+      return JSON.stringify(key) + ":" + canon(value[key]);
+    }).join(",") + "}";
+  }
+  function entKey(id) {
+    if (!id || typeof id !== "object") { return "bp/?/e/?"; }
+    var path = Array.isArray(id.book_path) ? id.book_path : [];
+    return "bp/" + (path.join("/") || "root") + "/e/" + id.entity_number;
+  }
+  function epKey(id) {
+    if (!id || typeof id !== "object") { return "?/?"; }
+    return entKey(id.entity) + "/" + id.kind + "/" + id.name;
+  }
+  var TOKEN = /^[a-z][a-z0-9_-]*$/;
+
+  /* --------------------------------------------------------------- indexes */
+
+  var entityByKey = {}, endpointByKey = {}, arcById = {}, evidenceById = {};
+  (G.entities || []).forEach(function (e) { entityByKey[e.key] = e; });
+  [].concat(G.ports || [], G.lanes || [], G.inventories || []).forEach(function (p) { endpointByKey[p.key] = p; });
+  (G.arcs || []).forEach(function (a) { arcById[a.id] = a; });
+  (G.evidence || []).forEach(function (e) { evidenceById[e.id] = e; });
+  var findings = (R && R.findings) || [];
+  var findingById = {};
+  findings.forEach(function (f) { findingById[f.id] = f; });
+
+  /* ------------------------------------------------------- editable state */
+
+  function copyAssignments(source) {
+    source = source || {};
+    return {
+      schema_version: source.schema_version !== undefined ? source.schema_version : G.schema_version,
+      blueprint_hash: source.blueprint_hash !== undefined ? source.blueprint_hash : G.blueprint_hash,
+      graph_hash: source.graph_hash !== undefined ? source.graph_hash : G.graph_hash,
+      feeds: (source.feeds || []).map(function (f) {
+        return { id: f.id, budget_id: f.budget_id, endpoint: f.endpoint, capacity: f.capacity };
+      }),
+      furnaces: (source.furnaces || []).map(function (f) { return { entity: f.entity, recipe: f.recipe }; }),
+      controls: (source.controls || []).map(function (c) { return { condition: c.condition, enabled: c.enabled }; })
+    };
+  }
+  var A = copyAssignments(D.assignments);
+
+  function assignmentDoc(state) {
+    var s = state || A;
+    return {
+      schema_version: s.schema_version,
+      blueprint_hash: s.blueprint_hash,
+      graph_hash: s.graph_hash,
+      feeds: s.feeds.map(function (f) {
+        return { id: f.id, budget_id: f.budget_id, endpoint: f.endpoint, capacity: f.capacity };
+      }),
+      furnaces: s.furnaces.map(function (f) { return { entity: f.entity, recipe: f.recipe }; }),
+      controls: s.controls.map(function (c) { return { condition: c.condition, enabled: c.enabled }; })
+    };
+  }
+  LOADED = canon(assignmentDoc());
+
+  var proposed = {
+    budgets: (REQ ? REQ.budgets : []).map(function (b) {
+      return { id: b.id, material: b.material, capacity: b.capacity };
+    }),
+    exports: (REQ ? REQ.exports : []).map(function (x) { return x.record; }).filter(Boolean),
+    surplus: (REQ ? REQ.surplus : []).map(function (x) { return x.record; }).filter(Boolean),
+    objective: REQ ? { kind: REQ.objective.kind, export_id: REQ.objective.export_id } : { kind: "feasible", export_id: null }
+  };
+
+  function proposalDoc(source) {
+    source = source || proposed;
+    return {
+      budgets: (source.budgets || []).map(function (b) { return { id: b.id, material: b.material, capacity: b.capacity }; }),
+      exports: (source.exports || []).slice(),
+      surplus: (source.surplus || []).slice(),
+      objective: { kind: source.objective && source.objective.kind,
+        export_id: source.objective ? source.objective.export_id : null }
+    };
+  }
+  function editableDocument(assignments, proposal) {
+    return { assignments: assignmentDoc(assignments), proposed_request: proposalDoc(proposal) };
+  }
+  var ANALYSED = (D.analyzed_assignments && REQ)
+    ? canon(editableDocument(copyAssignments(D.analyzed_assignments), proposed)) : null;
+  var LOADED = canon(editableDocument());
+
+  var state = {
+    tab: "findings",
+    finding: null,
+    selEntities: {},
+    selEndpoints: {},
+    importMessage: null,
+    importText: "",
+    importOk: false,
+    entityFilter: ""
+  };
+  var HL = { entities: {}, endpoints: {}, arcs: {} };
+
+  /* ------------------------------------------------------------ staleness */
+
+  function staleReport() {
+    var hard = [], soft = [];
+    if (A.blueprint_hash !== G.blueprint_hash) {
+      hard.push("Stale blueprint hash: assignments carry " + dash(A.blueprint_hash) + ", this graph is " + dash(G.blueprint_hash) + ".");
+    }
+    if (A.graph_hash !== G.graph_hash) {
+      hard.push("Stale graph hash: assignments carry " + dash(A.graph_hash) + ", this graph is " + dash(G.graph_hash) + ".");
+    }
+    if (R && ANALYSED !== null && canon(editableDocument()) !== ANALYSED) {
+      soft.push("The displayed analysis was produced for different assignments, budgets, outlets or objective. It no longer describes these edits; re-run the host analysis.");
+    }
+    if (R && ANALYSED === null) {
+      soft.push("The displayed result carries no interpreted assignments, so these edits cannot be matched against it.");
+    }
+    if (R && R.graph_match === false) {
+      hard.push("The displayed result's blueprint, prototype or graph provenance does not match what is loaded here (missing or mismatched hash).");
+    }
+    return { hard: hard, soft: soft, edited: canon(editableDocument()) !== LOADED };
+  }
+
+  /* --------------------------------------------------------------- layout */
+
+  var app = document.getElementById("app");
+  var header = add(app, E("header", "top"));
+  var main = add(app, E("main"));
+  var side = add(main, E("section")); side.id = "side";
+  var tabsBar = add(side, E("div")); tabsBar.id = "tabs";
+  var panel = add(side, E("div")); panel.id = "panel";
+  var stage = add(main, E("section")); stage.id = "stage";
+  var canvas = add(stage, E("canvas")); canvas.id = "map";
+  var tools = add(stage, E("div")); tools.id = "tools";
+  var legend = add(stage, E("div")); legend.id = "legend";
+  var statusBar = add(stage, E("div")); statusBar.id = "status";
+  var banners = null;
+
+  function renderHeader() {
+    header.textContent = "";
+    add(header, E("h1", null, D.title));
+    var chips = add(header, E("div", "chips"));
+    add(chips, E("span", "chip", "provenance: " + dash(G.provenance)));
+    add(chips, E("span", "chip", "profile: " + dash(G.mechanics_profile)));
+    add(chips, E("span", "chip", "graph schema: " + dash(G.schema_version)));
+    if (R) {
+      add(chips, E("span", "chip", "status: " + dash(R.status)));
+      add(chips, E("span", "chip", "analyzer: " + dash(R.analyzer_version)));
+    } else {
+      add(chips, E("span", "chip", "no analysis result loaded"));
+    }
+    add(chips, E("span", "chip mono", "graph " + dash(G.graph_hash_short)));
+    add(chips, E("span", "chip mono", "blueprint " + dash(G.blueprint_hash_short)));
+    banners = add(header, E("div"));
+    renderBanners();
+  }
+
+  function renderBanners() {
+    if (!banners) { return; }
+    banners.textContent = "";
+    var report = staleReport();
+    report.hard.forEach(function (text) { add(banners, E("div", "banner err", "STALE: " + text)); });
+    report.soft.forEach(function (text) { add(banners, E("div", "banner", "STALE: " + text)); });
+    if (!report.hard.length && !report.soft.length && report.edited) {
+      add(banners, E("div", "banner ok", "Assignments edited in this page; they still match the analysed request."));
+    }
+    if (R) {
+      add(banners, E("div", "banner ok", R.status_text));
+    }
+  }
+
+  var TABS = [
+    ["findings", "Findings"],
+    ["model", "Model"],
+    ["assign", "Assignments"],
+    ["io", "Export / import"],
+    ["selection", "Selection"]
+  ];
+  TABS.forEach(function (pair) {
+    var button = add(tabsBar, E("button", null, pair[1]));
+    button.setAttribute("role", "tab");
+    button.dataset.tab = pair[0];
+    button.addEventListener("click", function () { state.tab = pair[0]; renderPanel(); });
+  });
+
+  function renderPanel() {
+    Array.prototype.forEach.call(tabsBar.children, function (b) {
+      b.setAttribute("aria-selected", b.dataset.tab === state.tab ? "true" : "false");
+    });
+    panel.textContent = "";
+    panel.scrollTop = 0;
+    if (state.tab === "findings") { renderFindings(panel); }
+    else if (state.tab === "model") { renderModel(panel); }
+    else if (state.tab === "assign") { renderAssign(panel); }
+    else if (state.tab === "io") { renderIo(panel); }
+    else { renderSelection(panel); }
+  }
+
+  /* ------------------------------------------------------- findings panel */
+
+  function scopeLine(parent, label, keys) {
+    if (!keys || !keys.length) { return; }
+    var wrap = add(parent, E("div", "small"));
+    add(wrap, E("span", null, label + ": "));
+    keys.forEach(function (key, index) {
+      if (index) { add(wrap, E("span", null, ", ")); }
+      add(wrap, E("span", "mono", key));
+    });
+  }
+
+  function renderFindings(root) {
+    add(root, E("h2", null, "Analysis"));
+    if (!R) {
+      add(root, E("p", "note", "No analysis result was supplied to the renderer. The map below shows the graph only."));
+      return;
+    }
+    add(root, E("p", "note", R.status_text));
+    kv(root, "result hash", R.result_hash);
+    kv(root, "request hash", R.request_hash);
+    kv(root, "result blueprint hash", R.blueprint_hash);
+    kv(root, "result prototype hash", R.prototype_hash);
+    kv(root, "result graph hash", R.graph_hash);
+    kv(root, "detail scope", R.detail_kind);
+    kv(root, "witness", R.witness_present ? ("present (" + dash(R.witness_validation) + ")") : "none");
+    extras(root, R.extra, "Additional result fields");
+
+    add(root, E("h2", null, "Findings (" + findings.length + ")"));
+    add(root, E("p", "note", "Severity and evidence kind are written out in words and marked by border style, so they do not depend on colour."));
+    if (!findings.length) { add(root, E("p", "note", "none")); }
+    findings.forEach(function (finding) {
+      var card = add(root, E("div", "card sev-" + finding.severity + (state.finding === finding.id ? " sel" : "")));
+      card.tabIndex = 0;
+      var head = add(card, E("div"));
+      var mark = finding.severity === "error" ? "✖ ERROR" : (finding.severity === "warning" ? "▲ WARNING" : "● INFO");
+      add(head, E("span", "badge " + finding.severity, mark));
+      add(head, E("span", "badge kind", "evidence: " + finding.evidence_kind));
+      add(head, E("span", "mono", finding.code));
+      add(card, E("p", "msg", finding.message));
+      add(card, E("p", "small", finding.evidence_kind_text));
+      add(card, E("p", "small", finding.runtime_note));
+      if (finding.material_text) { kv(card, "material", finding.material_text); }
+      if (finding.required_rate_text) { kv(card, "required rate", finding.required_rate_text); }
+      if (finding.capacity_upper_bound_text) {
+        kv(card, "upper bound under stated relaxations", finding.capacity_upper_bound_text);
+      }
+      scopeLine(card, "entities", finding.entity_keys);
+      scopeLine(card, "endpoints", finding.endpoint_keys);
+      scopeLine(card, "evidence", finding.evidence_ids);
+      scopeLine(card, "highlights arcs", finding.highlight.arcs);
+      list(card, finding.assumptions, "no extra assumptions recorded");
+      extras(card, finding.extra, "Additional finding fields");
+      kv(card, "finding id", finding.id);
+      card.addEventListener("click", function () { selectFinding(finding.id); });
+      card.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") { event.preventDefault(); selectFinding(finding.id); }
+      });
+    });
+
+    var bounds = R.bounds || [];
+    add(root, E("h2", null, "Upper bounds (" + bounds.length + ")"));
+    add(root, E("p", "note", "Each value is an upper bound under the stated relaxations. It is never an achievable or measured rate."));
+    if (!bounds.length) { add(root, E("p", "note", "No bound is advertised for this result.")); }
+    bounds.forEach(function (bound) {
+      var card = add(root, E("div", "card plain sev-info"));
+      add(card, E("div", null, "stage " + bound.stage + " — " + bound.direction + " bound"));
+      add(card, E("p", "small", bound.stage_text));
+      kv(card, "value", bound.value_text);
+      kv(card, "objective export", bound.objective_export_id);
+      kv(card, "solver state", bound.solver_state);
+      add(card, E("p", "small", "relaxations:"));
+      list(card, bound.relaxations, "none declared");
+      add(card, E("p", "small", "assumptions:"));
+      list(card, bound.assumptions, "none declared");
+      add(card, E("p", "small", "certificate (producer attestation, not a proof checked here):"));
+      add(card, E("p", "msg", bound.certificate));
+      kv(card, "comparison hash", bound.comparison_hash);
+      kv(card, "constraint hash", bound.constraint_hash);
+      extras(card, bound.extra, "Additional bound fields");
+    });
+
+    add(root, E("h2", null, "Result assumptions"));
+    list(root, R.assumptions, "none recorded");
+    add(root, E("h2", null, "Result limitations"));
+    list(root, R.limitations, "none recorded");
+    add(root, E("h2", null, "Page notes"));
+    list(root, D.notes);
+  }
+
+  /* ---------------------------------------------------------- model panel */
+
+  function renderModel(root) {
+    add(root, E("h2", null, "Graph"));
+    var counts = G.counts || {};
+    Object.keys(counts).forEach(function (key) { kv(root, key.replace(/_/g, " "), counts[key]); });
+    kv(root, "selected book paths", (G.selected_paths || []).join(" "));
+    kv(root, "blueprint hash", G.blueprint_hash);
+    kv(root, "prototype hash", G.prototype_hash);
+    kv(root, "graph hash", G.graph_hash);
+    extras(root, G.extra, "Additional graph fields");
+
+    var unsupported = (G.entities || []).filter(function (e) { return e.support !== "supported"; });
+    add(root, E("h2", null, "Unsupported / conditional entities (" + unsupported.length + ")"));
+    add(root, E("p", "note", "These stay visible on the map. They cannot become supported activities, and they block bounds unless the request declares them out of scope."));
+    unsupported.forEach(function (entity) { add(root, entityRow(entity)); });
+    if (!unsupported.length) { add(root, E("p", "note", "none")); }
+
+    var gaps = G.topology_gaps || [];
+    add(root, E("h2", null, "Unsupported possible topology (" + gaps.length + ")"));
+    gaps.forEach(function (gap) {
+      var card = add(root, E("div", "card sev-warning"));
+      add(card, E("span", "badge warning", "▲ GAP"));
+      add(card, E("span", "mono", gap.id));
+      add(card, E("p", "msg", gap.reason));
+      kv(card, "may connect", gap.may_connect ? "yes" : "no");
+      scopeLine(card, "entities", gap.entity_keys);
+      scopeLine(card, "possible endpoints", gap.endpoint_keys);
+      extras(card, gap.extra, "Additional gap fields");
+      card.addEventListener("click", function () {
+        HL = { entities: keySet(gap.entity_keys), endpoints: keySet(gap.endpoint_keys), arcs: {} };
+        state.finding = null;
+        focusKeys(gap.entity_keys, gap.endpoint_keys, []);
+        renderPanel(); request();
+      });
+    });
+    if (!gaps.length) { add(root, E("p", "note", "none")); }
+
+    add(root, E("h2", null, "Capacity groups (" + (G.capacity_groups || []).length + ")"));
+    (G.capacity_groups || []).forEach(function (group) {
+      var row = add(root, E("div", "row"));
+      add(row, E("span", "mono", group.id));
+      add(row, E("span", "grow small", group.kind + " · " + group.capacity_text));
+    });
+
+    add(root, E("h2", null, "Activities (" + (G.activities || []).length + ")"));
+    (G.activities || []).forEach(function (activity) {
+      var card = add(root, E("div", "card plain"));
+      add(card, E("div", "mono", activity.id + " · " + activity.recipe));
+      kv(card, "entity", activity.entity_key);
+      kv(card, "craft capacity", activity.craft_capacity_text);
+      activity.inputs.forEach(function (part) {
+        kv(card, "in " + part.material_text, part.amount_text + " per craft @ " + part.endpoint_key);
+      });
+      activity.outputs.forEach(function (part) {
+        kv(card, "out " + part.material_text, part.amount_text + " per craft @ " + part.endpoint_key);
+      });
+      activity.resources.forEach(function (use) { kv(card, "machine time group", use.group_id + " × " + use.coefficient_text); });
+      extras(card, activity.extra, "Additional activity fields");
+    });
+    if (!(G.activities || []).length) { add(root, E("p", "note", "none")); }
+
+    add(root, E("h2", null, "Evidence (" + (G.evidence || []).length + ")"));
+    (G.evidence || []).forEach(function (evidence) {
+      var card = add(root, E("div", "card plain"));
+      add(card, E("span", "badge kind", evidence.kind));
+      add(card, E("span", "mono", evidence.id));
+      add(card, E("p", "msg", evidence.description));
+      evidence.sources.forEach(function (source) { kv(card, source.source, source.uri + " " + source.pointer); });
+      scopeLine(card, "arc path", evidence.arc_path);
+      extras(card, evidence.extra, "Additional evidence fields");
+    });
+
+    if (REQ) { renderRequest(root); }
+
+    add(root, E("h2", null, "Entities (" + (G.entities || []).length + ")"));
+    var search = add(root, E("input"));
+    search.type = "text";
+    search.placeholder = "filter by key or prototype";
+    search.value = state.entityFilter;
+    var results = add(root, E("div"));
+    function fill() {
+      results.textContent = "";
+      var needle = state.entityFilter.toLowerCase();
+      var matched = (G.entities || []).filter(function (entity) {
+        return !needle || entity.key.toLowerCase().indexOf(needle) >= 0 || entity.prototype.toLowerCase().indexOf(needle) >= 0;
+      });
+      add(results, E("p", "small", "showing " + Math.min(matched.length, 200) + " of " + matched.length + " matching entities (the map draws all of them)"));
+      matched.slice(0, 200).forEach(function (entity) { add(results, entityRow(entity)); });
+    }
+    search.addEventListener("input", function () { state.entityFilter = search.value; fill(); });
+    fill();
+  }
+
+  function renderRequest(root) {
+    add(root, E("h2", null, "Interpreted request"));
+    kv(root, "objective", REQ.objective_text);
+    add(root, E("p", "small", "Global material budgets — feeds sharing an ID draw on one ceiling:"));
+    (REQ.budgets || []).forEach(function (budget) {
+      var row = add(root, E("div", "row"));
+      add(row, E("span", "mono", budget.id));
+      add(row, E("span", "grow small", budget.material_text + " · " + budget.capacity_text));
+    });
+    add(root, E("p", "small", "Exports (net rates, external removal required):"));
+    (REQ.exports || []).forEach(function (item) {
+      var card = add(root, E("div", "card plain"));
+      add(card, E("div", "mono", item.id));
+      kv(card, "material", item.material_text);
+      kv(card, "requirement", item.requirement + " " + item.rate_text);
+      kv(card, "endpoint", item.endpoint_key);
+      kv(card, "sink", item.sink_service);
+      kv(card, "sink ceiling", item.sink_capacity_text);
+    });
+    if ((REQ.surplus || []).length) {
+      add(root, E("p", "small", "Surplus outlets:"));
+      (REQ.surplus || []).forEach(function (item) {
+        var card = add(root, E("div", "card plain"));
+        add(card, E("div", "mono", item.id));
+        kv(card, "material", item.material_text);
+        kv(card, "endpoint", item.endpoint_key);
+        kv(card, "sink", item.sink_service);
+      });
+    }
+    add(root, E("h2", null, "Request assumptions"));
+    (REQ.assumptions.rows || []).forEach(function (pair) { kv(root, pair[0], pair[1]); });
+    var irrelevant = REQ.assumptions.irrelevant || [];
+    if (irrelevant.length) {
+      add(root, E("p", "small", "Declared irrelevant subsystems (scoped out of the item model by the request):"));
+      irrelevant.forEach(function (declaration) {
+        var card = add(root, E("div", "card sev-info"));
+        add(card, E("span", "badge info", "● DECLARED"));
+        add(card, E("span", "mono", declaration.id));
+        kv(card, "subsystem", declaration.subsystem);
+        kv(card, "basis", declaration.basis);
+        add(card, E("p", "msg", declaration.justification));
+        scopeLine(card, "entities", declaration.entity_keys);
+      });
+    }
+    extras(root, REQ.assumptions.extra, "Additional assumption fields");
+    kv(root, "protected areas", REQ.protected.areas);
+    scopeLine(root, "protected entities", REQ.protected.entities);
+    scopeLine(root, "protected endpoints", REQ.protected.endpoints);
+    list(root, REQ.protected.flags, "no protection flags recorded");
+    extras(root, REQ.extra, "Additional request fields");
+  }
+
+  function entityRow(entity) {
+    var row = E("div", "row" + (state.selEntities[entity.key] ? " sel" : ""));
+    add(row, E("span", "mono", entity.key));
+    var detail = entity.prototype + " · " + entity.support;
+    if (entity.subsystem) { detail += " · " + entity.subsystem; }
+    if (entity.mod) { detail += " · mod " + entity.mod; }
+    add(row, E("span", "grow small", detail));
+    row.style.cursor = "pointer";
+    row.addEventListener("click", function () { selectEntity(entity.key, false); });
+    return row;
+  }
+
+  /* ---------------------------------------------------- assignments panel */
+
+  function budgetOptions() {
+    return proposed.budgets.map(function (b) { return b.id; });
+  }
+
+  function renderAssign(root) {
+    var report = staleReport();
+    if (report.hard.length || report.soft.length) {
+      report.hard.concat(report.soft).forEach(function (text) { add(root, E("div", "banner err", "STALE: " + text)); });
+    }
+    add(root, E("h2", null, "Global budgets"));
+    add(root, E("p", "note", "Two feeds naming one budget ID share a single global ceiling; they do not each receive it. Click a budget to select every port that draws on it."));
+    proposed.budgets.forEach(function (budget) {
+      var users = A.feeds.filter(function (f) { return f.budget_id === budget.id; });
+      var row = add(root, E("div", "row"));
+      add(row, E("span", "mono", budget.id));
+      add(row, E("span", "grow small", materialText(budget.material) + " · ceiling " + capacityText(budget.capacity)
+        + " · " + users.length + " feed(s) share it"));
+      row.style.cursor = "pointer";
+      row.addEventListener("click", function () {
+        state.selEndpoints = {};
+        users.forEach(function (feed) { state.selEndpoints[epKey(feed.endpoint)] = true; });
+        state.selEntities = {};
+        state.tab = "selection";
+        focusKeys([], Object.keys(state.selEndpoints), []);
+        renderPanel(); request();
+      });
+      var removeBudget = add(row, E("button", "mini", "remove"));
+      removeBudget.disabled = users.length > 0;
+      removeBudget.title = users.length ? "Remove or replace its feeds first; shared budgets stay shared." : "Remove unused budget";
+      removeBudget.addEventListener("click", function (event) {
+        event.stopPropagation();
+        if (users.length) { return; }
+        proposed.budgets = proposed.budgets.filter(function (candidate) { return candidate.id !== budget.id; });
+        changed();
+      });
+    });
+    if (!proposed.budgets.length) { add(root, E("p", "note", "none declared yet")); }
+    add(root, budgetForm());
+
+    add(root, E("h2", null, "Feeds (" + A.feeds.length + ")"));
+    A.feeds.forEach(function (feed, index) {
+      var row = add(root, E("div", "row" + (state.selEndpoints[epKey(feed.endpoint)] ? " sel" : "")));
+      add(row, E("span", "mono", feed.id));
+      add(row, E("span", "grow small", "budget " + feed.budget_id + " · " + capacityText(feed.capacity) + " · " + epKey(feed.endpoint)));
+      var pick = add(row, E("button", "mini", "select port"));
+      pick.addEventListener("click", function (event) {
+        event.stopPropagation();
+        state.selEndpoints[epKey(feed.endpoint)] = true;
+        renderPanel(); request();
+      });
+      var drop = add(row, E("button", "mini", "remove"));
+      drop.addEventListener("click", function (event) {
+        event.stopPropagation();
+        A.feeds.splice(index, 1);
+        changed();
+      });
+    });
+    if (!A.feeds.length) { add(root, E("p", "note", "none")); }
+    add(root, feedForm());
+
+    add(root, E("h2", null, "Exports and surplus (request draft only)"));
+    add(root, E("p", "note", "Outlets belong to the routing request, not to the assignment set. They are written to the draft export document for the host."));
+    proposed.exports.forEach(function (item, index) {
+      var row = add(root, E("div", "row"));
+      add(row, E("span", "mono", item.id));
+      add(row, E("span", "grow small", "export " + materialText(item.material) + " · " + item.requirement + " " + item.rate + " · " + epKey(item.endpoint)));
+      var drop = add(row, E("button", "mini", "remove"));
+      drop.addEventListener("click", function () { proposed.exports.splice(index, 1); changed(); });
+    });
+    proposed.surplus.forEach(function (item, index) {
+      var row = add(root, E("div", "row"));
+      add(row, E("span", "mono", item.id));
+      add(row, E("span", "grow small", "surplus " + materialText(item.material) + " · " + epKey(item.endpoint)));
+      var drop = add(row, E("button", "mini", "remove"));
+      drop.addEventListener("click", function () { proposed.surplus.splice(index, 1); changed(); });
+    });
+    add(root, outletForm());
+
+    add(root, E("h2", null, "Draft objective"));
+    add(root, E("p", "note", "Changing the objective also makes a displayed result stale. This only edits the draft for the CLI; it does not solve in the page."));
+    var objectiveKind = choice(root, "objective", [["feasible", "Feasible request"], ["maximize_export", "Maximize an export"]], proposed.objective.kind || "feasible");
+    var objectiveExport = choice(root, "objective export", [["", "(none — required for feasible)"]].concat(
+      proposed.exports.map(function (item) { return [item.id, item.id + " · " + materialText(item.material)]; })),
+      proposed.objective.export_id || "");
+    function setObjective() {
+      if (objectiveKind.value === "maximize_export" && !objectiveExport.value) {
+        objectiveKind.value = "feasible";
+      }
+      proposed.objective = objectiveKind.value === "maximize_export"
+        ? { kind: "maximize_export", export_id: objectiveExport.value || null }
+        : { kind: "feasible", export_id: null };
+      changed();
+    }
+    objectiveKind.addEventListener("change", setObjective);
+    objectiveExport.addEventListener("change", setObjective);
+
+    add(root, E("h2", null, "Furnace recipe assignment"));
+    add(root, E("p", "note", "Only a recipe recorded as a candidate of that entity may be assigned. Several candidates with no override leave the model unresolved, which forces a partial result with no bounds."));
+    var furnaceEntities = (G.entities || []).filter(function (e) { return e.furnace_candidates && e.furnace_candidates.length; });
+    furnaceEntities.forEach(function (entity) {
+      var current = null;
+      A.furnaces.forEach(function (f) { if (entKey(f.entity) === entity.key) { current = f; } });
+      var wrap = add(root, E("div", "card plain"));
+      add(wrap, E("div", "mono", entity.key + " · " + entity.prototype));
+      var label = add(wrap, E("label", "field"));
+      add(label, E("span", null, "recipe (" + entity.furnace_candidates.length + " candidate(s))"));
+      var select = add(label, E("select"));
+      var none = add(select, E("option", null, "(unresolved — no override)"));
+      none.value = "";
+      entity.furnace_candidates.forEach(function (recipe) {
+        var option = add(select, E("option", null, recipe));
+        option.value = recipe;
+      });
+      select.value = current ? current.recipe : "";
+      if (!current && entity.furnace_candidates.length > 1) {
+        add(wrap, E("p", "small err-text", "Unresolved: this entity has several candidates and no assignment."));
+      }
+      select.addEventListener("change", function () {
+        A.furnaces = A.furnaces.filter(function (f) { return entKey(f.entity) !== entity.key; });
+        if (select.value) { A.furnaces.push({ entity: entity.id, recipe: select.value }); }
+        changed();
+      });
+    });
+    if (!furnaceEntities.length) { add(root, E("p", "note", "no entity in this graph records furnace candidates")); }
+
+    add(root, E("h2", null, "Circuit control assignments"));
+    var conditions = G.conditions || [];
+    if (!conditions.length) { add(root, E("p", "note", "no arc in this graph names a condition")); }
+    conditions.forEach(function (condition) {
+      var current = null;
+      A.controls.forEach(function (c) { if (c.condition === condition) { current = c; } });
+      var label = add(root, E("label", "field"));
+      add(label, E("span", null, condition));
+      var select = add(label, E("select"));
+      [["", "(unset — relax_open policy)"], ["true", "enabled"], ["false", "disabled"]].forEach(function (pair) {
+        var option = add(select, E("option", null, pair[1]));
+        option.value = pair[0];
+      });
+      select.value = current ? String(current.enabled) : "";
+      select.addEventListener("change", function () {
+        A.controls = A.controls.filter(function (c) { return c.condition !== condition; });
+        if (select.value) { A.controls.push({ condition: condition, enabled: select.value === "true" }); }
+        changed();
+      });
+    });
+  }
+
+  function field(parent, labelText, value, placeholder) {
+    var label = add(parent, E("label", "field"));
+    add(label, E("span", null, labelText));
+    var input = add(label, E("input"));
+    input.type = "text";
+    if (value !== undefined && value !== null) { input.value = value; }
+    if (placeholder) { input.placeholder = placeholder; }
+    return input;
+  }
+  function choice(parent, labelText, options, value) {
+    var label = add(parent, E("label", "field"));
+    add(label, E("span", null, labelText));
+    var select = add(label, E("select"));
+    options.forEach(function (pair) {
+      var option = add(select, E("option", null, pair[1]));
+      option.value = pair[0];
+    });
+    if (value !== undefined) { select.value = value; }
+    return select;
+  }
+  function materialText(material) {
+    if (!material) { return "—"; }
+    return material.name + (material.kind !== "item" ? " (" + material.kind + ")" : "")
+      + (material.quality && material.quality !== "normal" ? " [" + material.quality + "]" : "");
+  }
+  function capacityText(capacity) {
+    if (!capacity) { return "—"; }
+    if (capacity.kind === "finite") { return String(capacity.value); }
+    return capacity.kind;
+  }
+  function numberOrNull(text) {
+    if (!/^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(String(text).trim())) { return null; }
+    var value = Number(text);
+    return isFinite(value) ? value : null;
+  }
+
+  function inputBeltFor(endpoint) {
+    var entity = endpoint && entityByKey[endpoint.entity_key];
+    return entity && entity.input_belt ? { entity: entity, belt: entity.input_belt } : null;
+  }
+  function inputIdPart(entity) {
+    var ident = entity.id || {};
+    return (ident.book_path || []).concat([ident.entity_number]).join("_").replace(/[^a-zA-Z0-9_-]/g, "_").toLowerCase();
+  }
+  function shortcutBudgetId(entity, material) {
+    var base = "full_input_" + inputIdPart(entity) + "_" + material;
+    var id = base, suffix = 2;
+    while (proposed.budgets.some(function (budget) { return budget.id === id; })) {
+      id = base + "_" + suffix;
+      suffix += 1;
+    }
+    return id;
+  }
+  function pruneUnusedShortcutBudgets() {
+    proposed.budgets = proposed.budgets.filter(function (budget) {
+      return budget.id.indexOf("full_input_") !== 0
+        || A.feeds.some(function (feed) { return feed.budget_id === budget.id; });
+    });
+  }
+  function itemPicker(parent, labelText) {
+    var known = (D.known_items || []).map(function (item) { return [item.name, item.label]; });
+    known.unshift(["", "(choose an imported item)"]);
+    known.push(["__internal__", "Other — enter an internal item name"]);
+    var select = choice(parent, labelText, known, "");
+    var custom = field(parent, labelText + " — internal item name", "", "iron-plate");
+    custom.hidden = true;
+    select.addEventListener("change", function () { custom.hidden = select.value !== "__internal__"; });
+    return {
+      value: function () {
+        var value = select.value === "__internal__" ? custom.value.trim() : select.value;
+        return TOKEN.test(value) ? value : null;
+      }
+    };
+  }
+  function fullInputForm(endpoint) {
+    var info = inputBeltFor(endpoint);
+    if (!info) { return null; }
+    var selectedLane = (info.belt.lanes || []).filter(function (lane) { return lane.incoming_key === endpoint.key; })[0];
+    if (!selectedLane || !selectedLane.boundary_candidate) { return null; }
+    var form = E("div", "card plain full-input");
+    add(form, E("div", null, "Full supply input"));
+    add(form, E("p", "note", "This declares available external supply up to imported lane capacity; it never forces consumption. The CLI reanalyzes an exported draft."));
+    if (!selectedLane.available) {
+      add(form, E("p", "err-text", info.belt.reason || "Imported lane capacity is unavailable, so this shortcut cannot apply."));
+      return form;
+    }
+    var modeOptions = [["lane", "Selected lane only — " + selectedLane.capacity_text]];
+    if (info.belt.whole_belt_available) {
+      modeOptions.unshift(["whole", "Whole belt — " + info.belt.whole_capacity_text]);
+    }
+    var mode = choice(form, "supply scope", modeOptions, info.belt.whole_belt_available ? "whole" : "lane");
+    var packing = choice(form, "whole-belt item layout", [["same", "One item on both lanes"], ["different", "A different item per lane"]], "same");
+    var first = itemPicker(form, "item for " + selectedLane.side + " lane");
+    var otherLane = (info.belt.lanes || []).filter(function (lane) { return lane.incoming_key !== selectedLane.incoming_key; })[0];
+    var second = itemPicker(form, "item for " + (otherLane ? otherLane.side : "other") + " lane");
+    var message = add(form, E("p", "small"));
+    function packingVisibility() {
+      packing.parentElement.hidden = mode.value !== "whole";
+      /* itemPicker creates a label after the select; keep the second lane's
+         label adjacent and hidden for single-item/full-lane declarations. */
+      second._unused = false;
+      var labels = form.querySelectorAll("label.field");
+      if (labels.length >= 6) {
+        labels[4].hidden = mode.value !== "whole" || packing.value !== "different";
+        labels[5].hidden = mode.value !== "whole" || packing.value !== "different";
+      }
+    }
+    mode.addEventListener("change", packingVisibility);
+    packing.addEventListener("change", packingVisibility);
+    packingVisibility();
+    var button = add(form, E("button", "act", "Mark as full input"));
+    button.addEventListener("click", function () {
+      var useWhole = mode.value === "whole";
+      var lanes = useWhole ? info.belt.lanes.slice() : [selectedLane];
+      if (lanes.some(function (lane) { return !lane.available || !lane.boundary_candidate; })) {
+        message.className = "small err-text";
+        message.textContent = "The selected lane(s) no longer have imported incoming-boundary capacity evidence.";
+        return;
+      }
+      var firstItem = first.value();
+      var secondItem = (useWhole && packing.value === "different") ? second.value() : firstItem;
+      if (!firstItem || !secondItem) {
+        message.className = "small err-text";
+        message.textContent = "Choose an imported item or provide a valid internal item name ([a-z][a-z0-9_-]*).";
+        return;
+      }
+      var items = lanes.map(function (lane) {
+        return { lane: lane, material: lane.incoming_key === selectedLane.incoming_key ? firstItem : secondItem };
+      });
+      var replaceKeys = {};
+      lanes.forEach(function (lane) { replaceKeys[lane.incoming_key] = true; });
+      /* Replacing an input removes the old feed(s) at exactly these lane
+         entrances.  A shared advanced budget remains intact for other ports. */
+      A.feeds = A.feeds.filter(function (feed) { return !replaceKeys[epKey(feed.endpoint)]; });
+      pruneUnusedShortcutBudgets();
+      var byMaterial = {};
+      items.forEach(function (item) { (byMaterial[item.material] || (byMaterial[item.material] = [])).push(item); });
+      Object.keys(byMaterial).sort().forEach(function (material) {
+        var group = byMaterial[material];
+        var capacity = (group.length === 2 && useWhole)
+          ? info.belt.whole_capacity : group[0].lane.capacity;
+        var budgetId = shortcutBudgetId(info.entity, material);
+        proposed.budgets.push({ id: budgetId,
+          material: { kind: "item", name: material, quality: "normal" }, capacity: capacity });
+        group.forEach(function (item) {
+          A.feeds.push({ id: "full_input_" + inputIdPart(info.entity) + "_" + item.lane.side,
+            budget_id: budgetId, endpoint: endpointByKey[item.lane.incoming_key].id,
+            capacity: item.lane.capacity });
+        });
+      });
+      message.className = "small";
+      message.textContent = "Full supply assigned. Export the draft, re-run the CLI analysis, then reopen its regenerated page.";
+      changed();
+    });
+    var existingKeys = {};
+    (info.belt.lanes || []).forEach(function (lane) { existingKeys[lane.incoming_key] = true; });
+    if (A.feeds.some(function (feed) { return existingKeys[epKey(feed.endpoint)]; })) {
+      var remove = add(form, E("button", "act sub", "Remove input assignment"));
+      remove.addEventListener("click", function () {
+        A.feeds = A.feeds.filter(function (feed) { return !existingKeys[epKey(feed.endpoint)]; });
+        pruneUnusedShortcutBudgets();
+        changed();
+      });
+    }
+    return form;
+  }
+
+  function budgetForm() {
+    var form = E("div", "card plain");
+    add(form, E("div", null, "Declare a global budget"));
+    var id = field(form, "budget id (token)", "", "iron");
+    var name = field(form, "material name", "", "iron-plate");
+    var kind = choice(form, "material kind", [["item", "item"], ["fluid", "fluid"]], "item");
+    var capKind = choice(form, "ceiling", [["finite", "finite"], ["unlimited", "unlimited"]], "finite");
+    var capValue = field(form, "ceiling value (items/s)", "", "10");
+    var message = add(form, E("p", "small"));
+    var button = add(form, E("button", "act", "Add budget"));
+    button.addEventListener("click", function () {
+      var errors = [];
+      if (!TOKEN.test(id.value)) { errors.push("budget id must match [a-z][a-z0-9_-]*"); }
+      if (!TOKEN.test(name.value)) { errors.push("material name must match [a-z][a-z0-9_-]*"); }
+      if (budgetOptions().indexOf(id.value) >= 0) { errors.push("budget id already declared"); }
+      var capacity = { kind: "unlimited", value: null };
+      if (capKind.value === "finite") {
+        var value = numberOrNull(capValue.value);
+        if (value === null || value < 0) { errors.push("ceiling must be a nonnegative decimal number"); }
+        capacity = { kind: "finite", value: value };
+      }
+      if (errors.length) { message.className = "small err-text"; message.textContent = errors.join("; "); return; }
+      proposed.budgets.push({
+        id: id.value,
+        material: { kind: kind.value, name: name.value, quality: kind.value === "item" ? "normal" : null },
+        capacity: capacity
+      });
+      changed();
+    });
+    return form;
+  }
+
+  function selectedEndpointKeys() { return Object.keys(state.selEndpoints); }
+
+  function feedForm() {
+    var form = E("div", "card plain");
+    add(form, E("div", null, "Declare a feed at the selected endpoint"));
+    var keys = selectedEndpointKeys();
+    add(form, E("p", "small", keys.length ? ("selected: " + keys.join(", "))
+      : "Select a port, lane or inventory first (click the map, or a row in the Selection tab)."));
+    var id = field(form, "feed id (token)", "feed_" + (A.feeds.length + 1), "feed_a");
+    var budget = choice(form, "shared global budget id", budgetOptions().map(function (b) { return [b, b]; }), budgetOptions()[0]);
+    var capKind = choice(form, "local feed ceiling", [["unlimited", "unlimited"], ["finite", "finite"]], "unlimited");
+    var capValue = field(form, "local ceiling value (items/s)", "", "10");
+    var message = add(form, E("p", "small"));
+    var button = add(form, E("button", "act", "Declare feed"));
+    button.addEventListener("click", function () {
+      var errors = [];
+      var target = selectedEndpointKeys();
+      if (target.length !== 1) { errors.push("select exactly one endpoint to declare a feed"); }
+      if (!TOKEN.test(id.value)) { errors.push("feed id must match [a-z][a-z0-9_-]*"); }
+      if (!budget.value) { errors.push("declare a global budget first"); }
+      if (A.feeds.some(function (f) { return f.id === id.value; })) { errors.push("feed id already used"); }
+      var endpoint = target.length === 1 ? endpointByKey[target[0]] : null;
+      if (endpoint && endpoint.kind === "port" && endpoint.role === "outgoing") {
+        errors.push("a feed cannot target an outgoing port");
+      }
+      if (endpoint && A.feeds.some(function (f) { return epKey(f.endpoint) === endpoint.key && f.budget_id === budget.value; })) {
+        errors.push("this endpoint already draws on that budget");
+      }
+      var capacity = { kind: "unlimited", value: null };
+      if (capKind.value === "finite") {
+        var value = numberOrNull(capValue.value);
+        if (value === null || value < 0) { errors.push("ceiling must be a nonnegative decimal number"); }
+        capacity = { kind: "finite", value: value };
+      }
+      if (errors.length || !endpoint) {
+        message.className = "small err-text";
+        message.textContent = errors.join("; ") || "no endpoint selected";
+        return;
+      }
+      A.feeds.push({ id: id.value, budget_id: budget.value, endpoint: endpoint.id, capacity: capacity });
+      changed();
+    });
+    return form;
+  }
+
+  function outletForm() {
+    var form = E("div", "card plain");
+    add(form, E("div", null, "Declare an export or surplus outlet at the selected endpoint"));
+    var keys = selectedEndpointKeys();
+    add(form, E("p", "small", keys.length ? ("selected: " + keys.join(", ")) : "Select one outgoing port, lane exit or inventory first."));
+    var outlet = choice(form, "outlet kind", [["export", "export (net rate requirement)"], ["surplus", "surplus (declared removal)"]], "export");
+    var id = field(form, "outlet id (token)", "", "product");
+    var name = field(form, "material name", "", "iron-plate");
+    var requirement = choice(form, "requirement", [["minimum", "minimum"], ["exact", "exact"]], "minimum");
+    var rate = field(form, "net rate (items/s)", "0", "5");
+    var service = field(form, "external removal service (required)", "", "continuous external removal");
+    var sinkKind = choice(form, "sink ceiling", [["unlimited", "unlimited"], ["finite", "finite"]], "unlimited");
+    var sinkValue = field(form, "sink ceiling value (items/s)", "", "20");
+    var message = add(form, E("p", "small"));
+    var button = add(form, E("button", "act", "Declare outlet"));
+    button.addEventListener("click", function () {
+      var errors = [];
+      var target = selectedEndpointKeys();
+      if (target.length !== 1) { errors.push("select exactly one endpoint"); }
+      if (!TOKEN.test(id.value)) { errors.push("outlet id must match [a-z][a-z0-9_-]*"); }
+      if (!TOKEN.test(name.value)) { errors.push("material name must match [a-z][a-z0-9_-]*"); }
+      if (!service.value.trim()) { errors.push("an outlet needs an explicit ongoing external removal service"); }
+      var endpoint = target.length === 1 ? endpointByKey[target[0]] : null;
+      if (endpoint && endpoint.kind === "port" && endpoint.role === "incoming") {
+        errors.push("an outlet cannot target an incoming port");
+      }
+      var value = numberOrNull(rate.value);
+      if (outlet.value === "export" && (value === null || value < 0)) { errors.push("rate must be a nonnegative decimal number"); }
+      var sink = { kind: "external", service: service.value, capacity: { kind: "unlimited", value: null } };
+      if (sinkKind.value === "finite") {
+        var ceiling = numberOrNull(sinkValue.value);
+        if (ceiling === null || ceiling < 0) { errors.push("sink ceiling must be a nonnegative decimal number"); }
+        sink.capacity = { kind: "finite", value: ceiling };
+      }
+      if (errors.length || !endpoint) {
+        message.className = "small err-text";
+        message.textContent = errors.join("; ") || "no endpoint selected";
+        return;
+      }
+      var material = { kind: "item", name: name.value, quality: "normal" };
+      if (outlet.value === "export") {
+        proposed.exports.push({ id: id.value, material: material, endpoint: endpoint.id, requirement: requirement.value, rate: value, sink: sink });
+      } else {
+        proposed.surplus.push({ id: id.value, material: material, endpoint: endpoint.id, sink: sink });
+      }
+      changed();
+    });
+    return form;
+  }
+
+  /* ------------------------------------------------------- export /import */
+
+  function draftDocument() {
+    return {
+      document_kind: D.document_kind,
+      view_version: D.view_version,
+      blueprint_hash: A.blueprint_hash,
+      graph_hash: A.graph_hash,
+      assignments: assignmentDoc(),
+      proposed_request: proposalDoc(),
+      notes: [
+        "Produced by the routing viewer for host reanalysis. The page ran no solver and wrote no file.",
+        "Budgets, exports and surplus are request material; only 'assignments' is an AssignmentSet."
+      ]
+    };
+  }
+
+  var exportKindValue = "draft";
+
+  function renderIo(root) {
+    add(root, E("h2", null, "Export"));
+    add(root, E("p", "note", "The page produces JSON for the host to reanalyze. It never writes a file or solves anything by itself."));
+    var kind = choice(root, "document", [["draft", "Assignment draft with proposed budgets and outlets (default)"], ["assignments", "AssignmentSet only"]], exportKindValue);
+    var area = add(root, E("textarea"));
+    area.id = "export-text";
+    area.spellcheck = false;
+    function fill() {
+      exportKindValue = kind.value;
+      area.value = JSON.stringify(kind.value === "draft" ? draftDocument() : assignmentDoc(), null, 2);
+    }
+    kind.addEventListener("change", fill);
+    fill();
+    var refresh = add(root, E("button", "act sub", "Refresh"));
+    refresh.addEventListener("click", fill);
+    var download = add(root, E("button", "act", "Download"));
+    download.addEventListener("click", function () {
+      var blob = new Blob([area.value], { type: "application/json" });
+      var url = URL.createObjectURL(blob);
+      var link = E("a");
+      link.href = url;
+      link.download = (kind.value === "draft" ? "routing_assignment_draft.json" : "routing_assignments.json");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+    });
+
+    add(root, E("h2", null, "Import"));
+    add(root, E("p", "note", "Reimport checks the blueprint and graph hashes and resolves every entity, endpoint, recipe and condition against this graph."));
+    var input = add(root, E("textarea"));
+    input.id = "import-text";
+    input.spellcheck = false;
+    input.value = state.importText || "";
+    input.addEventListener("input", function () { state.importText = input.value; });
+    var forceLabel = add(root, E("label", "field"));
+    var force = add(forceLabel, E("input"));
+    force.type = "checkbox";
+    force.id = "import-force";
+    add(forceLabel, E("span", null, "load anyway when the hashes are stale (keeps the document's hashes and marks the page stale)"));
+    var button = add(root, E("button", "act", "Import draft or assignments"));
+    var message = add(root, E("p", "small"));
+    message.id = "import-message";
+    if (state.importMessage) {
+      message.className = state.importOk ? "small" : "small err-text";
+      message.textContent = state.importMessage;
+    }
+    button.addEventListener("click", function () {
+      state.importText = input.value;
+      applyImport(input.value, force.checked);
+    });
+  }
+
+  function importReport(document_) {
+    var set = document_;
+    if (document_ && typeof document_ === "object" && document_.assignments
+        && typeof document_.assignments === "object" && document_.assignments.feeds && !document_.feeds) {
+      set = document_.assignments;
+    }
+    var stale = [], unknown = [];
+    if (!set || typeof set !== "object" || !Array.isArray(set.feeds)) {
+      return { set: null, stale: stale, unknown: ["document is not an assignment set"] };
+    }
+    if (set.blueprint_hash !== G.blueprint_hash) {
+      stale.push("stale blueprint hash: document has " + dash(set.blueprint_hash) + ", this graph has " + dash(G.blueprint_hash));
+    }
+    if (set.graph_hash !== G.graph_hash) {
+      stale.push("stale graph hash: document has " + dash(set.graph_hash) + ", this graph has " + dash(G.graph_hash));
+    }
+    set.feeds.forEach(function (feed) {
+      var key = epKey(feed && feed.endpoint);
+      var endpoint = endpointByKey[key];
+      if (!endpoint) { unknown.push("unknown feed endpoint: " + key); return; }
+      if (endpoint.kind === "port" && endpoint.role === "outgoing") { unknown.push("feed targets an outgoing port: " + key); }
+    });
+    (set.furnaces || []).forEach(function (furnace) {
+      var key = entKey(furnace && furnace.entity);
+      var entity = entityByKey[key];
+      if (!entity) { unknown.push("unknown furnace entity: " + key); return; }
+      if ((entity.furnace_candidates || []).indexOf(furnace.recipe) < 0) {
+        unknown.push("recipe " + dash(furnace.recipe) + " is not a recorded candidate of " + key);
+      }
+    });
+    (set.controls || []).forEach(function (control) {
+      if ((G.conditions || []).indexOf(control && control.condition) < 0) {
+        unknown.push("unknown control condition: " + dash(control && control.condition));
+      }
+    });
+    var proposal = document_ && typeof document_ === "object" ? document_.proposed_request : null;
+    if (proposal !== null && proposal !== undefined) {
+      if (!proposal || typeof proposal !== "object" || !Array.isArray(proposal.budgets)
+          || !Array.isArray(proposal.exports) || !Array.isArray(proposal.surplus) || !proposal.objective) {
+        unknown.push("draft has an invalid proposed_request section");
+      } else {
+        (proposal.budgets || []).forEach(function (budget) {
+          if (!budget || !TOKEN.test(budget.id) || !budget.material || !budget.capacity) {
+            unknown.push("draft has an invalid budget record");
+          }
+        });
+        var ids = {};
+        (proposal.budgets || []).forEach(function (budget) {
+          if (budget && budget.id) { ids[budget.id] = (ids[budget.id] || 0) + 1; }
+        });
+        Object.keys(ids).forEach(function (id) { if (ids[id] > 1) { unknown.push("draft repeats budget ID " + id); } });
+      }
+    }
+    return { set: set, stale: stale, unknown: unknown, proposal: proposal };
+  }
+
+  function applyImport(text, force) {
+    var parsed;
+    try { parsed = JSON.parse(text); }
+    catch (error) {
+      state.importOk = false;
+      state.importMessage = "Not valid JSON: " + error.message;
+      renderPanel();
+      return;
+    }
+    var report = importReport(parsed);
+    if (!report.set || report.unknown.length || (report.stale.length && !force)) {
+      state.importOk = false;
+      state.importMessage = "Not applied. " + report.stale.concat(report.unknown).join("; ")
+        + (report.stale.length && !report.unknown.length ? " — tick 'load anyway' to inspect it as a stale document." : "");
+      renderPanel();
+      return;
+    }
+    A = copyAssignments(report.set);
+    if (report.proposal) {
+      proposed = proposalDoc(report.proposal);
+    }
+    state.importOk = true;
+    state.importMessage = "Imported " + A.feeds.length + " feed(s), " + A.furnaces.length + " furnace override(s), "
+      + A.controls.length + " control assignment(s)."
+      + (report.proposal ? " Restored proposed budgets, outlets and objective." : "")
+      + (report.stale.length ? " Loaded with STALE hashes: " + report.stale.join("; ") : "");
+    changed();
+  }
+
+  /* ------------------------------------------------------ selection panel */
+
+  function keySet(keys) {
+    var out = {};
+    (keys || []).forEach(function (key) { out[key] = true; });
+    return out;
+  }
+
+  function renderSelection(root) {
+    add(root, E("h2", null, "Selection"));
+    var entityKeys = Object.keys(state.selEntities);
+    var endpointKeys = Object.keys(state.selEndpoints);
+    if (!entityKeys.length && !endpointKeys.length) {
+      add(root, E("p", "note", "Click an entity on the map, or a row in another tab. Shift-click adds to the selection."));
+    }
+    if (endpointKeys.length) {
+      add(root, E("h2", null, "Selected endpoints (" + endpointKeys.length + ")"));
+      var budgets = {};
+      endpointKeys.forEach(function (key) {
+        A.feeds.forEach(function (feed) {
+          if (epKey(feed.endpoint) === key) { budgets[feed.budget_id] = (budgets[feed.budget_id] || 0) + 1; }
+        });
+      });
+      Object.keys(budgets).forEach(function (id) {
+        if (budgets[id] > 1) {
+          add(root, E("p", "note", budgets[id] + " selected endpoints declare a feed on global budget '" + id
+            + "'. They share that one ceiling; they do not each receive it."));
+        }
+      });
+      endpointKeys.forEach(function (key) { add(root, endpointCard(key)); });
+    }
+    entityKeys.forEach(function (key) { add(root, entityCard(key)); });
+    if (state.finding) {
+      var finding = findingById[state.finding];
+      if (finding) {
+        add(root, E("h2", null, "Highlighted by the selected finding"));
+        scopeLine(root, "entities", finding.highlight.entities);
+        scopeLine(root, "endpoints", finding.highlight.endpoints);
+        scopeLine(root, "arcs", finding.highlight.arcs);
+      }
+    }
+  }
+
+  function endpointCard(key) {
+    var endpoint = endpointByKey[key];
+    var card = E("div", "card plain");
+    if (!endpoint) { add(card, E("p", "err-text", "unresolved endpoint " + key)); return card; }
+    add(card, E("div", "mono", endpoint.key));
+    kv(card, "kind", endpoint.kind);
+    if (endpoint.role) { kv(card, "role", endpoint.role); }
+    if (endpoint.side) { kv(card, "lane side", endpoint.side); }
+    if (endpoint.position_text) { kv(card, "position", endpoint.position_text); }
+    if (endpoint.direction_text) { kv(card, "direction", endpoint.direction_text); }
+    kv(card, "eligibility", endpoint.eligibility_text);
+    if (endpoint.storage_text) { kv(card, "storage", endpoint.storage_text); }
+    if (endpoint.boundary_candidate !== undefined) { kv(card, "boundary candidate", endpoint.boundary_candidate ? "yes" : "no"); }
+    if (endpoint.incoming_key) { kv(card, "lane entrance", endpoint.incoming_key); }
+    if (endpoint.outgoing_key) { kv(card, "lane exit", endpoint.outgoing_key); }
+    scopeLine(card, "evidence", endpoint.evidence_ids);
+    var feeds = A.feeds.filter(function (f) { return epKey(f.endpoint) === key; });
+    feeds.forEach(function (feed) { kv(card, "declared feed", feed.id + " on budget " + feed.budget_id + " (" + capacityText(feed.capacity) + ")"); });
+    var input = fullInputForm(endpoint);
+    if (input) {
+      add(card, input);
+    } else {
+      var beltInfo = inputBeltFor(endpoint);
+      if (beltInfo && endpoint.kind === "port") {
+        add(card, E("p", "small", endpoint.role !== "incoming"
+          ? "Full supply applies only to an incoming boundary belt port; this is not an incoming port."
+          : "Full supply applies only to an imported incoming boundary belt; this port is internal or has no boundary evidence."));
+      }
+    }
+    extras(card, endpoint.extra, "Additional endpoint fields");
+    var drop = add(card, E("button", "act sub", "Deselect"));
+    drop.addEventListener("click", function () { delete state.selEndpoints[key]; renderPanel(); request(); });
+    return card;
+  }
+
+  function entityCard(key) {
+    var entity = entityByKey[key];
+    var card = E("div", "card plain");
+    if (!entity) { add(card, E("p", "err-text", "unresolved entity " + key)); return card; }
+    add(card, E("div", "mono", entity.key));
+    kv(card, "prototype", entity.prototype);
+    kv(card, "position", entity.position_text);
+    kv(card, "direction", entity.direction_text);
+    kv(card, "orientation", entity.orientation_text);
+    kv(card, "quality", entity.quality);
+    kv(card, "support", entity.support);
+    if (entity.subsystem) { kv(card, "subsystem", entity.subsystem); }
+    if (entity.mod) { kv(card, "mod", entity.mod); }
+    if (entity.recipes && entity.recipes.length) {
+      kv(card, "imported blueprint recipe" + (entity.recipes.length > 1 ? "s" : ""), entity.recipes.join(", "));
+      if (entity.blueprint_recipe && entity.activities.length === 0) {
+        add(card, E("p", "small", "This recipe remains visible as blueprint data; it is not an inferred or newly supported activity."));
+      }
+    }
+    if (entity.furnace_candidates.length) { kv(card, "furnace candidates", entity.furnace_candidates.join(", ")); }
+    scopeLine(card, "evidence", entity.evidence_ids);
+    extras(card, entity.extra, "Additional entity fields");
+    [["ports", entity.ports], ["lanes", entity.lanes], ["inventories", entity.inventories]].forEach(function (pair) {
+      if (!pair[1].length) { return; }
+      add(card, E("p", "small", pair[0] + ":"));
+      pair[1].forEach(function (endpointKey) {
+        var endpoint = endpointByKey[endpointKey];
+        var row = add(card, E("div", "row" + (state.selEndpoints[endpointKey] ? " sel" : "")));
+        add(row, E("span", "mono", endpoint ? endpoint.name : endpointKey));
+        add(row, E("span", "grow small", endpoint ? (endpoint.role || endpoint.side || endpoint.kind) + " · " + endpoint.eligibility_text : "?"));
+        var pick = add(row, E("button", "mini", state.selEndpoints[endpointKey] ? "deselect" : "select"));
+        pick.addEventListener("click", function () {
+          if (state.selEndpoints[endpointKey]) { delete state.selEndpoints[endpointKey]; }
+          else { state.selEndpoints[endpointKey] = true; }
+          renderPanel(); request();
+        });
+      });
+    });
+    if (entity.arcs.length) {
+      add(card, E("p", "small", "arcs touching this entity:"));
+      entity.arcs.forEach(function (arcId) {
+        var arc = arcById[arcId];
+        var row = add(card, E("div", "row"));
+        add(row, E("span", "mono", arcId));
+        add(row, E("span", "grow small", arc ? (arc.semantics + " · " + arc.eligibility_text
+          + (arc.conditions.length ? " · conditions: " + arc.conditions.join(", ") : "")) : "?"));
+      });
+    }
+    add(card, E("p", "small", "original blueprint record (inert text):"));
+    add(card, E("pre", "raw", entity.raw_text));
+    var drop = add(card, E("button", "act sub", "Deselect"));
+    drop.addEventListener("click", function () { delete state.selEntities[key]; renderPanel(); request(); });
+    return card;
+  }
+
+  /* ------------------------------------------------------------ selection */
+
+  function selectFinding(id) {
+    var finding = findingById[id];
+    if (!finding) { return; }
+    state.finding = (state.finding === id) ? null : id;
+    if (state.finding) {
+      HL = {
+        entities: keySet(finding.highlight.entities),
+        endpoints: keySet(finding.highlight.endpoints),
+        arcs: keySet(finding.highlight.arcs)
+      };
+      if (finding.focus) { focusBox(finding.focus); }
+    } else {
+      HL = { entities: {}, endpoints: {}, arcs: {} };
+    }
+    renderPanel();
+    request();
+  }
+
+  function selectEntity(key, additive) {
+    if (!additive) { state.selEntities = {}; state.selEndpoints = {}; }
+    state.selEntities[key] = true;
+    state.tab = "selection";
+    renderPanel();
+    request();
+  }
+
+  function focusKeys(entityKeys, endpointKeys, arcIds) {
+    var xs = [], ys = [];
+    (entityKeys || []).forEach(function (key) {
+      var entity = entityByKey[key];
+      if (entity) { xs.push(entity.box[0], entity.box[2]); ys.push(entity.box[1], entity.box[3]); }
+    });
+    (endpointKeys || []).forEach(function (key) {
+      var endpoint = endpointByKey[key];
+      if (!endpoint) { return; }
+      var points = endpoint.polyline && endpoint.polyline.length ? endpoint.polyline : [endpoint.anchor];
+      points.forEach(function (point) { xs.push(point[0]); ys.push(point[1]); });
+    });
+    (arcIds || []).forEach(function (id) {
+      var arc = arcById[id];
+      if (arc) { xs.push(arc.geometry[0], arc.geometry[2]); ys.push(arc.geometry[1], arc.geometry[3]); }
+    });
+    if (!xs.length) { return; }
+    focusBox([Math.min.apply(null, xs), Math.min.apply(null, ys), Math.max.apply(null, xs), Math.max.apply(null, ys)]);
+  }
+
+  /* ---------------------------------------------------------------- canvas */
+
+  var ctx = canvas.getContext("2d");
+  var view = { cx: 0, cy: 0, k: 8 };
+  var pending = false;
+  var drawn = { entities: 0, arcs: 0 };
+
+  function palette() {
+    var dark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    return dark
+      ? { entity: "#2b3341", line: "#57657d", odd: "#4a3520", oddLine: "#e0b33c", lane: "#6f819d",
+          arc: "#8fa6c9", hl: "#ffd257", sel: "#7fb0ff", text: "#e9ecf1" }
+      : { entity: "#dfe4ec", line: "#8c98ad", odd: "#f6e2b8", oddLine: "#a97b00", lane: "#7d8ba1",
+          arc: "#4a5b78", hl: "#b8570a", sel: "#1c4f9c", text: "#16181d" };
+  }
+  var C = palette();
+  if (window.matchMedia) {
+    var media = window.matchMedia("(prefers-color-scheme: dark)");
+    if (media.addEventListener) { media.addEventListener("change", function () { C = palette(); request(); }); }
+  }
+
+  function request() {
+    if (pending) { return; }
+    pending = true;
+    window.requestAnimationFrame(draw);
+  }
+
+  function fit(box) {
+    var w = canvas.clientWidth || 800, h = canvas.clientHeight || 600;
+    var width = Math.max(box[2] - box[0], 1e-6), height = Math.max(box[3] - box[1], 1e-6);
+    view.k = Math.min(w / (width * 1.15), h / (height * 1.15));
+    view.k = Math.max(Math.min(view.k, 64), 0.02);
+    view.cx = (box[0] + box[2]) / 2;
+    view.cy = (box[1] + box[3]) / 2;
+    request();
+  }
+  function focusBox(box) {
+    var padded = [box[0] - 1.5, box[1] - 1.5, box[2] + 1.5, box[3] + 1.5];
+    fit(padded);
+  }
+
+  function assignedInputText(entity) {
+    var belt = entity.input_belt;
+    if (!belt) { return ""; }
+    var bits = [];
+    (belt.lanes || []).forEach(function (lane) {
+      var feed = A.feeds.filter(function (candidate) { return epKey(candidate.endpoint) === lane.incoming_key; })[0];
+      if (!feed) { return; }
+      var budget = proposed.budgets.filter(function (candidate) { return candidate.id === feed.budget_id; })[0];
+      bits.push(lane.side + ": " + (budget ? materialText(budget.material) : feed.budget_id));
+    });
+    return bits.length ? "IN " + bits.join(" · ") : "";
+  }
+
+  function draw() {
+    pending = false;
+    var w = canvas.clientWidth, h = canvas.clientHeight;
+    var dpr = window.devicePixelRatio || 1;
+    if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) {
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+    }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    var k = view.k;
+    var ox = w / 2 - view.cx * k, oy = h / 2 - view.cy * k;
+    var x0 = -ox / k, x1 = (w - ox) / k, y0 = -oy / k, y1 = (h - oy) / k;
+    var entities = G.entities || [], arcs = G.arcs || [], lanes = G.lanes || [];
+    var i, item, box;
+
+    var normal = [], odd = [];
+    drawn.entities = 0;
+    for (i = 0; i < entities.length; i++) {
+      item = entities[i];
+      box = item.box;
+      if (box[2] < x0 || box[0] > x1 || box[3] < y0 || box[1] > y1) { continue; }
+      (item.support === "supported" ? normal : odd).push(item);
+      drawn.entities++;
+    }
+    function fillBoxes(items, fillStyle, strokeStyle, dashPattern) {
+      if (!items.length) { return; }
+      ctx.beginPath();
+      for (var j = 0; j < items.length; j++) {
+        var b = items[j].box;
+        ctx.rect(b[0] * k + ox, b[1] * k + oy, (b[2] - b[0]) * k, (b[3] - b[1]) * k);
+      }
+      ctx.fillStyle = fillStyle;
+      ctx.fill();
+      if (k > 2) {
+        ctx.setLineDash(dashPattern || []);
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = strokeStyle;
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+    }
+    fillBoxes(normal, C.entity, C.line, null);
+    fillBoxes(odd, C.odd, C.oddLine, [4, 3]);
+
+    if (k > 1.5) {
+      ctx.beginPath();
+      for (i = 0; i < lanes.length; i++) {
+        var points = lanes[i].polyline;
+        if (!points.length) { continue; }
+        if (points[0][0] * k + ox < -50 || points[0][0] * k + ox > w + 50
+          || points[0][1] * k + oy < -50 || points[0][1] * k + oy > h + 50) { continue; }
+        ctx.moveTo(points[0][0] * k + ox, points[0][1] * k + oy);
+        for (var p = 1; p < points.length; p++) { ctx.lineTo(points[p][0] * k + ox, points[p][1] * k + oy); }
+      }
+      ctx.strokeStyle = C.lane;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    var styles = { exact: [], conditional: [], relaxed: [] };
+    drawn.arcs = 0;
+    for (i = 0; i < arcs.length; i++) {
+      var geometry = arcs[i].geometry;
+      var ax = geometry[0] * k + ox, ay = geometry[1] * k + oy;
+      var bx = geometry[2] * k + ox, by = geometry[3] * k + oy;
+      if ((ax < -50 && bx < -50) || (ax > w + 50 && bx > w + 50) || (ay < -50 && by < -50) || (ay > h + 50 && by > h + 50)) { continue; }
+      (styles[arcs[i].semantics] || styles.exact).push([ax, ay, bx, by]);
+      drawn.arcs++;
+    }
+    function strokeSegments(segments, dashPattern, width) {
+      if (!segments.length) { return; }
+      ctx.beginPath();
+      for (var j = 0; j < segments.length; j++) {
+        ctx.moveTo(segments[j][0], segments[j][1]);
+        ctx.lineTo(segments[j][2], segments[j][3]);
+      }
+      ctx.setLineDash(dashPattern);
+      ctx.lineWidth = width;
+      ctx.strokeStyle = C.arc;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    strokeSegments(styles.exact, [], 1.5);
+    strokeSegments(styles.conditional, [5, 4], 1.5);
+    strokeSegments(styles.relaxed, [1, 3], 1.5);
+
+    /* highlight and selection overlays: thick outline plus corner ticks, so they
+       remain visible without relying on hue */
+    function outline(box2, colour, width, dashPattern) {
+      ctx.setLineDash(dashPattern || []);
+      ctx.lineWidth = width;
+      ctx.strokeStyle = colour;
+      ctx.strokeRect(box2[0] * k + ox - 3, box2[1] * k + oy - 3,
+        (box2[2] - box2[0]) * k + 6, (box2[3] - box2[1]) * k + 6);
+      ctx.setLineDash([]);
+    }
+    Object.keys(HL.entities).forEach(function (key) {
+      var entity = entityByKey[key];
+      if (entity) { outline(entity.box, C.hl, 4, null); marker(entity.box, C.hl); }
+    });
+    Object.keys(state.selEntities).forEach(function (key) {
+      var entity = entityByKey[key];
+      if (entity) { outline(entity.box, C.sel, 2.5, [6, 4]); }
+    });
+    function strokeEndpoint(key, colour, width, dashPattern) {
+      var endpoint = endpointByKey[key];
+      if (!endpoint) { return; }
+      ctx.setLineDash(dashPattern || []);
+      ctx.lineWidth = width;
+      ctx.strokeStyle = colour;
+      if (endpoint.polyline && endpoint.polyline.length > 1) {
+        ctx.beginPath();
+        ctx.moveTo(endpoint.polyline[0][0] * k + ox, endpoint.polyline[0][1] * k + oy);
+        for (var p = 1; p < endpoint.polyline.length; p++) {
+          ctx.lineTo(endpoint.polyline[p][0] * k + ox, endpoint.polyline[p][1] * k + oy);
+        }
+        ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.arc(endpoint.anchor[0] * k + ox, endpoint.anchor[1] * k + oy, Math.max(4, 0.18 * k), 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.setLineDash([]);
+    }
+    Object.keys(HL.endpoints).forEach(function (key) { strokeEndpoint(key, C.hl, 5, null); });
+    Object.keys(state.selEndpoints).forEach(function (key) { strokeEndpoint(key, C.sel, 3, [6, 4]); });
+    Object.keys(HL.arcs).forEach(function (id) {
+      var arc = arcById[id];
+      if (!arc) { return; }
+      ctx.beginPath();
+      ctx.moveTo(arc.geometry[0] * k + ox, arc.geometry[1] * k + oy);
+      ctx.lineTo(arc.geometry[2] * k + ox, arc.geometry[3] * k + oy);
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = C.hl;
+      ctx.stroke();
+      arrow(arc.geometry, k, ox, oy, C.hl);
+    });
+
+    if (k >= 14 && drawn.entities <= 300) {
+      ctx.fillStyle = C.text;
+      ctx.font = "11px system-ui, sans-serif";
+      /* only label an entity when its own footprint gives the text room, so
+         neighbouring labels cannot overprint each other */
+      var labelled = normal.concat(odd);
+      for (i = 0; i < labelled.length; i++) {
+        var entity = labelled[i];
+        var recipeCaption = entity.recipes && entity.recipes.length ? entity.recipes.join(", ") : "";
+        var caption = entity.prototype + (recipeCaption ? " · " + recipeCaption : "")
+          + (entity.support === "supported" ? "" : " (" + entity.support + ")");
+        var room = (entity.box[2] - entity.box[0]) * k + 6;
+        if (ctx.measureText(caption).width > room && recipeCaption) { caption = recipeCaption; }
+        if (ctx.measureText(caption).width > room) { continue; }
+        ctx.fillText(caption, entity.box[0] * k + ox + 2, entity.box[1] * k + oy - 3);
+        var input = assignedInputText(entity);
+        if (input && ctx.measureText(input).width <= room) {
+          ctx.fillText(input, entity.box[0] * k + ox + 2, entity.box[3] * k + oy + 12);
+        }
+      }
+    }
+
+    statusBar.textContent = "zoom ×" + view.k.toFixed(2) + " · centre " + view.cx.toFixed(1) + ", " + view.cy.toFixed(1)
+      + " · drawing " + drawn.entities + "/" + entities.length + " entities, " + drawn.arcs + "/" + arcs.length + " arcs";
+  }
+
+  function marker(box, colour) {
+    var k = view.k;
+    var w = canvas.clientWidth, h = canvas.clientHeight;
+    var ox = w / 2 - view.cx * k, oy = h / 2 - view.cy * k;
+    var cx = (box[0] + box[2]) / 2 * k + ox, cy = (box[1] + box[3]) / 2 * k + oy;
+    ctx.strokeStyle = colour;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(cx - 14, cy); ctx.lineTo(cx - 6, cy);
+    ctx.moveTo(cx + 6, cy); ctx.lineTo(cx + 14, cy);
+    ctx.moveTo(cx, cy - 14); ctx.lineTo(cx, cy - 6);
+    ctx.moveTo(cx, cy + 6); ctx.lineTo(cx, cy + 14);
+    ctx.stroke();
+  }
+
+  function arrow(geometry, k, ox, oy, colour) {
+    var ax = geometry[0] * k + ox, ay = geometry[1] * k + oy;
+    var bx = geometry[2] * k + ox, by = geometry[3] * k + oy;
+    var dx = bx - ax, dy = by - ay;
+    var length = Math.sqrt(dx * dx + dy * dy);
+    if (length < 6) { return; }
+    dx /= length; dy /= length;
+    ctx.beginPath();
+    ctx.moveTo(bx, by);
+    ctx.lineTo(bx - dx * 9 - dy * 5, by - dy * 9 + dx * 5);
+    ctx.lineTo(bx - dx * 9 + dy * 5, by - dy * 9 - dx * 5);
+    ctx.closePath();
+    ctx.fillStyle = colour;
+    ctx.fill();
+  }
+
+  /* ------------------------------------------------------------- controls */
+
+  function toolButton(labelText, handler) {
+    var button = add(tools, E("button", null, labelText));
+    button.addEventListener("click", handler);
+    return button;
+  }
+  toolButton("Fit all", function () { fit(G.bounds_box); });
+  toolButton("Zoom in", function () { view.k = Math.min(view.k * 1.4, 400); request(); });
+  toolButton("Zoom out", function () { view.k = Math.max(view.k / 1.4, 0.02); request(); });
+  toolButton("Focus selection", function () {
+    focusKeys(Object.keys(state.selEntities).concat(Object.keys(HL.entities)),
+      Object.keys(state.selEndpoints).concat(Object.keys(HL.endpoints)),
+      Object.keys(HL.arcs));
+  });
+  toolButton("Legend", function () { legend.hidden = !legend.hidden; });
+  toolButton("Clear highlight", function () {
+    HL = { entities: {}, endpoints: {}, arcs: {} };
+    state.finding = null;
+    state.selEntities = {};
+    state.selEndpoints = {};
+    renderPanel();
+    request();
+  });
+
+  legend.textContent = "";
+  add(legend, E("div", null, "solid outline = exact arc"));
+  add(legend, E("div", null, "dashed outline = conditional arc or entity"));
+  add(legend, E("div", null, "dotted = relaxed arc"));
+  add(legend, E("div", null, "thick ring + cross ticks = finding evidence"));
+  add(legend, E("div", null, "dashed ring = your selection"));
+  add(legend, E("div", "small", "Drag to pan, wheel to zoom, click an entity to inspect."));
+
+  var dragging = false, lastX = 0, lastY = 0, moved = 0;
+  canvas.addEventListener("pointerdown", function (event) {
+    dragging = true; moved = 0; lastX = event.clientX; lastY = event.clientY;
+    canvas.classList.add("drag");
+    canvas.setPointerCapture(event.pointerId);
+  });
+  canvas.addEventListener("pointermove", function (event) {
+    if (!dragging) { return; }
+    var dx = event.clientX - lastX, dy = event.clientY - lastY;
+    moved += Math.abs(dx) + Math.abs(dy);
+    lastX = event.clientX; lastY = event.clientY;
+    view.cx -= dx / view.k;
+    view.cy -= dy / view.k;
+    request();
+  });
+  canvas.addEventListener("pointerup", function (event) {
+    dragging = false;
+    canvas.classList.remove("drag");
+    if (moved < 4) { pick(event, event.shiftKey); }
+  });
+  canvas.addEventListener("pointercancel", function () { dragging = false; canvas.classList.remove("drag"); });
+  canvas.addEventListener("wheel", function (event) {
+    event.preventDefault();
+    var rect = canvas.getBoundingClientRect();
+    var mx = event.clientX - rect.left, my = event.clientY - rect.top;
+    var before = screenToWorld(mx, my);
+    var factor = Math.pow(1.0015, -event.deltaY);
+    view.k = Math.max(0.02, Math.min(400, view.k * factor));
+    var after = screenToWorld(mx, my);
+    view.cx += before[0] - after[0];
+    view.cy += before[1] - after[1];
+    request();
+  }, { passive: false });
+
+  function screenToWorld(mx, my) {
+    var w = canvas.clientWidth, h = canvas.clientHeight;
+    return [(mx - w / 2) / view.k + view.cx, (my - h / 2) / view.k + view.cy];
+  }
+
+  function pick(event, additive) {
+    var rect = canvas.getBoundingClientRect();
+    var point = screenToWorld(event.clientX - rect.left, event.clientY - rect.top);
+    var tolerance = Math.max(0.12, 6 / view.k);
+    var endpoints = [].concat(G.ports || [], G.inventories || []);
+    if (view.k >= 10) {
+      for (var i = endpoints.length - 1; i >= 0; i--) {
+        var anchor = endpoints[i].anchor;
+        if (Math.abs(anchor[0] - point[0]) <= tolerance && Math.abs(anchor[1] - point[1]) <= tolerance) {
+          if (!additive) { state.selEndpoints = {}; state.selEntities = {}; }
+          state.selEndpoints[endpoints[i].key] = true;
+          state.tab = "selection";
+          renderPanel(); request();
+          return;
+        }
+      }
+    }
+    var entities = G.entities || [];
+    for (var j = entities.length - 1; j >= 0; j--) {
+      var box = entities[j].box;
+      if (point[0] >= box[0] && point[0] <= box[2] && point[1] >= box[1] && point[1] <= box[3]) {
+        selectEntity(entities[j].key, additive);
+        return;
+      }
+    }
+    if (!additive) {
+      state.selEntities = {}; state.selEndpoints = {};
+      renderPanel(); request();
+    }
+  }
+
+  function changed() {
+    renderBanners();
+    renderPanel();
+    request();
+  }
+
+  if (window.ResizeObserver) {
+    new window.ResizeObserver(function () { request(); }).observe(stage);
+  } else {
+    window.addEventListener("resize", request);
+  }
+
+  renderHeader();
+  renderPanel();
+  fit(G.bounds_box || [-1, -1, 1, 1]);
+
+  /* Read-only hook for host-side interaction checks. */
+  window.factoribotView = {
+    model: D,
+    highlight: function () {
+      return { entities: Object.keys(HL.entities), endpoints: Object.keys(HL.endpoints), arcs: Object.keys(HL.arcs) };
+    },
+    selection: function () {
+      return { entities: Object.keys(state.selEntities), endpoints: Object.keys(state.selEndpoints), finding: state.finding };
+    },
+    assignments: function () { return assignmentDoc(); },
+    draft: draftDocument,
+    stale: staleReport,
+    selectFinding: selectFinding,
+    importDocument: applyImport,
+    viewport: function () { return { k: view.k, cx: view.cx, cy: view.cy, drawn: drawn }; },
+    redraw: function () { draw(); }
+  };
+}());
+
+</script>
+</body>
+</html>

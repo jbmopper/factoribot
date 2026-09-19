@@ -35,7 +35,7 @@
         "recipe": "stone-brick"
       }
     ],
-    "graph_hash": "sha256:a231fb10ce36af325213e2375447e2012272a1dc1e3d7fc968242775228bf981",
+    "graph_hash": "sha256:df10f85dd61eda1ae55f499328020e4cb1ee160022b3052dfd58684ea2978764",
     "schema_version": "1.1.1"
   },
   "description": "SYNTHETIC schema/interaction fixture; all assignments illustrative.",
@@ -410,7 +410,7 @@
         ]
       }
     ],
-    "graph_hash": "sha256:a231fb10ce36af325213e2375447e2012272a1dc1e3d7fc968242775228bf981",
+    "graph_hash": "sha256:df10f85dd61eda1ae55f499328020e4cb1ee160022b3052dfd58684ea2978764",
     "inventories": [
       {
         "eligibility": {
@@ -496,7 +496,7 @@
         "side": "left"
       }
     ],
-    "mechanics_profile": "base-2.0.76-normal-v1",
+    "mechanics_profile": "base-2.0.77-normal-v1",
     "ports": [
       {
         "boundary_candidate": true,
@@ -580,9 +580,9 @@
         "role": "outgoing"
       }
     ],
-    "prototype_hash": "sha256:de94da985e17afb6471b0371bb50662ff9ad99d48e152d77b097ee4750c11285",
+    "prototype_hash": "sha256:113ccd2e13e2ac3aa1469e2f1aaadb5ab7c11730a2ae3663d790037ce08de9a6",
     "prototypes": {
-      "canonical": "{\"entities\":[\"electric-furnace\",\"transport-belt\"],\"fixture\":\"synthetic\",\"note\":\"Hand-defined geometry, activities and capacities; NOT a Factorio prototype extract.\",\"profile\":\"base-2.0.76-normal-v1\"}"
+      "canonical": "{\"entities\":[\"electric-furnace\",\"transport-belt\"],\"fixture\":\"synthetic\",\"note\":\"Hand-defined geometry, activities and capacities; NOT a Factorio prototype extract.\",\"profile\":\"base-2.0.77-normal-v1\"}"
     },
     "provenance": "synthetic",
     "schema_version": "1.1.1",
@@ -633,7 +633,7 @@
           "recipe": "stone-brick"
         }
       ],
-      "graph_hash": "sha256:a231fb10ce36af325213e2375447e2012272a1dc1e3d7fc968242775228bf981",
+      "graph_hash": "sha256:df10f85dd61eda1ae55f499328020e4cb1ee160022b3052dfd58684ea2978764",
       "schema_version": "1.1.1"
     },
     "assumptions": {
@@ -643,14 +643,14 @@
       ],
       "beacons": "none",
       "control_policy": "explicit",
-      "game_version": "2.0.76",
+      "game_version": "2.0.77",
       "irrelevant": [],
       "mods": [
         {
           "alters_item_mechanics": false,
           "name": "base",
           "provides": [],
-          "version": "2.0.76"
+          "version": "2.0.77"
         }
       ],
       "modules": "none",
@@ -715,8 +715,8 @@
         }
       }
     ],
-    "graph_hash": "sha256:a231fb10ce36af325213e2375447e2012272a1dc1e3d7fc968242775228bf981",
-    "mechanics_profile": "base-2.0.76-normal-v1",
+    "graph_hash": "sha256:df10f85dd61eda1ae55f499328020e4cb1ee160022b3052dfd58684ea2978764",
+    "mechanics_profile": "base-2.0.77-normal-v1",
     "objective": {
       "export_id": "product",
       "kind": "maximize_export"
@@ -741,8 +741,8 @@
       "preserve_unknown": true,
       "preserve_wiring": true
     },
-    "prototype_hash": "sha256:de94da985e17afb6471b0371bb50662ff9ad99d48e152d77b097ee4750c11285",
-    "request_hash": "sha256:939e2f178324f738f39dd261b653bb989c72837a8fabcfe120a360cc573a46e3",
+    "prototype_hash": "sha256:113ccd2e13e2ac3aa1469e2f1aaadb5ab7c11730a2ae3663d790037ce08de9a6",
+    "request_hash": "sha256:35427ff827ad270a59ca8c79f1ae1955ced65841c764f7567bc62f07683015fe",
     "schema_version": "1.1.1",
     "surplus": []
   },
@@ -758,8 +758,8 @@
           "Declared illustrative feeds, recipes, external removal and power"
         ],
         "certificate": "SYNTHETIC hand proof: explicit machine, budget or outlet ceiling; illustrative allocation attains the stated relaxed bound.",
-        "comparison_hash": "sha256:3d287a0b8c727afa08e39d746943a9fdf6065da544a7cd7067107d7be1323504",
-        "constraint_hash": "sha256:5a3ea4b4dbb3929f6ff03094dfd3aa7fedba35bed59a4775a882e5d2c4953541",
+        "comparison_hash": "sha256:4573891c5209964c58d0ee4447e012283e4de2cfab270f2079f9d232ba151d03",
+        "constraint_hash": "sha256:baf2c5a47c754212052e3c597c57ebb4b98846e5e584ab5a70a6e713098ad559",
         "direction": "upper",
         "evidence_ids": [
           "fixture_geometry"
@@ -782,8 +782,8 @@
           "Declared illustrative feeds, recipes, external removal and power"
         ],
         "certificate": "SYNTHETIC hand proof: explicit machine, budget or outlet ceiling; illustrative allocation attains the stated relaxed bound.",
-        "comparison_hash": "sha256:3d287a0b8c727afa08e39d746943a9fdf6065da544a7cd7067107d7be1323504",
-        "constraint_hash": "sha256:ff43f8c0340aeff6373c776b1c1f016ef35a546600172dbb1bcf1a9c5c3c22b6",
+        "comparison_hash": "sha256:4573891c5209964c58d0ee4447e012283e4de2cfab270f2079f9d232ba151d03",
+        "constraint_hash": "sha256:116c61fa81d643a6efc1cd18463a858128ef8699287e6c603fa859f25a180eb2",
         "direction": "upper",
         "evidence_ids": [
           "fixture_geometry"
@@ -805,8 +805,8 @@
           "Declared illustrative feeds, recipes, external removal and power"
         ],
         "certificate": "SYNTHETIC hand proof: explicit machine, budget or outlet ceiling; illustrative allocation attains the stated relaxed bound.",
-        "comparison_hash": "sha256:3d287a0b8c727afa08e39d746943a9fdf6065da544a7cd7067107d7be1323504",
-        "constraint_hash": "sha256:8d7a811020d350384013c2c28cb431e1b5c386821fc241ca21fe9ec8a8f61ce8",
+        "comparison_hash": "sha256:4573891c5209964c58d0ee4447e012283e4de2cfab270f2079f9d232ba151d03",
+        "constraint_hash": "sha256:1c25bd8159625047df4d515bd1226e27f5910dd3c099aebc8d316d742250d53c",
         "direction": "upper",
         "evidence_ids": [
           "fixture_geometry"
@@ -856,7 +856,7 @@
         "severity": "warning"
       }
     ],
-    "graph_hash": "sha256:a231fb10ce36af325213e2375447e2012272a1dc1e3d7fc968242775228bf981",
+    "graph_hash": "sha256:df10f85dd61eda1ae55f499328020e4cb1ee160022b3052dfd58684ea2978764",
     "interpreted_request": {
       "assignments": {
         "blueprint_hash": "sha256:d1b4f2031d8785f3d6e2479b8653e86a063e015fbf5ddb739d0cd773eac5ee6c",
@@ -894,7 +894,7 @@
             "recipe": "stone-brick"
           }
         ],
-        "graph_hash": "sha256:a231fb10ce36af325213e2375447e2012272a1dc1e3d7fc968242775228bf981",
+        "graph_hash": "sha256:df10f85dd61eda1ae55f499328020e4cb1ee160022b3052dfd58684ea2978764",
         "schema_version": "1.1.1"
       },
       "assumptions": {
@@ -904,14 +904,14 @@
         ],
         "beacons": "none",
         "control_policy": "explicit",
-        "game_version": "2.0.76",
+        "game_version": "2.0.77",
         "irrelevant": [],
         "mods": [
           {
             "alters_item_mechanics": false,
             "name": "base",
             "provides": [],
-            "version": "2.0.76"
+            "version": "2.0.77"
           }
         ],
         "modules": "none",
@@ -976,8 +976,8 @@
           }
         }
       ],
-      "graph_hash": "sha256:a231fb10ce36af325213e2375447e2012272a1dc1e3d7fc968242775228bf981",
-      "mechanics_profile": "base-2.0.76-normal-v1",
+      "graph_hash": "sha256:df10f85dd61eda1ae55f499328020e4cb1ee160022b3052dfd58684ea2978764",
+      "mechanics_profile": "base-2.0.77-normal-v1",
       "objective": {
         "export_id": "product",
         "kind": "maximize_export"
@@ -1002,17 +1002,17 @@
         "preserve_unknown": true,
         "preserve_wiring": true
       },
-      "prototype_hash": "sha256:de94da985e17afb6471b0371bb50662ff9ad99d48e152d77b097ee4750c11285",
-      "request_hash": "sha256:939e2f178324f738f39dd261b653bb989c72837a8fabcfe120a360cc573a46e3",
+      "prototype_hash": "sha256:113ccd2e13e2ac3aa1469e2f1aaadb5ab7c11730a2ae3663d790037ce08de9a6",
+      "request_hash": "sha256:35427ff827ad270a59ca8c79f1ae1955ced65841c764f7567bc62f07683015fe",
       "schema_version": "1.1.1",
       "surplus": []
     },
     "limitations": [
       "Not a game observation or computed routing solution; no achievable-throughput claim"
     ],
-    "prototype_hash": "sha256:de94da985e17afb6471b0371bb50662ff9ad99d48e152d77b097ee4750c11285",
-    "request_hash": "sha256:939e2f178324f738f39dd261b653bb989c72837a8fabcfe120a360cc573a46e3",
-    "result_hash": "sha256:db7214b93b570ca44d7f0f622d55406b3c4260fe2ab8004266c31ea5ae981992",
+    "prototype_hash": "sha256:113ccd2e13e2ac3aa1469e2f1aaadb5ab7c11730a2ae3663d790037ce08de9a6",
+    "request_hash": "sha256:35427ff827ad270a59ca8c79f1ae1955ced65841c764f7567bc62f07683015fe",
+    "result_hash": "sha256:1751abb1e61073703f081f575884638dfb17139f91bfe6e569393310f9615552",
     "schema_version": "1.1.1",
     "status": "feasible_relaxed",
     "witness": {

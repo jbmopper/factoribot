@@ -39,6 +39,7 @@
     "fast-underground-belt": 6
   },
   "view_limitations": [
+    "no prototype geometry for: ee-super-substation (unit-tile footprint assumed; classified unknown/unsupported)",
     "mod origin unidentified for: ee-super-substation (recorded as mod 'unknown'; the prototype extract carries no mod manifest)"
   ],
   "entities": [
@@ -2478,19 +2479,21 @@
         "y": -32
       },
       "footprint": {
-        "min_x": 473.0,
-        "min_y": -33.0,
-        "max_x": 475.0,
-        "max_y": -31.0
+        "min_x": 473.5,
+        "min_y": -32.5,
+        "max_x": 474.5,
+        "max_y": -31.5
       },
       "direction": 0,
       "orientation": null,
       "quality": "normal",
       "support": "unsupported",
-      "subsystem": "power",
+      "subsystem": "unknown",
       "mod": "unknown",
-      "geometry_source": "prototype",
+      "geometry_source": "assumed_unit_tile",
       "limitations": [
+        "unknown_prototype",
+        "assumed_unit_footprint",
         "unidentified_mod_origin"
       ]
     },

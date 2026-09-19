@@ -1,0 +1,65 @@
+{
+  "status": "returned",
+  "row_count": 6,
+  "metadata": {
+    "avg": {
+      "iron-plate": {
+        "cons": 3,
+        "prod": 0
+      },
+      "iron-gear-wheel": {
+        "cons": 0,
+        "prod": 1.5
+      }
+    },
+    "total": {
+      "iron-plate": {
+        "cons": 6,
+        "prod": 0
+      },
+      "iron-gear-wheel": {
+        "cons": 0,
+        "prod": 3
+      }
+    }
+  },
+  "rows": [
+    {
+      "label": "iron-plate",
+      "tick": 60,
+      "cons": 2,
+      "prod": 0
+    },
+    {
+      "label": "iron-gear-wheel",
+      "tick": 60,
+      "cons": 0,
+      "prod": 1
+    },
+    {
+      "label": "iron-plate",
+      "tick": 120,
+      "cons": 4,
+      "prod": 0
+    },
+    {
+      "label": "iron-gear-wheel",
+      "tick": 120,
+      "cons": 0,
+      "prod": 2
+    },
+    {
+      "label": "iron-plate",
+      "tick": 0,
+      "cons": 0,
+      "prod": 0
+    },
+    {
+      "label": "iron-gear-wheel",
+      "tick": 0,
+      "cons": 0,
+      "prod": 0
+    }
+  ],
+  "expectation": "Over 120 ticks (2 seconds), 6 plates consumed and 3 gears produced imply averages of 3 and 1.5 item/s."
+}

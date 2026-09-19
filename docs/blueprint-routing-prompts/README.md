@@ -15,6 +15,18 @@ Tasks 00–08 deliver the first routing audit; 09–14 are later releases.
 Manual furnace assignments and explicit optimistic treatment of unknown inserter
 rates belong in the first release.
 
+The [deterministic throughput roadmap](../blueprint-routing-deterministic-roadmap.md)
+now sets the next milestone order. It brings forward scoped furnace inference
+and throughput validation while retaining the CLI and deferring browser upload.
+
+## New deterministic update prompts
+
+Use [DETERMINISTIC-DISPATCH.md](DETERMINISTIC-DISPATCH.md) for paste-ready prompts,
+model choices, ownership and launch order. Start 15 (page), 16 (reuse evaluation)
+and 17 (measurement harness) together. Tasks 18–21 cover integration, inference,
+throughput and independent review. This supersedes the generic old example below
+for the currently requested updates; 00–14 remain historical/reference tasks.
+
 ## How to dispatch
 
 Open the repository in the chosen agent and paste this, replacing the task path:

@@ -174,7 +174,7 @@ def request_document(graph, feeds, budgets, exports, surplus_outlets=(), recipes
         objective=dict(kind="feasible", export_id=None) if objective is None else dict(kind="maximize_export", export_id=objective),
         assignments=assignments,
         protected=dict(entities=[], endpoints=[exports[0]["endpoint"]], areas=[], preserve_wiring=True, preserve_unknown=True, preserve_boundaries=True),
-        assumptions=dict(game_version="2.0.76", mods=[BASE_DECLARATION], quality="normal", available_recipes=list(recipes),
+        assumptions=dict(game_version="2.0.77", mods=[BASE_DECLARATION], quality="normal", available_recipes=list(recipes),
                          research=[dict(name="inserter-capacity-bonus", level=0)], control_policy=policy, power=power,
                          modules="none", beacons="none", irrelevant=[]),
         detail=dict(kind="full", entity_ids=[], cursor=None, limit=10000)), "request_hash")

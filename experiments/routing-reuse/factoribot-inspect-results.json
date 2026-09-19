@@ -1,0 +1,2775 @@
+{
+  "cases": {
+    "blocked_output": {
+      "arc_semantics": {
+        "conditional": 8,
+        "relaxed": 2
+      },
+      "bound_prerequisites": [
+        {
+          "kind": "power",
+          "requirement": "assumptions.power must be 'assumed_available'; 'unknown' always withholds."
+        }
+      ],
+      "capacity_kinds": {
+        "finite": 3,
+        "unknown": 2,
+        "unlimited": 1
+      },
+      "conditions": {
+        "inserter_rotation_documented": 4,
+        "inserter_rotation_reversed": 4
+      },
+      "counts": {
+        "activities": 1,
+        "arcs": 10,
+        "capacity_groups": 6,
+        "entities": 4,
+        "evidence": 17,
+        "graph_findings": 11,
+        "inventories": 2,
+        "lanes": 2,
+        "ports": 6,
+        "topology_gaps": 0
+      },
+      "error": null,
+      "finding_rows": [
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "blocked_output",
+          "endpoint_ids": [
+            "bp/root/e/3/inventory/output"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 3,
+              "key": "bp/root/e/3"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:5479254c54d82564aa4fb1eee838ff7d088b8905a20b49f3ede7ed9ee8a9e1db",
+          "material": null,
+          "message": "bp/root/e/3 (assembling-machine-2): nothing this machine produces can reach a boundary endpoint of the selected area through supported transport.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_capacity_unknown",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_rate"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:5464915683bc05bbdd1f9589e397935563652f1a1a1dc78eb9c92a7f95097947",
+          "material": null,
+          "message": "Every inserter capacity group is `unknown`: inserter.rate.cycle_and_stack gives no items/s from the prototype, and hand size depends on research the blueprint does not record. An optimistic model relaxes these to unlimited; detailed inserter timing is task 09.",
+          "required_rate": null,
+          "severity": "info"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_endpoint_missing",
+          "endpoint_ids": [],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 4,
+              "key": "bp/root/e/4"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:8e4fa1b65abb735b1af6179572d8ae64559188fd0d2c0fca141bd45c626c3306",
+          "material": null,
+          "message": "bp/root/e/4 has no candidate tile pair with both a source and a destination endpoint; being on a footprint is not itself a valid endpoint.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_rotation_unresolved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_endpoints"
+          ],
+          "evidence_kind": "conditional",
+          "id": "finding:977256a5bf964ee0b8b23e80a8df7094cf8b2a63e7046de6a05c2ab3e2b49f06",
+          "material": null,
+          "message": "The rotation sense of pickup_position/insert_position is not observed, so both role assignments stay available as conditions inserter_rotation_documented and inserter_rotation_reversed. No convention is chosen here; on the pilot the layout's own geometry cannot discriminate them (task 03 handoff, section 4).",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_endpoints"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:0b4fd90560eeb7c6d0aa6f54cd46d750b14cfedb4b1cffca32640164bf26bb6b",
+          "material": null,
+          "message": "inserter.endpoints.pickup_drop_tiles is documented-only, not observed in a controlled game capture. Pickup and drop tiles follow the prototype's pickup_position [0, -1] and insert_position [0, 1.2] rotated by the entity direction, so a north-facing inserter takes from the tile one south and drops one north. Documented wiki behaviour adds that an inserter dropping onto a belt places items on the far lane. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_rate"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:106e0abd789b26d70e8f471752b8ab07b72c8fd6f5edf09aa6dc19e1ac53ff0d",
+          "material": null,
+          "message": "inserter.rate.cycle_and_stack is documented-only, not observed in a controlled game capture. Throughput is cycles per second times hand size. The wiki gives roughly 0.86 cycles/s for the inserter and 2.5 cycles/s for the fast and bulk inserters at normal quality, and hand size grows with inserter capacity research, which the blueprint does not record. The prototype exposes only extension_speed, rotation_speed and the bulk flag, so no items/s follows from it. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_machine_am2"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:11d6e93601adf93ede5828dea4eb47735b2501705a949d63c60fb259ef419efe",
+          "material": null,
+          "message": "machine.activity.assembling_machine_2 is documented-only, not observed in a controlled game capture. An AM2 crafts at crafting_speed 0.75 divided by the recipe's energy_required, with no modules and no beacons. The prototype also advertises 2 module slots and 150kW, which the first profile does not use. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_lane_capacity"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:8954f5e2016e09189811434701889432688890239410f96c21412ef46596f563",
+          "material": null,
+          "message": "belt.straight.lane_capacity is documented-only, not observed in a controlled game capture. A straight fast-transport-belt carries at most 30 items/s across both lanes and 15 items/s per lane, matching prototype speed 0.0625 tiles/tick x 480. transport-belt is 15/s (7.5 per lane) and express is 45/s (22.5 per lane). Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_transfer"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:b502744b13d45e567d862783b54164f63d1591e52150c755ed31cb8dd0100b12",
+          "material": null,
+          "message": "belt.transfer.belt_to_belt is pending, not observed in a controlled game capture. An end-to-end handover between two belts of the same direction preserves lane identity and is limited by the slower of the two belts. Neither the lane preservation nor the tier-boundary limit is established here. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_boundary_candidate",
+          "endpoint_ids": [
+            "bp/root/e/1/port/in_left",
+            "bp/root/e/1/port/in_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 1,
+              "key": "bp/root/e/1"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:f1f2d283293aade28d986ff423eed15b4960bff0774c427cdf4876cc1847c6cd",
+          "material": null,
+          "message": "bp/root/e/1: 2 lane endpoint(s) face an empty tile. External context is incomplete: this is a candidate interface, not a declared feed or export, and nothing is imported or removed here unless the request declares it.",
+          "required_rate": null,
+          "severity": "info"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_internal_break",
+          "endpoint_ids": [
+            "bp/root/e/1/port/out_left",
+            "bp/root/e/1/port/out_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 1,
+              "key": "bp/root/e/1"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:e71fedfacef5862ef2b5e342a94f9612da9fbde6476b822fb8f2a9f42306ee80",
+          "material": null,
+          "message": "bp/root/e/1: 2 lane endpoint(s) are blocked by an entity that offers no supported handover. This is an internal break inside the layout, not a boundary interface, and no external supply or removal is implied.",
+          "required_rate": null,
+          "severity": "warning"
+        }
+      ],
+      "graph_findings": {
+        "by_code": {
+          "blocked_output": 1,
+          "inserter_capacity_unknown": 1,
+          "inserter_endpoint_missing": 1,
+          "inserter_rotation_unresolved": 1,
+          "mechanics_unobserved": 5,
+          "transport_boundary_candidate": 1,
+          "transport_internal_break": 1
+        },
+        "by_evidence_kind": {
+          "conditional": 1,
+          "estimated": 6,
+          "structural": 4
+        },
+        "by_severity": {
+          "info": 2,
+          "warning": 9
+        },
+        "total": 11
+      },
+      "identity": {
+        "blueprint_hash": "sha256:7bc8bcd037285ffc72f94680670d7410acd1b74c2ef233c1427f74e5914aff5d",
+        "graph_hash": "sha256:5fca4b73f75f9e682f897dddc8f0fcf95fcb693b2000de539f69051a00911659",
+        "integration_version": "factoribot-routing-integration-1",
+        "mechanics_profile": "base-2.0.76-normal-v1",
+        "prototype_hash": "sha256:756af0daaf0da4d68e414513bf18144b2638e9e6b76d3319fe1f7e38e126655e",
+        "provenance": "synthetic",
+        "repeat_with": "the same blueprint_string/graph and book_path; pin expect_graph_hash to fail loudly on a changed input",
+        "schema_version": "1.1.1",
+        "selected_paths": [
+          []
+        ],
+        "source": "blueprint_string"
+      },
+      "ok": true,
+      "prototypes": {
+        "assembling-machine-2": 1,
+        "fast-inserter": 2,
+        "transport-belt": 1
+      },
+      "support": {
+        "supported": 4
+      }
+    },
+    "furnace_chain": {
+      "arc_semantics": {
+        "conditional": 16,
+        "relaxed": 2
+      },
+      "bound_prerequisites": [
+        {
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 1,
+              "key": "bp/root/e/1"
+            }
+          ],
+          "id": "gap_e1",
+          "kind": "possible_bridge",
+          "requirement": "Cannot be declared away: only evidence of disconnection (a structural or observed may_connect:false gap) admits bounds."
+        },
+        {
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 9,
+              "key": "bp/root/e/9"
+            }
+          ],
+          "id": "gap_e9",
+          "kind": "possible_bridge",
+          "requirement": "Cannot be declared away: only evidence of disconnection (a structural or observed may_connect:false gap) admits bounds."
+        },
+        {
+          "already_covered_by_disconnection_gap": 0,
+          "count": 2,
+          "entity_keys": [
+            "bp/root/e/1",
+            "bp/root/e/9"
+          ],
+          "kind": "non_supported_entities",
+          "mod": "unknown",
+          "requirement": "Item-capable subsystem: never declarable irrelevant. Needs an evidence-backed may_connect:false gap.",
+          "subsystem": "unknown"
+        },
+        {
+          "kind": "power",
+          "requirement": "assumptions.power must be 'assumed_available'; 'unknown' always withholds."
+        }
+      ],
+      "capacity_kinds": {
+        "finite": 2,
+        "unknown": 4,
+        "unlimited": 1
+      },
+      "conditions": {
+        "inserter_rotation_documented": 8,
+        "inserter_rotation_reversed": 8
+      },
+      "counts": {
+        "activities": 0,
+        "arcs": 18,
+        "capacity_groups": 7,
+        "entities": 9,
+        "evidence": 17,
+        "graph_findings": 18,
+        "inventories": 4,
+        "lanes": 2,
+        "ports": 8,
+        "topology_gaps": 2
+      },
+      "error": null,
+      "finding_rows": [
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "blocked_output",
+          "endpoint_ids": [
+            "bp/root/e/3/inventory/output"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 3,
+              "key": "bp/root/e/3"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:5479254c54d82564aa4fb1eee838ff7d088b8905a20b49f3ede7ed9ee8a9e1db",
+          "material": null,
+          "message": "bp/root/e/3 (electric-furnace): nothing this machine produces can reach a boundary endpoint of the selected area through supported transport. An unresolved possible bridge is present, so this is a reachability observation over the supported topology, not a proven disconnection.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "blocked_output",
+          "endpoint_ids": [
+            "bp/root/e/7/inventory/output"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 7,
+              "key": "bp/root/e/7"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:703e225a0338aea25295277c9f1a7a025647c7d5669481c8d6496389bb7e6a35",
+          "material": null,
+          "message": "bp/root/e/7 (electric-furnace): nothing this machine produces can reach a boundary endpoint of the selected area through supported transport. An unresolved possible bridge is present, so this is a reachability observation over the supported topology, not a proven disconnection.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_capacity_unknown",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_rate"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:5464915683bc05bbdd1f9589e397935563652f1a1a1dc78eb9c92a7f95097947",
+          "material": null,
+          "message": "Every inserter capacity group is `unknown`: inserter.rate.cycle_and_stack gives no items/s from the prototype, and hand size depends on research the blueprint does not record. An optimistic model relaxes these to unlimited; detailed inserter timing is task 09.",
+          "required_rate": null,
+          "severity": "info"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_endpoint_missing",
+          "endpoint_ids": [],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 8,
+              "key": "bp/root/e/8"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:0b18e5dc71328a32d15e3940c3b750c62f4fe12566cb1aefae24e0098009aeaf",
+          "material": null,
+          "message": "bp/root/e/8 has no candidate tile pair with both a source and a destination endpoint; being on a footprint is not itself a valid endpoint.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_endpoint_missing",
+          "endpoint_ids": [],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 2,
+              "key": "bp/root/e/2"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:57441cba1b45dc73fc799473ea4abb5d5deb4cae7c4b18073bcc3b5f3327f5a9",
+          "material": null,
+          "message": "bp/root/e/2 has no candidate tile pair with both a source and a destination endpoint; being on a footprint is not itself a valid endpoint.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_rotation_unresolved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_endpoints"
+          ],
+          "evidence_kind": "conditional",
+          "id": "finding:977256a5bf964ee0b8b23e80a8df7094cf8b2a63e7046de6a05c2ab3e2b49f06",
+          "material": null,
+          "message": "The rotation sense of pickup_position/insert_position is not observed, so both role assignments stay available as conditions inserter_rotation_documented and inserter_rotation_reversed. No convention is chosen here; on the pilot the layout's own geometry cannot discriminate them (task 03 handoff, section 4).",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "machine_recipe_unresolved",
+          "endpoint_ids": [],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 3,
+              "key": "bp/root/e/3"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:0582e48a0bb7eda0960393272f6bb889753cf98ac63f36d755b1c31c7b86e7c8",
+          "material": null,
+          "message": "bp/root/e/3 (electric-furnace) has no resolved recipe, so it contributes no activity; nothing is inferred from its neighbours.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "machine_recipe_unresolved",
+          "endpoint_ids": [],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 7,
+              "key": "bp/root/e/7"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:bab6616f674e579ea64b196f74a444bf9ee5584de00a776ac514df060ac91dce",
+          "material": null,
+          "message": "bp/root/e/7 (electric-furnace) has no resolved recipe, so it contributes no activity; nothing is inferred from its neighbours.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_endpoints"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:0b4fd90560eeb7c6d0aa6f54cd46d750b14cfedb4b1cffca32640164bf26bb6b",
+          "material": null,
+          "message": "inserter.endpoints.pickup_drop_tiles is documented-only, not observed in a controlled game capture. Pickup and drop tiles follow the prototype's pickup_position [0, -1] and insert_position [0, 1.2] rotated by the entity direction, so a north-facing inserter takes from the tile one south and drops one north. Documented wiki behaviour adds that an inserter dropping onto a belt places items on the far lane. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_rate"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:106e0abd789b26d70e8f471752b8ab07b72c8fd6f5edf09aa6dc19e1ac53ff0d",
+          "material": null,
+          "message": "inserter.rate.cycle_and_stack is documented-only, not observed in a controlled game capture. Throughput is cycles per second times hand size. The wiki gives roughly 0.86 cycles/s for the inserter and 2.5 cycles/s for the fast and bulk inserters at normal quality, and hand size grows with inserter capacity research, which the blueprint does not record. The prototype exposes only extension_speed, rotation_speed and the bulk flag, so no items/s follows from it. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_lane_capacity"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:8954f5e2016e09189811434701889432688890239410f96c21412ef46596f563",
+          "material": null,
+          "message": "belt.straight.lane_capacity is documented-only, not observed in a controlled game capture. A straight fast-transport-belt carries at most 30 items/s across both lanes and 15 items/s per lane, matching prototype speed 0.0625 tiles/tick x 480. transport-belt is 15/s (7.5 per lane) and express is 45/s (22.5 per lane). Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_unsupported_visibility"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:91bc915fc50dab3daa08d58049c4193008e131f7fe72d9452b0a705a1011b121",
+          "material": null,
+          "message": "unsupported.entity_visibility is documented-only, not observed in a controlled game capture. An entity outside the first entity set stays visible in the graph as unsupported topology with a subsystem hint, and never becomes a supported activity or an implicit transport link. In the pilot this is the 3 ee-super-substation entities, classified as subsystem 'power', support 'unsupported', origin 'unknown'. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_transfer"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:b502744b13d45e567d862783b54164f63d1591e52150c755ed31cb8dd0100b12",
+          "material": null,
+          "message": "belt.transfer.belt_to_belt is pending, not observed in a controlled game capture. An end-to-end handover between two belts of the same direction preserves lane identity and is limited by the slower of the two belts. Neither the lane preservation nor the tier-boundary limit is established here. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_internal_break",
+          "endpoint_ids": [
+            "bp/root/e/5/port/in_left",
+            "bp/root/e/5/port/in_right",
+            "bp/root/e/5/port/out_left",
+            "bp/root/e/5/port/out_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 5,
+              "key": "bp/root/e/5"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:c20ebd8fbdb319fc970d38c05348eee0dab8b86a0e84adfe47e58f17b673e34b",
+          "material": null,
+          "message": "bp/root/e/5: 4 lane endpoint(s) are blocked by an entity that offers no supported handover. This is an internal break inside the layout, not a boundary interface, and no external supply or removal is implied.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "unreachable_input",
+          "endpoint_ids": [
+            "bp/root/e/3/inventory/input"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 3,
+              "key": "bp/root/e/3"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:4c212d1dff2e8ff46aee0e913abb0722c1b144c6c1ec79fdd8ab10c94d572488",
+          "material": null,
+          "message": "bp/root/e/3 (electric-furnace): no boundary endpoint of the selected area can reach this machine's input inventory through supported transport. This is incomplete external context, not a claim that the machine is starved. An unresolved possible bridge is present, so this is a reachability observation over the supported topology, not a proven disconnection.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "unreachable_input",
+          "endpoint_ids": [
+            "bp/root/e/7/inventory/input"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 7,
+              "key": "bp/root/e/7"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:a8ce0761d9071e1b1a3d760697f8b72d6b7b89959f3fa9b2c7881d23f35951dc",
+          "material": null,
+          "message": "bp/root/e/7 (electric-furnace): no boundary endpoint of the selected area can reach this machine's input inventory through supported transport. This is incomplete external context, not a claim that the machine is starved. An unresolved possible bridge is present, so this is a reachability observation over the supported topology, not a proven disconnection.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "unsupported_possible_bridge",
+          "endpoint_ids": [
+            "bp/root/e/7/inventory/input",
+            "bp/root/e/7/inventory/output",
+            "bp/root/e/8/port/hand"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 9,
+              "key": "bp/root/e/9"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry",
+            "mech_unsupported_visibility"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:6e2c4337f2eef8cd1699bd1a05ca651a7a8d34777fe60cedfcfedf8f8a93e5e8",
+          "material": null,
+          "message": "bp/root/e/9 (wooden-chest) is not supported by base-2.0.76-normal-v1: unsupported entity adjacent to supported transport endpoints; it may or may not exchange items with them, so no bound may be advertised.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "unsupported_possible_bridge",
+          "endpoint_ids": [
+            "bp/root/e/2/port/hand",
+            "bp/root/e/3/inventory/input",
+            "bp/root/e/3/inventory/output"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 1,
+              "key": "bp/root/e/1"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry",
+            "mech_unsupported_visibility"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:9a909cc74df58b13fd5c092590ca742ae7b6f93e894f1839aa6b1a0f555351b8",
+          "material": null,
+          "message": "bp/root/e/1 (wooden-chest) is not supported by base-2.0.76-normal-v1: unsupported entity adjacent to supported transport endpoints; it may or may not exchange items with them, so no bound may be advertised.",
+          "required_rate": null,
+          "severity": "warning"
+        }
+      ],
+      "graph_findings": {
+        "by_code": {
+          "blocked_output": 2,
+          "inserter_capacity_unknown": 1,
+          "inserter_endpoint_missing": 2,
+          "inserter_rotation_unresolved": 1,
+          "machine_recipe_unresolved": 2,
+          "mechanics_unobserved": 5,
+          "transport_internal_break": 1,
+          "unreachable_input": 2,
+          "unsupported_possible_bridge": 2
+        },
+        "by_evidence_kind": {
+          "conditional": 1,
+          "estimated": 12,
+          "structural": 5
+        },
+        "by_severity": {
+          "info": 1,
+          "warning": 17
+        },
+        "total": 18
+      },
+      "identity": {
+        "blueprint_hash": "sha256:7436c3a1068f42bab4a5229f89d4ac4096da18f4f6fd317d02e472d190ba4071",
+        "graph_hash": "sha256:abaf5c3742cca20259c578ca362f3ecfbcffc4c1704a6c837f11cf353c5e02e9",
+        "integration_version": "factoribot-routing-integration-1",
+        "mechanics_profile": "base-2.0.76-normal-v1",
+        "prototype_hash": "sha256:756af0daaf0da4d68e414513bf18144b2638e9e6b76d3319fe1f7e38e126655e",
+        "provenance": "synthetic",
+        "repeat_with": "the same blueprint_string/graph and book_path; pin expect_graph_hash to fail loudly on a changed input",
+        "schema_version": "1.1.1",
+        "selected_paths": [
+          []
+        ],
+        "source": "blueprint_string"
+      },
+      "ok": true,
+      "prototypes": {
+        "electric-furnace": 2,
+        "fast-inserter": 4,
+        "transport-belt": 1,
+        "wooden-chest": 2
+      },
+      "support": {
+        "supported": 7,
+        "unsupported": 2
+      }
+    },
+    "inserter_limited_transfer": {
+      "arc_semantics": {
+        "conditional": 8,
+        "relaxed": 2
+      },
+      "bound_prerequisites": [
+        {
+          "kind": "power",
+          "requirement": "assumptions.power must be 'assumed_available'; 'unknown' always withholds."
+        }
+      ],
+      "capacity_kinds": {
+        "finite": 3,
+        "unknown": 2,
+        "unlimited": 1
+      },
+      "conditions": {
+        "inserter_rotation_documented": 4,
+        "inserter_rotation_reversed": 4
+      },
+      "counts": {
+        "activities": 1,
+        "arcs": 10,
+        "capacity_groups": 6,
+        "entities": 4,
+        "evidence": 17,
+        "graph_findings": 11,
+        "inventories": 2,
+        "lanes": 2,
+        "ports": 6,
+        "topology_gaps": 0
+      },
+      "error": null,
+      "finding_rows": [
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "blocked_output",
+          "endpoint_ids": [
+            "bp/root/e/3/inventory/output"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 3,
+              "key": "bp/root/e/3"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:5479254c54d82564aa4fb1eee838ff7d088b8905a20b49f3ede7ed9ee8a9e1db",
+          "material": null,
+          "message": "bp/root/e/3 (assembling-machine-2): nothing this machine produces can reach a boundary endpoint of the selected area through supported transport.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_capacity_unknown",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_rate"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:5464915683bc05bbdd1f9589e397935563652f1a1a1dc78eb9c92a7f95097947",
+          "material": null,
+          "message": "Every inserter capacity group is `unknown`: inserter.rate.cycle_and_stack gives no items/s from the prototype, and hand size depends on research the blueprint does not record. An optimistic model relaxes these to unlimited; detailed inserter timing is task 09.",
+          "required_rate": null,
+          "severity": "info"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_endpoint_missing",
+          "endpoint_ids": [],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 4,
+              "key": "bp/root/e/4"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:8e4fa1b65abb735b1af6179572d8ae64559188fd0d2c0fca141bd45c626c3306",
+          "material": null,
+          "message": "bp/root/e/4 has no candidate tile pair with both a source and a destination endpoint; being on a footprint is not itself a valid endpoint.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_rotation_unresolved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_endpoints"
+          ],
+          "evidence_kind": "conditional",
+          "id": "finding:977256a5bf964ee0b8b23e80a8df7094cf8b2a63e7046de6a05c2ab3e2b49f06",
+          "material": null,
+          "message": "The rotation sense of pickup_position/insert_position is not observed, so both role assignments stay available as conditions inserter_rotation_documented and inserter_rotation_reversed. No convention is chosen here; on the pilot the layout's own geometry cannot discriminate them (task 03 handoff, section 4).",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_endpoints"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:0b4fd90560eeb7c6d0aa6f54cd46d750b14cfedb4b1cffca32640164bf26bb6b",
+          "material": null,
+          "message": "inserter.endpoints.pickup_drop_tiles is documented-only, not observed in a controlled game capture. Pickup and drop tiles follow the prototype's pickup_position [0, -1] and insert_position [0, 1.2] rotated by the entity direction, so a north-facing inserter takes from the tile one south and drops one north. Documented wiki behaviour adds that an inserter dropping onto a belt places items on the far lane. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_rate"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:106e0abd789b26d70e8f471752b8ab07b72c8fd6f5edf09aa6dc19e1ac53ff0d",
+          "material": null,
+          "message": "inserter.rate.cycle_and_stack is documented-only, not observed in a controlled game capture. Throughput is cycles per second times hand size. The wiki gives roughly 0.86 cycles/s for the inserter and 2.5 cycles/s for the fast and bulk inserters at normal quality, and hand size grows with inserter capacity research, which the blueprint does not record. The prototype exposes only extension_speed, rotation_speed and the bulk flag, so no items/s follows from it. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_machine_am2"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:11d6e93601adf93ede5828dea4eb47735b2501705a949d63c60fb259ef419efe",
+          "material": null,
+          "message": "machine.activity.assembling_machine_2 is documented-only, not observed in a controlled game capture. An AM2 crafts at crafting_speed 0.75 divided by the recipe's energy_required, with no modules and no beacons. The prototype also advertises 2 module slots and 150kW, which the first profile does not use. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_lane_capacity"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:8954f5e2016e09189811434701889432688890239410f96c21412ef46596f563",
+          "material": null,
+          "message": "belt.straight.lane_capacity is documented-only, not observed in a controlled game capture. A straight fast-transport-belt carries at most 30 items/s across both lanes and 15 items/s per lane, matching prototype speed 0.0625 tiles/tick x 480. transport-belt is 15/s (7.5 per lane) and express is 45/s (22.5 per lane). Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_transfer"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:b502744b13d45e567d862783b54164f63d1591e52150c755ed31cb8dd0100b12",
+          "material": null,
+          "message": "belt.transfer.belt_to_belt is pending, not observed in a controlled game capture. An end-to-end handover between two belts of the same direction preserves lane identity and is limited by the slower of the two belts. Neither the lane preservation nor the tier-boundary limit is established here. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_boundary_candidate",
+          "endpoint_ids": [
+            "bp/root/e/1/port/in_left",
+            "bp/root/e/1/port/in_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 1,
+              "key": "bp/root/e/1"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:f1f2d283293aade28d986ff423eed15b4960bff0774c427cdf4876cc1847c6cd",
+          "material": null,
+          "message": "bp/root/e/1: 2 lane endpoint(s) face an empty tile. External context is incomplete: this is a candidate interface, not a declared feed or export, and nothing is imported or removed here unless the request declares it.",
+          "required_rate": null,
+          "severity": "info"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_internal_break",
+          "endpoint_ids": [
+            "bp/root/e/1/port/out_left",
+            "bp/root/e/1/port/out_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 1,
+              "key": "bp/root/e/1"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:e71fedfacef5862ef2b5e342a94f9612da9fbde6476b822fb8f2a9f42306ee80",
+          "material": null,
+          "message": "bp/root/e/1: 2 lane endpoint(s) are blocked by an entity that offers no supported handover. This is an internal break inside the layout, not a boundary interface, and no external supply or removal is implied.",
+          "required_rate": null,
+          "severity": "warning"
+        }
+      ],
+      "graph_findings": {
+        "by_code": {
+          "blocked_output": 1,
+          "inserter_capacity_unknown": 1,
+          "inserter_endpoint_missing": 1,
+          "inserter_rotation_unresolved": 1,
+          "mechanics_unobserved": 5,
+          "transport_boundary_candidate": 1,
+          "transport_internal_break": 1
+        },
+        "by_evidence_kind": {
+          "conditional": 1,
+          "estimated": 6,
+          "structural": 4
+        },
+        "by_severity": {
+          "info": 2,
+          "warning": 9
+        },
+        "total": 11
+      },
+      "identity": {
+        "blueprint_hash": "sha256:eea5378c64320c8e6a4dfe719eb20f95306e158120adc42013a6fdc7ce46d516",
+        "graph_hash": "sha256:e7e2cab216d629c6d157159612455f93a371719472fd9f058865e78c0be323ba",
+        "integration_version": "factoribot-routing-integration-1",
+        "mechanics_profile": "base-2.0.76-normal-v1",
+        "prototype_hash": "sha256:756af0daaf0da4d68e414513bf18144b2638e9e6b76d3319fe1f7e38e126655e",
+        "provenance": "synthetic",
+        "repeat_with": "the same blueprint_string/graph and book_path; pin expect_graph_hash to fail loudly on a changed input",
+        "schema_version": "1.1.1",
+        "selected_paths": [
+          []
+        ],
+        "source": "blueprint_string"
+      },
+      "ok": true,
+      "prototypes": {
+        "assembling-machine-2": 1,
+        "inserter": 2,
+        "transport-belt": 1
+      },
+      "support": {
+        "supported": 4
+      }
+    },
+    "lane_merge": {
+      "arc_semantics": {
+        "conditional": 4,
+        "relaxed": 12
+      },
+      "bound_prerequisites": [
+        {
+          "kind": "power",
+          "requirement": "assumptions.power must be 'assumed_available'; 'unknown' always withholds."
+        }
+      ],
+      "capacity_kinds": {
+        "finite": 8,
+        "unlimited": 1
+      },
+      "conditions": {
+        "side_load_feeds_far_lane": 2,
+        "side_load_feeds_near_lane": 2
+      },
+      "counts": {
+        "activities": 0,
+        "arcs": 16,
+        "capacity_groups": 9,
+        "entities": 4,
+        "evidence": 17,
+        "graph_findings": 6,
+        "inventories": 0,
+        "lanes": 8,
+        "ports": 16,
+        "topology_gaps": 0
+      },
+      "error": null,
+      "finding_rows": [
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_side_load"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:355985cd2bff2961f4c515a6ebb04f8b5479c240eb4d56611f6367bf9cb7a325",
+          "material": null,
+          "message": "belt.side_load.lane_assignment is pending, not observed in a controlled game capture. A perpendicular side-load is expected to feed a specific lane of the target belt determined by the load's side, and the target's own upstream flow competes for that lane. Which lane, and the resulting split, is not established here. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_lane_capacity"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:8954f5e2016e09189811434701889432688890239410f96c21412ef46596f563",
+          "material": null,
+          "message": "belt.straight.lane_capacity is documented-only, not observed in a controlled game capture. A straight fast-transport-belt carries at most 30 items/s across both lanes and 15 items/s per lane, matching prototype speed 0.0625 tiles/tick x 480. transport-belt is 15/s (7.5 per lane) and express is 45/s (22.5 per lane). Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_transfer"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:b502744b13d45e567d862783b54164f63d1591e52150c755ed31cb8dd0100b12",
+          "material": null,
+          "message": "belt.transfer.belt_to_belt is pending, not observed in a controlled game capture. An end-to-end handover between two belts of the same direction preserves lane identity and is limited by the slower of the two belts. Neither the lane preservation nor the tier-boundary limit is established here. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_boundary_candidate",
+          "endpoint_ids": [
+            "bp/root/e/4/port/out_left",
+            "bp/root/e/4/port/out_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 4,
+              "key": "bp/root/e/4"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:6187812630204ea6708b4c6647dec77ed6d33b62c5059024cb44436c94838877",
+          "material": null,
+          "message": "bp/root/e/4: 2 lane endpoint(s) face an empty tile. External context is incomplete: this is a candidate interface, not a declared feed or export, and nothing is imported or removed here unless the request declares it.",
+          "required_rate": null,
+          "severity": "info"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_boundary_candidate",
+          "endpoint_ids": [
+            "bp/root/e/2/port/in_left",
+            "bp/root/e/2/port/in_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 2,
+              "key": "bp/root/e/2"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:b72c91ece4d22b72a46e2a41e7144b441f1246b557518948fcf6dd49de0abf68",
+          "material": null,
+          "message": "bp/root/e/2: 2 lane endpoint(s) face an empty tile. External context is incomplete: this is a candidate interface, not a declared feed or export, and nothing is imported or removed here unless the request declares it.",
+          "required_rate": null,
+          "severity": "info"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_boundary_candidate",
+          "endpoint_ids": [
+            "bp/root/e/1/port/in_left",
+            "bp/root/e/1/port/in_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 1,
+              "key": "bp/root/e/1"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:f1f2d283293aade28d986ff423eed15b4960bff0774c427cdf4876cc1847c6cd",
+          "material": null,
+          "message": "bp/root/e/1: 2 lane endpoint(s) face an empty tile. External context is incomplete: this is a candidate interface, not a declared feed or export, and nothing is imported or removed here unless the request declares it.",
+          "required_rate": null,
+          "severity": "info"
+        }
+      ],
+      "graph_findings": {
+        "by_code": {
+          "mechanics_unobserved": 3,
+          "transport_boundary_candidate": 3
+        },
+        "by_evidence_kind": {
+          "estimated": 3,
+          "structural": 3
+        },
+        "by_severity": {
+          "info": 3,
+          "warning": 3
+        },
+        "total": 6
+      },
+      "identity": {
+        "blueprint_hash": "sha256:0aa6258e2d2d5124c0dbe5f66400c7feb5a0db0d1325cc5f2267d66c8ddf5eef",
+        "graph_hash": "sha256:b472d1d3e00733c970c2e9738fb146a1cc1747679c68297b86c965b52797641b",
+        "integration_version": "factoribot-routing-integration-1",
+        "mechanics_profile": "base-2.0.76-normal-v1",
+        "prototype_hash": "sha256:756af0daaf0da4d68e414513bf18144b2638e9e6b76d3319fe1f7e38e126655e",
+        "provenance": "synthetic",
+        "repeat_with": "the same blueprint_string/graph and book_path; pin expect_graph_hash to fail loudly on a changed input",
+        "schema_version": "1.1.1",
+        "selected_paths": [
+          []
+        ],
+        "source": "blueprint_string"
+      },
+      "ok": true,
+      "prototypes": {
+        "transport-belt": 4
+      },
+      "support": {
+        "supported": 4
+      }
+    },
+    "splitter_priority_right": {
+      "arc_semantics": {
+        "conditional": 24,
+        "relaxed": 40
+      },
+      "bound_prerequisites": [
+        {
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 1,
+              "key": "bp/root/e/1"
+            }
+          ],
+          "id": "gap_e1",
+          "kind": "possible_bridge",
+          "requirement": "Cannot be declared away: only evidence of disconnection (a structural or observed may_connect:false gap) admits bounds."
+        },
+        {
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 17,
+              "key": "bp/root/e/17"
+            }
+          ],
+          "id": "gap_e17",
+          "kind": "possible_bridge",
+          "requirement": "Cannot be declared away: only evidence of disconnection (a structural or observed may_connect:false gap) admits bounds."
+        },
+        {
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 9,
+              "key": "bp/root/e/9"
+            }
+          ],
+          "id": "gap_e9",
+          "kind": "possible_bridge",
+          "requirement": "Cannot be declared away: only evidence of disconnection (a structural or observed may_connect:false gap) admits bounds."
+        },
+        {
+          "already_covered_by_disconnection_gap": 0,
+          "count": 3,
+          "entity_keys": [
+            "bp/root/e/1",
+            "bp/root/e/17",
+            "bp/root/e/9"
+          ],
+          "kind": "non_supported_entities",
+          "mod": "unknown",
+          "requirement": "Item-capable subsystem: never declarable irrelevant. Needs an evidence-backed may_connect:false gap.",
+          "subsystem": "unknown"
+        },
+        {
+          "kind": "power",
+          "requirement": "assumptions.power must be 'assumed_available'; 'unknown' always withholds."
+        }
+      ],
+      "capacity_kinds": {
+        "finite": 22,
+        "unknown": 6,
+        "unlimited": 1
+      },
+      "conditions": {
+        "inserter_rotation_documented": 12,
+        "inserter_rotation_reversed": 12
+      },
+      "counts": {
+        "activities": 2,
+        "arcs": 64,
+        "capacity_groups": 29,
+        "entities": 17,
+        "evidence": 17,
+        "graph_findings": 26,
+        "inventories": 4,
+        "lanes": 12,
+        "ports": 37,
+        "topology_gaps": 3
+      },
+      "error": null,
+      "finding_rows": [
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "blocked_output",
+          "endpoint_ids": [
+            "bp/root/e/15/inventory/output"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 15,
+              "key": "bp/root/e/15"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:5a6d2cd405c5c4bda72e56f85050f2563eeeaf3dac2b33b0a2d1c4514eaf883c",
+          "material": null,
+          "message": "bp/root/e/15 (assembling-machine-2): nothing this machine produces can reach a boundary endpoint of the selected area through supported transport. An unresolved possible bridge is present, so this is a reachability observation over the supported topology, not a proven disconnection.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "blocked_output",
+          "endpoint_ids": [
+            "bp/root/e/7/inventory/output"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 7,
+              "key": "bp/root/e/7"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:703e225a0338aea25295277c9f1a7a025647c7d5669481c8d6496389bb7e6a35",
+          "material": null,
+          "message": "bp/root/e/7 (assembling-machine-2): nothing this machine produces can reach a boundary endpoint of the selected area through supported transport. An unresolved possible bridge is present, so this is a reachability observation over the supported topology, not a proven disconnection.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_capacity_unknown",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_rate"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:5464915683bc05bbdd1f9589e397935563652f1a1a1dc78eb9c92a7f95097947",
+          "material": null,
+          "message": "Every inserter capacity group is `unknown`: inserter.rate.cycle_and_stack gives no items/s from the prototype, and hand size depends on research the blueprint does not record. An optimistic model relaxes these to unlimited; detailed inserter timing is task 09.",
+          "required_rate": null,
+          "severity": "info"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_endpoint_missing",
+          "endpoint_ids": [],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 16,
+              "key": "bp/root/e/16"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:06872240a98e0b1c07ebc8ea57fe87e3505ebd84df2819a4a50a771b84fd25ca",
+          "material": null,
+          "message": "bp/root/e/16 has no candidate tile pair with both a source and a destination endpoint; being on a footprint is not itself a valid endpoint.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_endpoint_missing",
+          "endpoint_ids": [],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 8,
+              "key": "bp/root/e/8"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:0b18e5dc71328a32d15e3940c3b750c62f4fe12566cb1aefae24e0098009aeaf",
+          "material": null,
+          "message": "bp/root/e/8 has no candidate tile pair with both a source and a destination endpoint; being on a footprint is not itself a valid endpoint.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_endpoint_missing",
+          "endpoint_ids": [],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 2,
+              "key": "bp/root/e/2"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:57441cba1b45dc73fc799473ea4abb5d5deb4cae7c4b18073bcc3b5f3327f5a9",
+          "material": null,
+          "message": "bp/root/e/2 has no candidate tile pair with both a source and a destination endpoint; being on a footprint is not itself a valid endpoint.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_rotation_unresolved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_endpoints"
+          ],
+          "evidence_kind": "conditional",
+          "id": "finding:977256a5bf964ee0b8b23e80a8df7094cf8b2a63e7046de6a05c2ab3e2b49f06",
+          "material": null,
+          "message": "The rotation sense of pickup_position/insert_position is not observed, so both role assignments stay available as conditions inserter_rotation_documented and inserter_rotation_reversed. No convention is chosen here; on the pilot the layout's own geometry cannot discriminate them (task 03 handoff, section 4).",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_splitter_lane_split"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:01eaab54633ac31f69bcb541debd900caf6dbd53867f91f39498c89a8211c866",
+          "material": null,
+          "message": "splitter.lane_split is pending, not observed in a controlled game capture. A splitter occupies a 2x1 tile footprint with two input tiles and two output tiles, each carrying two lanes, and its total throughput is bounded by the belt tier. Which physical resource the four paths share, and how an unbalanced input is distributed, is not established here. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_endpoints"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:0b4fd90560eeb7c6d0aa6f54cd46d750b14cfedb4b1cffca32640164bf26bb6b",
+          "material": null,
+          "message": "inserter.endpoints.pickup_drop_tiles is documented-only, not observed in a controlled game capture. Pickup and drop tiles follow the prototype's pickup_position [0, -1] and insert_position [0, 1.2] rotated by the entity direction, so a north-facing inserter takes from the tile one south and drops one north. Documented wiki behaviour adds that an inserter dropping onto a belt places items on the far lane. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_rate"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:106e0abd789b26d70e8f471752b8ab07b72c8fd6f5edf09aa6dc19e1ac53ff0d",
+          "material": null,
+          "message": "inserter.rate.cycle_and_stack is documented-only, not observed in a controlled game capture. Throughput is cycles per second times hand size. The wiki gives roughly 0.86 cycles/s for the inserter and 2.5 cycles/s for the fast and bulk inserters at normal quality, and hand size grows with inserter capacity research, which the blueprint does not record. The prototype exposes only extension_speed, rotation_speed and the bulk flag, so no items/s follows from it. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_machine_am2"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:11d6e93601adf93ede5828dea4eb47735b2501705a949d63c60fb259ef419efe",
+          "material": null,
+          "message": "machine.activity.assembling_machine_2 is documented-only, not observed in a controlled game capture. An AM2 crafts at crafting_speed 0.75 divided by the recipe's energy_required, with no modules and no beacons. The prototype also advertises 2 module slots and 150kW, which the first profile does not use. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_lane_capacity"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:8954f5e2016e09189811434701889432688890239410f96c21412ef46596f563",
+          "material": null,
+          "message": "belt.straight.lane_capacity is documented-only, not observed in a controlled game capture. A straight fast-transport-belt carries at most 30 items/s across both lanes and 15 items/s per lane, matching prototype speed 0.0625 tiles/tick x 480. transport-belt is 15/s (7.5 per lane) and express is 45/s (22.5 per lane). Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_unsupported_visibility"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:91bc915fc50dab3daa08d58049c4193008e131f7fe72d9452b0a705a1011b121",
+          "material": null,
+          "message": "unsupported.entity_visibility is documented-only, not observed in a controlled game capture. An entity outside the first entity set stays visible in the graph as unsupported topology with a subsystem hint, and never becomes a supported activity or an implicit transport link. In the pilot this is the 3 ee-super-substation entities, classified as subsystem 'power', support 'unsupported', origin 'unknown'. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_transfer"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:b502744b13d45e567d862783b54164f63d1591e52150c755ed31cb8dd0100b12",
+          "material": null,
+          "message": "belt.transfer.belt_to_belt is pending, not observed in a controlled game capture. An end-to-end handover between two belts of the same direction preserves lane identity and is limited by the slower of the two belts. Neither the lane preservation nor the tier-boundary limit is established here. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_turn"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:c95e0049ed64b6c70a8f679066c5e26012ad908b2ace00e5e0d2ca5b1cd2cfb1",
+          "material": null,
+          "message": "belt.turn.lane_behavior is pending, not observed in a controlled game capture. A turn is expected not to reduce a saturated lane's throughput, but the inner and outer lanes traverse different path lengths, so per-lane timing differs. The magnitude, and whether any lane loses throughput, is not established here. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_splitter_priority"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:dce9102dd02030102af19b0e6d19f70791e56846bb7c636cd17584f058347b33",
+          "material": null,
+          "message": "splitter.priority_and_filter is pending, not observed in a controlled game capture. Priorities and filters restrict how a splitter distributes items. For an optimistic upper bound they must be relaxed explicitly, and the relaxation recorded, rather than modelled as a hard split. The actual behaviour is not established here. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "splitter_distribution_relaxed",
+          "endpoint_ids": [],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 4,
+              "key": "bp/root/e/4"
+            }
+          ],
+          "evidence_ids": [
+            "mech_splitter_lane_split",
+            "mech_splitter_priority"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:4d3464b753bb6d678c5917e5120d401f2f1aa2830f42946c778cd416cd950151",
+          "material": null,
+          "message": "bp/root/e/4: all sixteen lane paths stay open and share one splitter resource. Declared filter(s): none; declared priorit(ies): output_priority. splitter.lane_split and splitter.priority_and_filter are pending, so priorities and filters are relaxed and recorded, never modelled as a hard split.",
+          "required_rate": null,
+          "severity": "info"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_internal_break",
+          "endpoint_ids": [
+            "bp/root/e/4/port/in_left_left",
+            "bp/root/e/4/port/in_left_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 4,
+              "key": "bp/root/e/4"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:0738d130c8eba43326829e35a052302f9fa8b9bad8cc07851debccd7382394e7",
+          "material": null,
+          "message": "bp/root/e/4: 2 lane endpoint(s) are blocked by an entity that offers no supported handover. This is an internal break inside the layout, not a boundary interface, and no external supply or removal is implied.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_internal_break",
+          "endpoint_ids": [
+            "bp/root/e/3/port/in_left",
+            "bp/root/e/3/port/in_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 3,
+              "key": "bp/root/e/3"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:15865bdcde47507b900c554f39814ebb759be2a4d21348f02ef44a41e7792968",
+          "material": null,
+          "message": "bp/root/e/3: 2 lane endpoint(s) are blocked by an entity that offers no supported handover. This is an internal break inside the layout, not a boundary interface, and no external supply or removal is implied.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_internal_break",
+          "endpoint_ids": [
+            "bp/root/e/13/port/out_left",
+            "bp/root/e/13/port/out_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 13,
+              "key": "bp/root/e/13"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:258d297692acb453a39de1948bff0839d6aba4587da0c90310f86458ea3f0535",
+          "material": null,
+          "message": "bp/root/e/13: 2 lane endpoint(s) are blocked by an entity that offers no supported handover. This is an internal break inside the layout, not a boundary interface, and no external supply or removal is implied.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_internal_break",
+          "endpoint_ids": [
+            "bp/root/e/5/port/out_left",
+            "bp/root/e/5/port/out_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 5,
+              "key": "bp/root/e/5"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:7257735f1ff0e6edb2c74737abc8d5226fb9e1ac64dbbf4d11897db6e8ffb465",
+          "material": null,
+          "message": "bp/root/e/5: 2 lane endpoint(s) are blocked by an entity that offers no supported handover. This is an internal break inside the layout, not a boundary interface, and no external supply or removal is implied.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "unreachable_input",
+          "endpoint_ids": [
+            "bp/root/e/7/inventory/input"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 7,
+              "key": "bp/root/e/7"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:a8ce0761d9071e1b1a3d760697f8b72d6b7b89959f3fa9b2c7881d23f35951dc",
+          "material": null,
+          "message": "bp/root/e/7 (assembling-machine-2): no boundary endpoint of the selected area can reach this machine's input inventory through supported transport. This is incomplete external context, not a claim that the machine is starved. An unresolved possible bridge is present, so this is a reachability observation over the supported topology, not a proven disconnection.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "unreachable_input",
+          "endpoint_ids": [
+            "bp/root/e/15/inventory/input"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 15,
+              "key": "bp/root/e/15"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:d9f5944543248dd1083c5afe71894c9b1ddaa54dba5bac5c1651f52532a58e0e",
+          "material": null,
+          "message": "bp/root/e/15 (assembling-machine-2): no boundary endpoint of the selected area can reach this machine's input inventory through supported transport. This is incomplete external context, not a claim that the machine is starved. An unresolved possible bridge is present, so this is a reachability observation over the supported topology, not a proven disconnection.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "unsupported_possible_bridge",
+          "endpoint_ids": [
+            "bp/root/e/2/port/hand",
+            "bp/root/e/3/lane/left",
+            "bp/root/e/3/lane/right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 1,
+              "key": "bp/root/e/1"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry",
+            "mech_unsupported_visibility"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:0b5ed9d839c11ddd1db1a614aba7a8c3da0076f44a70ea44d63d6a2f02a108a9",
+          "material": null,
+          "message": "bp/root/e/1 (wooden-chest) is not supported by base-2.0.76-normal-v1: unsupported entity adjacent to supported transport endpoints; it may or may not exchange items with them, so no bound may be advertised.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "unsupported_possible_bridge",
+          "endpoint_ids": [
+            "bp/root/e/7/inventory/input",
+            "bp/root/e/7/inventory/output",
+            "bp/root/e/8/port/hand"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 9,
+              "key": "bp/root/e/9"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry",
+            "mech_unsupported_visibility"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:6e2c4337f2eef8cd1699bd1a05ca651a7a8d34777fe60cedfcfedf8f8a93e5e8",
+          "material": null,
+          "message": "bp/root/e/9 (wooden-chest) is not supported by base-2.0.76-normal-v1: unsupported entity adjacent to supported transport endpoints; it may or may not exchange items with them, so no bound may be advertised.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "unsupported_possible_bridge",
+          "endpoint_ids": [
+            "bp/root/e/15/inventory/input",
+            "bp/root/e/15/inventory/output",
+            "bp/root/e/16/port/hand"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 17,
+              "key": "bp/root/e/17"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry",
+            "mech_unsupported_visibility"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:8ff8340ac19388778ffac743eaae5f2b5abcf085b7a44d192fb2f7f31c4e1001",
+          "material": null,
+          "message": "bp/root/e/17 (wooden-chest) is not supported by base-2.0.76-normal-v1: unsupported entity adjacent to supported transport endpoints; it may or may not exchange items with them, so no bound may be advertised.",
+          "required_rate": null,
+          "severity": "warning"
+        }
+      ],
+      "graph_findings": {
+        "by_code": {
+          "blocked_output": 2,
+          "inserter_capacity_unknown": 1,
+          "inserter_endpoint_missing": 3,
+          "inserter_rotation_unresolved": 1,
+          "mechanics_unobserved": 9,
+          "splitter_distribution_relaxed": 1,
+          "transport_internal_break": 4,
+          "unreachable_input": 2,
+          "unsupported_possible_bridge": 3
+        },
+        "by_evidence_kind": {
+          "conditional": 1,
+          "estimated": 18,
+          "structural": 7
+        },
+        "by_severity": {
+          "info": 2,
+          "warning": 24
+        },
+        "total": 26
+      },
+      "identity": {
+        "blueprint_hash": "sha256:8e25ae620108349f512ce1d7a5dec84048469cc219a49c4d173096c4f8b8bcaa",
+        "graph_hash": "sha256:c18cd3e5d1e0cd3f147e5c3ffe6e329e01e40f6a7ffe83719049e2e59b42f00e",
+        "integration_version": "factoribot-routing-integration-1",
+        "mechanics_profile": "base-2.0.76-normal-v1",
+        "prototype_hash": "sha256:756af0daaf0da4d68e414513bf18144b2638e9e6b76d3319fe1f7e38e126655e",
+        "provenance": "synthetic",
+        "repeat_with": "the same blueprint_string/graph and book_path; pin expect_graph_hash to fail loudly on a changed input",
+        "schema_version": "1.1.1",
+        "selected_paths": [
+          []
+        ],
+        "source": "blueprint_string"
+      },
+      "ok": true,
+      "prototypes": {
+        "assembling-machine-2": 2,
+        "fast-inserter": 4,
+        "inserter": 1,
+        "splitter": 1,
+        "transport-belt": 6,
+        "wooden-chest": 3
+      },
+      "support": {
+        "supported": 14,
+        "unsupported": 3
+      }
+    },
+    "straight_one_lane": {
+      "arc_semantics": {
+        "relaxed": 10
+      },
+      "bound_prerequisites": [
+        {
+          "kind": "power",
+          "requirement": "assumptions.power must be 'assumed_available'; 'unknown' always withholds."
+        }
+      ],
+      "capacity_kinds": {
+        "finite": 6,
+        "unlimited": 1
+      },
+      "conditions": {},
+      "counts": {
+        "activities": 0,
+        "arcs": 10,
+        "capacity_groups": 7,
+        "entities": 3,
+        "evidence": 17,
+        "graph_findings": 4,
+        "inventories": 0,
+        "lanes": 6,
+        "ports": 12,
+        "topology_gaps": 0
+      },
+      "error": null,
+      "finding_rows": [
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_lane_capacity"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:8954f5e2016e09189811434701889432688890239410f96c21412ef46596f563",
+          "material": null,
+          "message": "belt.straight.lane_capacity is documented-only, not observed in a controlled game capture. A straight fast-transport-belt carries at most 30 items/s across both lanes and 15 items/s per lane, matching prototype speed 0.0625 tiles/tick x 480. transport-belt is 15/s (7.5 per lane) and express is 45/s (22.5 per lane). Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_transfer"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:b502744b13d45e567d862783b54164f63d1591e52150c755ed31cb8dd0100b12",
+          "material": null,
+          "message": "belt.transfer.belt_to_belt is pending, not observed in a controlled game capture. An end-to-end handover between two belts of the same direction preserves lane identity and is limited by the slower of the two belts. Neither the lane preservation nor the tier-boundary limit is established here. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_boundary_candidate",
+          "endpoint_ids": [
+            "bp/root/e/3/port/out_left",
+            "bp/root/e/3/port/out_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 3,
+              "key": "bp/root/e/3"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:09491591e78d785dc5555428331dcbd80aaf93ee4a403b79e097ebeac01d86a1",
+          "material": null,
+          "message": "bp/root/e/3: 2 lane endpoint(s) face an empty tile. External context is incomplete: this is a candidate interface, not a declared feed or export, and nothing is imported or removed here unless the request declares it.",
+          "required_rate": null,
+          "severity": "info"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_boundary_candidate",
+          "endpoint_ids": [
+            "bp/root/e/1/port/in_left",
+            "bp/root/e/1/port/in_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 1,
+              "key": "bp/root/e/1"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:f1f2d283293aade28d986ff423eed15b4960bff0774c427cdf4876cc1847c6cd",
+          "material": null,
+          "message": "bp/root/e/1: 2 lane endpoint(s) face an empty tile. External context is incomplete: this is a candidate interface, not a declared feed or export, and nothing is imported or removed here unless the request declares it.",
+          "required_rate": null,
+          "severity": "info"
+        }
+      ],
+      "graph_findings": {
+        "by_code": {
+          "mechanics_unobserved": 2,
+          "transport_boundary_candidate": 2
+        },
+        "by_evidence_kind": {
+          "estimated": 2,
+          "structural": 2
+        },
+        "by_severity": {
+          "info": 2,
+          "warning": 2
+        },
+        "total": 4
+      },
+      "identity": {
+        "blueprint_hash": "sha256:b29c215ba50164dd022cb9368bc8666f9fb13c31a3fdae5f894fd4b1aa1dfa6b",
+        "graph_hash": "sha256:4b7ad32beb82424f099c40d92c34ada2b6d5acfa9938458670603a09e60bd56c",
+        "integration_version": "factoribot-routing-integration-1",
+        "mechanics_profile": "base-2.0.76-normal-v1",
+        "prototype_hash": "sha256:756af0daaf0da4d68e414513bf18144b2638e9e6b76d3319fe1f7e38e126655e",
+        "provenance": "synthetic",
+        "repeat_with": "the same blueprint_string/graph and book_path; pin expect_graph_hash to fail loudly on a changed input",
+        "schema_version": "1.1.1",
+        "selected_paths": [
+          []
+        ],
+        "source": "blueprint_string"
+      },
+      "ok": true,
+      "prototypes": {
+        "transport-belt": 3
+      },
+      "support": {
+        "supported": 3
+      }
+    },
+    "unequal_competing_consumers": {
+      "arc_semantics": {
+        "conditional": 24,
+        "relaxed": 40
+      },
+      "bound_prerequisites": [
+        {
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 1,
+              "key": "bp/root/e/1"
+            }
+          ],
+          "id": "gap_e1",
+          "kind": "possible_bridge",
+          "requirement": "Cannot be declared away: only evidence of disconnection (a structural or observed may_connect:false gap) admits bounds."
+        },
+        {
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 17,
+              "key": "bp/root/e/17"
+            }
+          ],
+          "id": "gap_e17",
+          "kind": "possible_bridge",
+          "requirement": "Cannot be declared away: only evidence of disconnection (a structural or observed may_connect:false gap) admits bounds."
+        },
+        {
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 9,
+              "key": "bp/root/e/9"
+            }
+          ],
+          "id": "gap_e9",
+          "kind": "possible_bridge",
+          "requirement": "Cannot be declared away: only evidence of disconnection (a structural or observed may_connect:false gap) admits bounds."
+        },
+        {
+          "already_covered_by_disconnection_gap": 0,
+          "count": 3,
+          "entity_keys": [
+            "bp/root/e/1",
+            "bp/root/e/17",
+            "bp/root/e/9"
+          ],
+          "kind": "non_supported_entities",
+          "mod": "unknown",
+          "requirement": "Item-capable subsystem: never declarable irrelevant. Needs an evidence-backed may_connect:false gap.",
+          "subsystem": "unknown"
+        },
+        {
+          "kind": "power",
+          "requirement": "assumptions.power must be 'assumed_available'; 'unknown' always withholds."
+        }
+      ],
+      "capacity_kinds": {
+        "finite": 22,
+        "unknown": 6,
+        "unlimited": 1
+      },
+      "conditions": {
+        "inserter_rotation_documented": 12,
+        "inserter_rotation_reversed": 12
+      },
+      "counts": {
+        "activities": 2,
+        "arcs": 64,
+        "capacity_groups": 29,
+        "entities": 17,
+        "evidence": 17,
+        "graph_findings": 26,
+        "inventories": 4,
+        "lanes": 12,
+        "ports": 37,
+        "topology_gaps": 3
+      },
+      "error": null,
+      "finding_rows": [
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "blocked_output",
+          "endpoint_ids": [
+            "bp/root/e/15/inventory/output"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 15,
+              "key": "bp/root/e/15"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:5a6d2cd405c5c4bda72e56f85050f2563eeeaf3dac2b33b0a2d1c4514eaf883c",
+          "material": null,
+          "message": "bp/root/e/15 (assembling-machine-2): nothing this machine produces can reach a boundary endpoint of the selected area through supported transport. An unresolved possible bridge is present, so this is a reachability observation over the supported topology, not a proven disconnection.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "blocked_output",
+          "endpoint_ids": [
+            "bp/root/e/7/inventory/output"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 7,
+              "key": "bp/root/e/7"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:703e225a0338aea25295277c9f1a7a025647c7d5669481c8d6496389bb7e6a35",
+          "material": null,
+          "message": "bp/root/e/7 (assembling-machine-2): nothing this machine produces can reach a boundary endpoint of the selected area through supported transport. An unresolved possible bridge is present, so this is a reachability observation over the supported topology, not a proven disconnection.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_capacity_unknown",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_rate"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:5464915683bc05bbdd1f9589e397935563652f1a1a1dc78eb9c92a7f95097947",
+          "material": null,
+          "message": "Every inserter capacity group is `unknown`: inserter.rate.cycle_and_stack gives no items/s from the prototype, and hand size depends on research the blueprint does not record. An optimistic model relaxes these to unlimited; detailed inserter timing is task 09.",
+          "required_rate": null,
+          "severity": "info"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_endpoint_missing",
+          "endpoint_ids": [],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 16,
+              "key": "bp/root/e/16"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:06872240a98e0b1c07ebc8ea57fe87e3505ebd84df2819a4a50a771b84fd25ca",
+          "material": null,
+          "message": "bp/root/e/16 has no candidate tile pair with both a source and a destination endpoint; being on a footprint is not itself a valid endpoint.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_endpoint_missing",
+          "endpoint_ids": [],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 8,
+              "key": "bp/root/e/8"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:0b18e5dc71328a32d15e3940c3b750c62f4fe12566cb1aefae24e0098009aeaf",
+          "material": null,
+          "message": "bp/root/e/8 has no candidate tile pair with both a source and a destination endpoint; being on a footprint is not itself a valid endpoint.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_endpoint_missing",
+          "endpoint_ids": [],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 2,
+              "key": "bp/root/e/2"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:57441cba1b45dc73fc799473ea4abb5d5deb4cae7c4b18073bcc3b5f3327f5a9",
+          "material": null,
+          "message": "bp/root/e/2 has no candidate tile pair with both a source and a destination endpoint; being on a footprint is not itself a valid endpoint.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "inserter_rotation_unresolved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_endpoints"
+          ],
+          "evidence_kind": "conditional",
+          "id": "finding:977256a5bf964ee0b8b23e80a8df7094cf8b2a63e7046de6a05c2ab3e2b49f06",
+          "material": null,
+          "message": "The rotation sense of pickup_position/insert_position is not observed, so both role assignments stay available as conditions inserter_rotation_documented and inserter_rotation_reversed. No convention is chosen here; on the pilot the layout's own geometry cannot discriminate them (task 03 handoff, section 4).",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_splitter_lane_split"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:01eaab54633ac31f69bcb541debd900caf6dbd53867f91f39498c89a8211c866",
+          "material": null,
+          "message": "splitter.lane_split is pending, not observed in a controlled game capture. A splitter occupies a 2x1 tile footprint with two input tiles and two output tiles, each carrying two lanes, and its total throughput is bounded by the belt tier. Which physical resource the four paths share, and how an unbalanced input is distributed, is not established here. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_endpoints"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:0b4fd90560eeb7c6d0aa6f54cd46d750b14cfedb4b1cffca32640164bf26bb6b",
+          "material": null,
+          "message": "inserter.endpoints.pickup_drop_tiles is documented-only, not observed in a controlled game capture. Pickup and drop tiles follow the prototype's pickup_position [0, -1] and insert_position [0, 1.2] rotated by the entity direction, so a north-facing inserter takes from the tile one south and drops one north. Documented wiki behaviour adds that an inserter dropping onto a belt places items on the far lane. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_inserter_rate"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:106e0abd789b26d70e8f471752b8ab07b72c8fd6f5edf09aa6dc19e1ac53ff0d",
+          "material": null,
+          "message": "inserter.rate.cycle_and_stack is documented-only, not observed in a controlled game capture. Throughput is cycles per second times hand size. The wiki gives roughly 0.86 cycles/s for the inserter and 2.5 cycles/s for the fast and bulk inserters at normal quality, and hand size grows with inserter capacity research, which the blueprint does not record. The prototype exposes only extension_speed, rotation_speed and the bulk flag, so no items/s follows from it. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_machine_am2"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:11d6e93601adf93ede5828dea4eb47735b2501705a949d63c60fb259ef419efe",
+          "material": null,
+          "message": "machine.activity.assembling_machine_2 is documented-only, not observed in a controlled game capture. An AM2 crafts at crafting_speed 0.75 divided by the recipe's energy_required, with no modules and no beacons. The prototype also advertises 2 module slots and 150kW, which the first profile does not use. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_lane_capacity"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:8954f5e2016e09189811434701889432688890239410f96c21412ef46596f563",
+          "material": null,
+          "message": "belt.straight.lane_capacity is documented-only, not observed in a controlled game capture. A straight fast-transport-belt carries at most 30 items/s across both lanes and 15 items/s per lane, matching prototype speed 0.0625 tiles/tick x 480. transport-belt is 15/s (7.5 per lane) and express is 45/s (22.5 per lane). Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_unsupported_visibility"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:91bc915fc50dab3daa08d58049c4193008e131f7fe72d9452b0a705a1011b121",
+          "material": null,
+          "message": "unsupported.entity_visibility is documented-only, not observed in a controlled game capture. An entity outside the first entity set stays visible in the graph as unsupported topology with a subsystem hint, and never becomes a supported activity or an implicit transport link. In the pilot this is the 3 ee-super-substation entities, classified as subsystem 'power', support 'unsupported', origin 'unknown'. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_transfer"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:b502744b13d45e567d862783b54164f63d1591e52150c755ed31cb8dd0100b12",
+          "material": null,
+          "message": "belt.transfer.belt_to_belt is pending, not observed in a controlled game capture. An end-to-end handover between two belts of the same direction preserves lane identity and is limited by the slower of the two belts. Neither the lane preservation nor the tier-boundary limit is established here. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_belt_turn"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:c95e0049ed64b6c70a8f679066c5e26012ad908b2ace00e5e0d2ca5b1cd2cfb1",
+          "material": null,
+          "message": "belt.turn.lane_behavior is pending, not observed in a controlled game capture. A turn is expected not to reduce a saturated lane's throughput, but the inner and outer lanes traverse different path lengths, so per-lane timing differs. The magnitude, and whether any lane loses throughput, is not established here. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "mechanics_unobserved",
+          "endpoint_ids": [],
+          "entity_ids": [],
+          "evidence_ids": [
+            "mech_splitter_priority"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:dce9102dd02030102af19b0e6d19f70791e56846bb7c636cd17584f058347b33",
+          "material": null,
+          "message": "splitter.priority_and_filter is pending, not observed in a controlled game capture. Priorities and filters restrict how a splitter distributes items. For an optimistic upper bound they must be relaxed explicitly, and the relaxation recorded, rather than modelled as a hard split. The actual behaviour is not established here. Arcs relying on it are relaxed, never exact.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "splitter_distribution_relaxed",
+          "endpoint_ids": [],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 4,
+              "key": "bp/root/e/4"
+            }
+          ],
+          "evidence_ids": [
+            "mech_splitter_lane_split",
+            "mech_splitter_priority"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:4d3464b753bb6d678c5917e5120d401f2f1aa2830f42946c778cd416cd950151",
+          "material": null,
+          "message": "bp/root/e/4: all sixteen lane paths stay open and share one splitter resource. Declared filter(s): none; declared priorit(ies): none. splitter.lane_split and splitter.priority_and_filter are pending, so priorities and filters are relaxed and recorded, never modelled as a hard split.",
+          "required_rate": null,
+          "severity": "info"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_internal_break",
+          "endpoint_ids": [
+            "bp/root/e/4/port/in_left_left",
+            "bp/root/e/4/port/in_left_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 4,
+              "key": "bp/root/e/4"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:0738d130c8eba43326829e35a052302f9fa8b9bad8cc07851debccd7382394e7",
+          "material": null,
+          "message": "bp/root/e/4: 2 lane endpoint(s) are blocked by an entity that offers no supported handover. This is an internal break inside the layout, not a boundary interface, and no external supply or removal is implied.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_internal_break",
+          "endpoint_ids": [
+            "bp/root/e/3/port/in_left",
+            "bp/root/e/3/port/in_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 3,
+              "key": "bp/root/e/3"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:15865bdcde47507b900c554f39814ebb759be2a4d21348f02ef44a41e7792968",
+          "material": null,
+          "message": "bp/root/e/3: 2 lane endpoint(s) are blocked by an entity that offers no supported handover. This is an internal break inside the layout, not a boundary interface, and no external supply or removal is implied.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_internal_break",
+          "endpoint_ids": [
+            "bp/root/e/13/port/out_left",
+            "bp/root/e/13/port/out_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 13,
+              "key": "bp/root/e/13"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:258d297692acb453a39de1948bff0839d6aba4587da0c90310f86458ea3f0535",
+          "material": null,
+          "message": "bp/root/e/13: 2 lane endpoint(s) are blocked by an entity that offers no supported handover. This is an internal break inside the layout, not a boundary interface, and no external supply or removal is implied.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "transport_internal_break",
+          "endpoint_ids": [
+            "bp/root/e/5/port/out_left",
+            "bp/root/e/5/port/out_right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 5,
+              "key": "bp/root/e/5"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "structural",
+          "id": "finding:7257735f1ff0e6edb2c74737abc8d5226fb9e1ac64dbbf4d11897db6e8ffb465",
+          "material": null,
+          "message": "bp/root/e/5: 2 lane endpoint(s) are blocked by an entity that offers no supported handover. This is an internal break inside the layout, not a boundary interface, and no external supply or removal is implied.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "unreachable_input",
+          "endpoint_ids": [
+            "bp/root/e/7/inventory/input"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 7,
+              "key": "bp/root/e/7"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:a8ce0761d9071e1b1a3d760697f8b72d6b7b89959f3fa9b2c7881d23f35951dc",
+          "material": null,
+          "message": "bp/root/e/7 (assembling-machine-2): no boundary endpoint of the selected area can reach this machine's input inventory through supported transport. This is incomplete external context, not a claim that the machine is starved. An unresolved possible bridge is present, so this is a reachability observation over the supported topology, not a proven disconnection.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "unreachable_input",
+          "endpoint_ids": [
+            "bp/root/e/15/inventory/input"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 15,
+              "key": "bp/root/e/15"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:d9f5944543248dd1083c5afe71894c9b1ddaa54dba5bac5c1651f52532a58e0e",
+          "material": null,
+          "message": "bp/root/e/15 (assembling-machine-2): no boundary endpoint of the selected area can reach this machine's input inventory through supported transport. This is incomplete external context, not a claim that the machine is starved. An unresolved possible bridge is present, so this is a reachability observation over the supported topology, not a proven disconnection.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "unsupported_possible_bridge",
+          "endpoint_ids": [
+            "bp/root/e/2/port/hand",
+            "bp/root/e/3/lane/left",
+            "bp/root/e/3/lane/right"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 1,
+              "key": "bp/root/e/1"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry",
+            "mech_unsupported_visibility"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:0b5ed9d839c11ddd1db1a614aba7a8c3da0076f44a70ea44d63d6a2f02a108a9",
+          "material": null,
+          "message": "bp/root/e/1 (wooden-chest) is not supported by base-2.0.76-normal-v1: unsupported entity adjacent to supported transport endpoints; it may or may not exchange items with them, so no bound may be advertised.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "unsupported_possible_bridge",
+          "endpoint_ids": [
+            "bp/root/e/7/inventory/input",
+            "bp/root/e/7/inventory/output",
+            "bp/root/e/8/port/hand"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 9,
+              "key": "bp/root/e/9"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry",
+            "mech_unsupported_visibility"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:6e2c4337f2eef8cd1699bd1a05ca651a7a8d34777fe60cedfcfedf8f8a93e5e8",
+          "material": null,
+          "message": "bp/root/e/9 (wooden-chest) is not supported by base-2.0.76-normal-v1: unsupported entity adjacent to supported transport endpoints; it may or may not exchange items with them, so no bound may be advertised.",
+          "required_rate": null,
+          "severity": "warning"
+        },
+        {
+          "assumptions": [],
+          "capacity_upper_bound": null,
+          "code": "unsupported_possible_bridge",
+          "endpoint_ids": [
+            "bp/root/e/15/inventory/input",
+            "bp/root/e/15/inventory/output",
+            "bp/root/e/16/port/hand"
+          ],
+          "entity_ids": [
+            {
+              "book_path": [],
+              "entity_number": 17,
+              "key": "bp/root/e/17"
+            }
+          ],
+          "evidence_ids": [
+            "blueprint_geometry",
+            "mech_unsupported_visibility"
+          ],
+          "evidence_kind": "estimated",
+          "id": "finding:8ff8340ac19388778ffac743eaae5f2b5abcf085b7a44d192fb2f7f31c4e1001",
+          "material": null,
+          "message": "bp/root/e/17 (wooden-chest) is not supported by base-2.0.76-normal-v1: unsupported entity adjacent to supported transport endpoints; it may or may not exchange items with them, so no bound may be advertised.",
+          "required_rate": null,
+          "severity": "warning"
+        }
+      ],
+      "graph_findings": {
+        "by_code": {
+          "blocked_output": 2,
+          "inserter_capacity_unknown": 1,
+          "inserter_endpoint_missing": 3,
+          "inserter_rotation_unresolved": 1,
+          "mechanics_unobserved": 9,
+          "splitter_distribution_relaxed": 1,
+          "transport_internal_break": 4,
+          "unreachable_input": 2,
+          "unsupported_possible_bridge": 3
+        },
+        "by_evidence_kind": {
+          "conditional": 1,
+          "estimated": 18,
+          "structural": 7
+        },
+        "by_severity": {
+          "info": 2,
+          "warning": 24
+        },
+        "total": 26
+      },
+      "identity": {
+        "blueprint_hash": "sha256:26080ba3c191e55788a4e84c02eae16be0a304277fe14c65ec56b5dbbb685cd3",
+        "graph_hash": "sha256:0df8e679c01584c02c5de2768fa32f82fc4ce3cf9d6334dcf35d738413a399a8",
+        "integration_version": "factoribot-routing-integration-1",
+        "mechanics_profile": "base-2.0.76-normal-v1",
+        "prototype_hash": "sha256:756af0daaf0da4d68e414513bf18144b2638e9e6b76d3319fe1f7e38e126655e",
+        "provenance": "synthetic",
+        "repeat_with": "the same blueprint_string/graph and book_path; pin expect_graph_hash to fail loudly on a changed input",
+        "schema_version": "1.1.1",
+        "selected_paths": [
+          []
+        ],
+        "source": "blueprint_string"
+      },
+      "ok": true,
+      "prototypes": {
+        "assembling-machine-2": 2,
+        "fast-inserter": 4,
+        "inserter": 1,
+        "splitter": 1,
+        "transport-belt": 6,
+        "wooden-chest": 3
+      },
+      "support": {
+        "supported": 14,
+        "unsupported": 3
+      }
+    }
+  },
+  "note": "Structural inspection only. Factoribot advertises no operating rate: all arcs are relaxed/conditional and the mechanics gate is unmet."
+}

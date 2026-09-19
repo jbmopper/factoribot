@@ -1,0 +1,28 @@
+   0.000 2026-09-12 21:58:18; Factorio 2.0.77 (build 84539, mac-arm64, steam)
+   0.004 Operating system: macOS 27.0.0
+   0.004 Program arguments: "/Volumes/Spess/SteamLibrary/steamapps/common/Factorio/factorio.app/Contents/MacOS/factorio" "--config" "/tmp/factoribot-2077-7jxk2ftq/config.ini" "--mod-directory" "/tmp/factoribot-2077-7jxk2ftq/mods" "--dump-data"
+   0.004 Config path: /private/tmp/factoribot-2077-7jxk2ftq/config.ini
+   0.004 Read data path: /Volumes/Spess/SteamLibrary/steamapps/common/Factorio/factorio.app/Contents/data
+   0.004 Write data path: /private/tmp/factoribot-2077-7jxk2ftq/output [59375/233752MB]
+   0.004 Binaries path: /Volumes/Spess/SteamLibrary/steamapps/common/Factorio/factorio.app/Contents
+   0.031 System info: [CPU: arm64, 10 cores, RAM: 16384 MB]
+   0.032 Running in headless mode
+   0.032 Audio is disabled
+   0.034 Info ModManager.cpp:449: FeatureFlag expansion-shaders = false
+   0.034 Info ModManager.cpp:449: FeatureFlag freezing = false
+   0.034 Info ModManager.cpp:449: FeatureFlag quality = false
+   0.034 Info ModManager.cpp:449: FeatureFlag rail-bridges = false
+   0.034 Info ModManager.cpp:449: FeatureFlag segmented-units = false
+   0.034 Info ModManager.cpp:449: FeatureFlag space-travel = false
+   0.034 Info ModManager.cpp:449: FeatureFlag spoiling = false
+   0.038 Loading mod core 0.0.0 (data.lua)
+   0.052 Loading mod base 2.0.77 (data.lua)
+   0.204 Loading mod base 2.0.77 (data-updates.lua)
+   0.236 Checksum for core: 4187927925
+   0.236 Checksum of base: 1879415942
+   0.350 Prototype list checksum: 911970612
+   1.070 Info PlayerData.cpp:66: Local player-data.json unavailable
+   1.070 Info PlayerData.cpp:71: Cloud player-data.json unavailable
+   1.073 Info GlobalContext.cpp:1300: Resetting config.
+   1.074 Factorio initialised
+   1.093 Goodbye

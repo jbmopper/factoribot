@@ -16,8 +16,8 @@ from types import UnionType
 from typing import Literal, Union, get_args, get_origin, get_type_hints
 
 SCHEMA_VERSION = "1.1.1"
-MECHANICS_PROFILE = "base-2.0.76-normal-v1"
-BASE_MOD = ("base", "2.0.76")
+MECHANICS_PROFILE = "base-2.0.77-normal-v1"
+BASE_MOD = ("base", "2.0.77")
 
 # Adapter-supplied classification of what an entity can do to items. It is a
 # claim about the prototype, never inferred from labels. Anything that can hold,
@@ -764,7 +764,7 @@ class Research(Record):
 
 @dataclass(frozen=True)
 class Assumptions(Record):
-    game_version: Literal["2.0.76"]
+    game_version: Literal["2.0.77"]
     mods: tuple[ModDeclaration, ...]
     quality: Literal["normal"]
     available_recipes: tuple[str, ...]
@@ -778,7 +778,7 @@ class Assumptions(Record):
     def _validate(self):
         unique((m.name for m in self.mods), "mod")
         base = [m for m in self.mods if m.name == BASE_MOD[0]]
-        require(len(base) == 1 and base[0] == ModDeclaration(*BASE_MOD, (), False), "base 2.0.76 must be declared exactly once")
+        require(len(base) == 1 and base[0] == ModDeclaration(*BASE_MOD, (), False), "base 2.0.77 must be declared exactly once")
         unique((d.id for d in self.irrelevant), "irrelevance declaration")
         require(all(d.basis != "power_assumed_available" for d in self.irrelevant) or self.power == "assumed_available",
                 "power irrelevance requires power assumed available")
@@ -815,7 +815,7 @@ class DetailScope(Record):
 @dataclass(frozen=True)
 class RoutingRequest(Record):
     schema_version: Literal["1.1.1"]
-    mechanics_profile: Literal["base-2.0.76-normal-v1"]
+    mechanics_profile: Literal["base-2.0.77-normal-v1"]
     blueprint_hash: str
     prototype_hash: str
     graph_hash: str
@@ -930,7 +930,14 @@ def unresolved_reasons(request: RoutingRequest, graph: SpatialGraph) -> tuple[st
     reasons += [f"unsupported entity: {e.id.key}" for e in graph.entities
                 if e.support != "supported" and e.id not in gapped and e.id not in declared]
     assigned = {f.entity for f in request.assignments.furnaces}
-    reasons += [f"ambiguous furnace: {e.id.key}" for e in graph.entities if len(e.furnace_candidates) > 1 and e.id not in assigned]
+    reasons += [f"ambiguous furnace: {e.id.key}" for e in graph.entities
+                if len(e.furnace_candidates) > 1 and e.id not in assigned]
+    # A sole compatible recipe is not itself feed evidence.  The inference pass
+    # must still record an assignment before the recipe can enter accounting;
+    # otherwise narrowing available_recipes to one value would silently bypass
+    # the no-source and conditional-source rules.
+    reasons += [f"unassigned furnace: {e.id.key}" for e in graph.entities
+                if len(e.furnace_candidates) == 1 and e.id not in assigned]
     if request.assumptions.power == "unknown":
         reasons.append("power availability unknown")
     reasons += [f"mod alters item mechanics: {m.name}" for m in request.assumptions.mods if m.alters_item_mechanics]

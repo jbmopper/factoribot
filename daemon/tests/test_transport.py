@@ -243,7 +243,7 @@ def test_handover_classification_survives_translation_and_rotation(extract):
 
 def test_both_readings_of_max_distance_stay_live(extract):
     reach = tr.underground_reach(L.UNDERGROUND, extract)
-    # 2.0.76 gives max_distance no description and the wiki states "4 squares"
+    # 2.0.77 gives max_distance no description and the wiki states "4 squares"
     # only for the basic tier, so the two readings differ by exactly one tile.
     assert (reach.max_distance, reach.certain, reach.extended) == (7, 7, 8)
     assert tr.underground_reach("underground-belt", extract).max_distance == 5

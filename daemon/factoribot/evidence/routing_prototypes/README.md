@@ -6,8 +6,8 @@ tasks 03/04/05 and CI work offline: nothing here needs the 14 MB
 
 Adapter: `daemon/factoribot/transport_prototypes.py`.
 Schema: `factoribot-routing-prototypes-1`.
-Target profile: `base-2.0.76-normal-v1` (a *target*, not a verified property of
-this extract -- see "What is unknown" below).
+Target profile: `base-2.0.77-normal-v1`. The extract comes from the verified
+base-only 2.0.77 build 84539 export; mechanics observations remain a separate gate.
 
 ## Files
 
@@ -43,7 +43,7 @@ Each prototype record separates three different kinds of statement:
 
 - `raw` -- fields copied verbatim from the dump. Read them with
   `Prototype.raw_field(name)`, which raises rather than returning a default.
-- `absent_raw_fields` -- fields the 2.0.76 prototype documentation defines for
+- `absent_raw_fields` -- fields the retained 2.0.76 prototype documentation defines for
   that prototype type and which this build leaves undefined. For example no
   inserter here defines `hand_size`, `stack_size_bonus` or `max_belt_stack_size`,
   and `bulk` exists only on `bulk-inserter`. An absent field is **not** silently
@@ -82,21 +82,18 @@ bulk-inserter, assembling-machine-2, electric-furnace). Poles and the beacon are
 retained as `unsupported` so the later power/beacon adapters need no second
 extraction pass; retaining their fields implies no mechanics.
 
-## What is unknown
+## Environment and legacy evidence
 
-The manifest records `environment_status: "unidentified"` and
-`matches_target_profile: "unknown"`, and every prototype's `origin` is
-`"unknown"`. That is not laziness:
+The manifest identifies Factorio 2.0.77 build 84539 with only base 2.0.77
+enabled. The executable export log and exact mod list are retained under
+`experiments/routing-measurements/profiles/base-2.0.77-normal-v1/`.
 
-- A `data-raw-dump.json` contains no build number and no mod manifest. The
-  blueprint format version does not identify the prototype environment either.
-- This dump defines 142 prototypes whose names begin with `ee-`, including the
-  `ee-super-substation` the pilot uses. That is consistent with an enabled
-  Editor Extensions mod, but the dump names and versions no mod, so the extract
-  is **not** certified as `base-2.0.76-normal-v1`.
-- It does look like a base-only-plus-mods environment in one respect: its only
-  quality prototypes are `normal` and `quality-unknown`, its only planet is
-  `nauvis`, and it defines no space platform or elevated rail prototypes.
+The mechanics documents and pending records still name their historical
+`base-2.0.76-normal-v1` profile. They are deliberately not relabelled. The
+runtime treats all incompatible records as pending for 2.0.77, so none can make
+an arc exact. The pilot's `ee-super-substation` is absent from the base-only
+extract, but blueprint import and pilot coverage retain it as visible unsupported
+topology rather than dropping it.
 
 `verify_manifest` refuses any manifest that claims a profile match or an
 identified environment without a known build *and* an explicit mod list.

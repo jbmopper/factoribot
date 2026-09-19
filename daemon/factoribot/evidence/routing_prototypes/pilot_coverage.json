@@ -40,11 +40,11 @@
     },
     "ee-super-substation": {
       "count": 3,
-      "in_extract": true,
-      "origin": "unknown",
-      "prototype_type": "electric-pole",
-      "subsystem": "power",
-      "support": "unsupported"
+      "in_extract": false,
+      "origin": null,
+      "prototype_type": null,
+      "subsystem": null,
+      "support": null
     },
     "electric-furnace": {
       "count": 76,
@@ -102,8 +102,8 @@
   "unresolved_prototypes": {
     "ee-super-substation": {
       "count": 3,
-      "reason": "present in this dump but its defining mod and version are unknown; recorded as unsupported topology with unknown origin",
-      "subsystem": "power"
+      "reason": "absent from the verified base-only export; retained from the blueprint as visible unsupported topology with unknown mod origin",
+      "subsystem": null
     }
   },
   "unsupported_entities": [

@@ -1,0 +1,15 @@
+{
+  "scenario_version": "factoribot-routing-measurement-scenario-1",
+  "scenario_id": "belt-straight-fast-one-lane",
+  "purpose": "Measure a saturated single lane without treating its available supply as forced intake.",
+  "setup": {
+    "entities": ["editor infinity chest source", "fast inserter feed", "20 straight fast-transport-belts", "counted collector chest before any removal"],
+    "supply_conditions": "Iron plates are available on exactly one lane up to 15 items/s; source extraction is counted.",
+    "removal_conditions": "Collector chest is read each window, then emptied only after its count is recorded.",
+    "blueprint_export_required": true
+  },
+  "research": {"inserter-capacity-bonus": 0},
+  "power_control": {"power_available": true, "circuit_state": "no circuit wires or enable condition"},
+  "measurement": {"warmup_ticks": 3600, "window_ticks": 3600, "repeat_runs": 2, "stability_tolerance_items_per_s": 0.016666666666666666},
+  "expected_not_observed": "A fast belt is documented at 15 items/s per lane. This is not a game observation until two completed captures validate it."
+}

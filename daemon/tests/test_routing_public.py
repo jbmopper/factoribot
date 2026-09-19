@@ -76,7 +76,7 @@ def test_layout_summary_counts_are_hand_derivable(toolbox, belt):
     assert out["counts"]["ports"] == 12
     assert out["counts"]["capacity_groups"] == 7
     assert out["identity"]["schema_version"] == "1.1.1"
-    assert out["identity"]["mechanics_profile"] == "base-2.0.76-normal-v1"
+    assert out["identity"]["mechanics_profile"] == "base-2.0.77-normal-v1"
     # The mechanics gate is unmet, so nothing may claim `exact`.
     assert "exact" not in out["arc_semantics"]
     assert out["mechanics_evidence"]["observed"] == 0
@@ -428,7 +428,7 @@ def test_the_layout_cache_cannot_change_an_answer(belt):
 
 def test_capabilities_advertise_the_unmet_mechanics_gate(toolbox):
     caps = toolbox.call("get_capabilities", {})["blueprint_routing"]
-    assert caps["mechanics_profile"] == "base-2.0.76-normal-v1"
+    assert caps["mechanics_profile"] == "base-2.0.77-normal-v1"
     assert caps["mechanics_evidence"]["by_status"] == {"documented-only": 6, "pending": 10}
     assert caps["mechanics_evidence"]["observed"] == 0
     assert caps["mechanics_evidence"]["gate"] == "unmet"
@@ -471,7 +471,7 @@ def test_capability_reason_sentence_tracks_the_observed_count_not_hardcoded(tmp_
                 measurement={"items_per_s_per_lane": 15.0},
                 measurement_interval_s=60.0,
                 observation_method="TEST FIXTURE, not a real capture",
-                environment={"game_version": "2.0.76", "declared_mods": ["base 2.0.76"],
+                environment={"game_version": "2.0.77", "declared_mods": ["base 2.0.77"],
                              "save": "test-disposable"},
             )
         (target / path.name).write_text(json.dumps(document))
@@ -479,6 +479,21 @@ def test_capability_reason_sentence_tracks_the_observed_count_not_hardcoded(tmp_
     real_load_mechanics = transport.load_mechanics
     monkeypatch.setattr(transport, "load_mechanics",
                         lambda directory=None: real_load_mechanics(str(target)))
+
+    legacy_observed = rp.routing_capabilities()
+    assert legacy_observed["mechanics_evidence"]["by_status"]["observed"] == 1
+    assert legacy_observed["mechanics_evidence"]["observed"] == 0
+    assert legacy_observed["mechanics_evidence"]["gate"] == "unmet"
+    assert "exact" not in legacy_observed["arc_semantics_available"]
+
+    observed_path = next(
+        path for path in target.iterdir()
+        if json.loads(path.read_text())["record_id"] == "belt.straight.lane_capacity"
+    )
+    document = json.loads(observed_path.read_text())
+    document["profile"] = "base-2.0.77-normal-v1"
+    observed_path.write_text(json.dumps(document))
+    real_load_mechanics.cache_clear()
 
     flipped = rp.routing_capabilities()
     assert flipped["mechanics_evidence"]["observed"] == 1
@@ -554,7 +569,7 @@ def test_seal_request_accepts_the_viewer_draft_envelope(belt):
         "surplus": [], "objective": {"kind": "maximize_export", "export_id": "out"},
         "protected": {"entities": [], "endpoints": [], "areas": [], "preserve_wiring": True,
                       "preserve_unknown": True, "preserve_boundaries": True},
-        "assumptions": {"game_version": "2.0.76", "mods": [R.BASE_MOD], "quality": "normal",
+        "assumptions": {"game_version": "2.0.77", "mods": [R.BASE_MOD], "quality": "normal",
                         "available_recipes": [], "research": [], "control_policy": "relax_open",
                         "power": "assumed_available", "modules": "none", "beacons": "none",
                         "irrelevant": []},

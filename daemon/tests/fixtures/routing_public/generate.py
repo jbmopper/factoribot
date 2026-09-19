@@ -122,18 +122,18 @@ def build():
         "protected": {"entities": [], "endpoints": [], "areas": [],
                       "preserve_wiring": True, "preserve_unknown": True, "preserve_boundaries": True},
         "assumptions": {
-            "game_version": "2.0.76",
+            "game_version": "2.0.77",
             # The pilot's three ee-super-substation poles carry mod `unknown`: task 03's
-            # adapter refuses to write "EditorExtensions" because the prototype extract
-            # records no mod manifest. The contract rejects a graph entity whose mod is
+            # adapter refuses to write "EditorExtensions" because the base-only extract
+            # has no such prototype. The contract rejects a graph entity whose mod is
             # undeclared, so a mod literally named `unknown` is declared here -- an honest
             # audit line ("an unidentified mod provides these power prototypes").
             # `irrelevant` stays EMPTY on purpose: nothing here asserts those poles are
             # irrelevant to item delivery, so the analysis reports them as unresolved and
             # withholds every bound instead of assuming them away.
-            "mods": [{"name": "unknown", "version": "unknown", "provides": ["power"],
+            "mods": [{"name": "unknown", "version": "unknown", "provides": ["unknown"],
                       "alters_item_mechanics": False},
-                     {"name": "base", "version": "2.0.76", "provides": [], "alters_item_mechanics": False}],
+                     {"name": "base", "version": "2.0.77", "provides": [], "alters_item_mechanics": False}],
             "quality": "normal",
             # Read from the blueprint's own recipe fields via the graph's activities.
             "available_recipes": sorted({a.recipe for a in graph.activities}),

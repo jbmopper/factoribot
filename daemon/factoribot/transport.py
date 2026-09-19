@@ -34,7 +34,8 @@ from typing import Iterable, Mapping
 from .blueprint_contract import EntityId
 from .spatial import SpatialEntity, SpatialIndex, rotate_offset
 from .transport_prototypes import (
-    EVIDENCE_STATUSES, PrototypeExtract, load_observations, load_pinned_extract,
+    EVIDENCE_STATUSES, TARGET_MECHANICS_PROFILE, PrototypeExtract,
+    load_observations, load_pinned_extract,
 )
 
 
@@ -80,10 +81,12 @@ class MechanicsRule:
     title: str
     expected_behavior: str
     blocking_gate: str | None
+    evidence_profile: str
+    compatible: bool
 
     @property
     def observed(self) -> bool:
-        return self.status == "observed"
+        return self.compatible and self.status == "observed"
 
 
 @lru_cache(maxsize=4)
@@ -91,12 +94,18 @@ def load_mechanics(directory: str | None = None) -> Mapping[str, MechanicsRule]:
     """Read task 02's observation records; the evidence status is theirs, not ours."""
     rules = {}
     for record in load_observations(directory):
+        compatible = record.profile == TARGET_MECHANICS_PROFILE
         rules[record.record_id] = MechanicsRule(
             id=record.record_id,
+            # Historical evidence keeps its original profile and advertised
+            # provenance. Compatibility is enforced by ``observed``/semantics.
             status=record.evidence_status,
             title=record.title,
             expected_behavior=record.expected_behavior,
-            blocking_gate=record.blocking_gate,
+            blocking_gate=(record.blocking_gate if compatible else
+                           f"legacy evidence targets {record.profile}; obtain a compatible {TARGET_MECHANICS_PROFILE} observation"),
+            evidence_profile=record.profile,
+            compatible=compatible,
         )
     missing = [r for r in MECHANICS_RULES if r not in rules]
     if missing:
@@ -638,7 +647,8 @@ class Profile:
             raise TransportError("unknown_mechanics_rule", f"unknown rule {rule_id!r}") from None
 
     def semantics(self, rule_id: str) -> str:
-        return semantics_for(self.status(rule_id))
+        rule = self.rules[rule_id]
+        return semantics_for("observed" if rule.observed else "pending")
 
     def unobserved(self, rule_ids: Iterable[str] = MECHANICS_RULES) -> tuple[str, ...]:
         """Rules in use that are not backed by a game observation."""

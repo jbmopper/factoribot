@@ -1,0 +1,168 @@
+{
+  "analysis_blueprint": {
+    "blueprint_hash": "sha256:9cecb5ce1dc8c938e9e544678e61d50c88751a4ce6e4fb5dd12f45193aebfb60",
+    "blueprint_string": "0eNqV02tqhDAQAOCryPzWZRMf0RxgL1FKie4sDWiUJJYu4t0b2ba0aMvkj5DHfBlmxgXafsbJauNBLqA9DiB/7KXQqxb7sHdRnR+tbkef8NP5JEQyoHKzxWtym61RHSbdq9ImhLyhdXo0IMuKN0XTlHVRifBJAY3XXqMD+bQ8FvcXMw8tWpAsBaMGDE/dlPOZt8q4abQ+C+9viUyjC7Ebu8A7yHMK9xBUrClctcXucRSWO5jHwYwM53EwJ8PFb1gbh9aHgx2ZH5KMH5jlt4l9uGh1l332bc+WX+yBU1FzE/TcRFwha3Ih6zi4IcNN5EzRp3W7SiswY/QKMxbRfpb/03/GyfmVEflF/kusohe0iKQFnS4j6b8m93ldPwBzodgR"
+  },
+  "auxiliary_trials": {
+    "counter_bindings": {
+      "dual_lane_export": {
+        "direction": "export",
+        "item": "iron-plate",
+        "lane": "both",
+        "prototype": "fast-transport-belt"
+      },
+      "dual_left_import": {
+        "direction": "import",
+        "item": "iron-plate",
+        "lane": "line-1",
+        "prototype": "fast-transport-belt"
+      },
+      "dual_right_import": {
+        "direction": "import",
+        "item": "iron-plate",
+        "lane": "line-2",
+        "prototype": "fast-transport-belt"
+      },
+      "inserter_export": {
+        "direction": "export",
+        "item": "iron-plate",
+        "lane": "sink-inventory",
+        "prototype": "fast-inserter"
+      },
+      "single_lane_export": {
+        "direction": "export",
+        "item": "iron-plate",
+        "lane": "line-1",
+        "prototype": "fast-transport-belt"
+      },
+      "single_lane_import": {
+        "direction": "import",
+        "item": "iron-plate",
+        "lane": "line-1",
+        "prototype": "fast-transport-belt"
+      }
+    },
+    "power_control": {
+      "circuit_state": "none",
+      "power_available": true,
+      "service": "isolated-electric-energy-interface-network"
+    },
+    "research": {
+      "inserter-capacity-bonus": 0
+    },
+    "setup": {
+      "inserter_source_items": 4000,
+      "removal": "count-before-unbounded-script-removal",
+      "straight_belts_per_line": 8
+    },
+    "source_schedule": {
+      "interval_ticks": 4,
+      "kind": "periodic-attempt",
+      "phase_tick": 0
+    }
+  },
+  "game_version": "2.0.77",
+  "measurement": {
+    "comparison_count_quantum": 1,
+    "comparison_relative_error": "1/200",
+    "counter_bindings": {
+      "ore_input_left_lane": {
+        "direction": "import",
+        "entity": "bp/root/e/1",
+        "item": "iron-ore",
+        "lane": "left"
+      },
+      "steel_output_right_lane": {
+        "direction": "export",
+        "entity": "bp/root/e/15",
+        "item": "steel-plate",
+        "lane": "right"
+      }
+    },
+    "repeat_runs": 2,
+    "state_resources": [
+      "belt-1:line-1",
+      "belt-1:line-2",
+      "belt-2:line-1",
+      "belt-2:line-2",
+      "belt-3:line-1",
+      "belt-3:line-2",
+      "belt-7:line-1",
+      "belt-7:line-2",
+      "belt-8:line-1",
+      "belt-8:line-2",
+      "belt-9:line-1",
+      "belt-9:line-2",
+      "belt-13:line-1",
+      "belt-13:line-2",
+      "belt-14:line-1",
+      "belt-14:line-2",
+      "belt-15:line-1",
+      "belt-15:line-2",
+      "furnace-5:source",
+      "furnace-5:result",
+      "furnace-11:source",
+      "furnace-11:result",
+      "inserter-4:hand",
+      "inserter-6:hand",
+      "inserter-10:hand",
+      "inserter-12:hand"
+    ],
+    "warmup_ticks": 3600,
+    "window_ticks": 3600,
+    "windows": 3
+  },
+  "mechanics_profile": "base-2.0.77-normal-v1",
+  "model": {
+    "external_removal": {
+      "counter_id": "steel_output_right_lane",
+      "item": "steel-plate",
+      "service": "count-before-unbounded-script-removal"
+    },
+    "external_supply": {
+      "capacity_items_per_s": "15",
+      "counter_id": "ore_input_left_lane",
+      "item": "iron-ore",
+      "schedule": {
+        "interval_ticks": 4,
+        "kind": "periodic-attempt",
+        "phase_tick": 0
+      }
+    },
+    "kind": "serial-furnace-chain",
+    "machines": [
+      {
+        "entity": "bp/root/e/5",
+        "prototype": "electric-furnace",
+        "recipe": "iron-plate"
+      },
+      {
+        "entity": "bp/root/e/11",
+        "prototype": "electric-furnace",
+        "recipe": "steel-plate"
+      }
+    ],
+    "power_control": {
+      "circuit_state": "none",
+      "power_available": true,
+      "service": "isolated-electric-energy-interface-network"
+    },
+    "research": {
+      "inserter-capacity-bonus": 0,
+      "steel-processing": 1
+    },
+    "transport_assumption": "noncompeting-services-observed-in-this-exact-scenario"
+  },
+  "recipe_data": {
+    "profile_extract_hash": "sha256:4cb74412fc6a5d1b9b234c22c1cec60724b7de60b7a84aa007e243ad50297e75",
+    "sha256": "be65dc3615d5939e522b00543b2925a02cfa890dbc9c00882dfe1c4629670f60"
+  },
+  "routing": {
+    "graph_hash": "sha256:6c8fc431002aeaa994267c98b26f7822b0c32c1659077d147329da9acdb7dddb",
+    "inference_artifact_hash": "sha256:f48f6bb1cc3eabcceab8c82a3665c147ba2ff412505fbd0f160049f9c94d9c0e",
+    "request_hash": "sha256:262a99985cd70756bc3d0f7786e2c60de36b2d270b4f50ddf336fd1c6bfaec52"
+  },
+  "scenario_hash": "sha256:aaf5cc1d378fa40ad2d8098148d5e24b1eff9e851aabfbc0286b1543a0cd13e6",
+  "scenario_id": "routing-measurement-23-base-2077-furnace-chain",
+  "schema_version": "factoribot-routing-throughput-scenario-2"
+}

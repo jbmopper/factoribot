@@ -1,0 +1,40 @@
+{
+  "environment": {
+    "declared_mods": [
+      [
+        "base",
+        "2.0.77"
+      ]
+    ],
+    "environment_status": "identified",
+    "game_version": "2.0.77",
+    "matches_target_profile": "yes"
+  },
+  "extract": {
+    "content_hash": "sha256:06121ba6be9093e86e8d649958e2d934ef7fa1273484d9238623c577efbe303e",
+    "missing_from_first_entity_set": [],
+    "path": "prototypes.json",
+    "prototype_count": 19,
+    "supported_count": 14
+  },
+  "notes": [
+    "Exported using Factorio 2.0.77 build 84539 in an isolated write directory and mod directory. Only base enabled; core is the engine built-in.",
+    "Environment match is not mechanics validation. Existing 2.0.76 documentation references are retained with their original version; their interpretation must be checked before activation.",
+    "The original modded pilot may include prototypes absent from this base-only export. Do not silently discard unsupported entities."
+  ],
+  "observations": {
+    "mechanics_gate_unmet": true,
+    "path": "../routing_mechanics_observations/manifest.json",
+    "status_counts": {}
+  },
+  "raw_slice": {
+    "content_hash": "sha256:5737564269fde2800500ba971052a0c523748037a6b3d57d5e7bbf65096a0299",
+    "path": "raw_prototype_slice.json"
+  },
+  "schema_version": "factoribot-routing-prototypes-1",
+  "source_dump": {
+    "path": "data/data-raw-dump-2.0.77-base.json",
+    "sha256": "be65dc3615d5939e522b00543b2925a02cfa890dbc9c00882dfe1c4629670f60"
+  },
+  "target_mechanics_profile": "base-2.0.77-normal-v1"
+}

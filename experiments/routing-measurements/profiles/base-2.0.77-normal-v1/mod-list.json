@@ -1,0 +1,9 @@
+
+{
+  "mods": [
+    {
+      "name": "base",
+      "enabled": true
+    }
+  ]
+}

@@ -588,32 +588,28 @@ def test_an_unknown_possible_bridge_never_becomes_a_proven_disconnection():
     assert not reachable_from(graph, [port(1, "in_left")]) & {port(3, "in_left")}
 
 
-def test_a_non_item_subsystem_is_left_to_the_requests_declaration():
+def test_a_modded_entity_absent_from_base_export_stays_a_visible_topology_gap():
     result = build(L.modded_pole_beside_belt())
     graph = result.graph
-    # No gap is written for a power entity: writing `may_connect: true` would
-    # withhold every bound whatever the request declares, and `may_connect: false`
-    # would assert a disconnection this module cannot prove.
-    assert graph.topology_gaps == ()
-    assert "unsupported_non_item_entity" in codes(result)
-    assert graph.entities[3].subsystem == "power"
-    assert graph.entities[3].subsystem not in ITEM_SUBSYSTEMS
+    # 2.0.77's base-only extract cannot prove the old modded pole's geometry.
+    # It stays visible and conservatively withholds instead of disappearing.
+    assert len(graph.topology_gaps) == 1
+    assert graph.topology_gaps[0].may_connect is True
+    assert graph.topology_gaps[0].entity_ids == (graph.entities[3].id,)
+    assert "unsupported_possible_bridge" in codes(result)
+    assert graph.entities[3].subsystem == "unknown"
 
     plain = R.make_request(
         graph, budgets=[R.budget("iron", "iron-plate", 1000)],
         feeds=[R.feed("f0", "iron", lane(1, "left"))],
         exports=[R.export("product", "iron-plate", lane(3, "left"))],
         objective={"kind": "maximize_export", "export_id": "product"})
-    assert unresolved_reasons(plain, graph) == ("unsupported entity: bp/root/e/4",)
+    assert unresolved_reasons(plain, graph) == ("unsupported topology: gap_e4",)
 
-    declared = R.make_request(
-        graph, budgets=[R.budget("iron", "iron-plate", 1000)],
-        feeds=[R.feed("f0", "iron", lane(1, "left"))],
-        exports=[R.export("product", "iron-plate", lane(3, "left"))],
-        objective={"kind": "maximize_export", "export_id": "product"},
-        irrelevant=[R.irrelevance(graph, "power", "power_assumed_available")])
-    assert unresolved_reasons(declared, graph) == ()
-    assert routing_value(analyze_delivery(graph, declared)) == pytest.approx(15.0)
+    # The contract has no irrelevance basis for an unidentified subsystem, and
+    # even a future declaration could not erase a may_connect topology gap.
+    report = analyze_delivery(graph, plain)
+    assert report.result.status == "partial" and report.result.bounds == ()
 
 
 # ---------------------------------------------------------------------------
@@ -809,14 +805,15 @@ def test_the_pilot_reports_its_unsupported_mechanics_and_advertises_no_bound(pil
         "splitter.lane_split", "splitter.priority_and_filter",
         "inserter.endpoints.pickup_drop_tiles", "inserter.rate.cycle_and_stack",
         "machine.activity.assembling_machine_2",
+        "unsupported.entity_visibility",
     }
     counted = {}
     for finding in pilot.findings:
         counted[finding.code] = counted.get(finding.code, 0) + 1
-    # The three ee-super-substations are power entities: reported, never turned
-    # into a topology gap, and never silently declared irrelevant here.
-    assert counted["unsupported_non_item_entity"] == 3
-    assert pilot.graph.topology_gaps == ()
+    # The three ee-super-substations are absent from base 2.0.77: reported and
+    # retained as possible topology gaps, never silently deleted.
+    assert counted["unsupported_possible_bridge"] == 3
+    assert len(pilot.graph.topology_gaps) == 3
     assert counted["machine_recipe_unresolved"] == 76   # the furnaces
     assert counted["item_filter_relaxed"] == 152        # filtered bulk inserters
     assert counted["splitter_distribution_relaxed"] == 15
@@ -831,7 +828,7 @@ def test_the_pilot_reports_its_unsupported_mechanics_and_advertises_no_bound(pil
                           [p.id for p in pilot.graph.ports if p.boundary_candidate
                            and p.role == "outgoing"][0])])
     reasons = unresolved_reasons(request, pilot.graph)
-    assert len(reasons) == 3 and all(r.startswith("unsupported entity") for r in reasons)
+    assert len(reasons) == 3 and all(r.startswith("unsupported topology") for r in reasons)
 
 
 def test_the_pilot_graph_is_accepted_by_the_delivery_adapter(pilot):

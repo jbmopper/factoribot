@@ -1,0 +1,2347 @@
+{
+  "auxiliary_trials": {
+    "meanings": {
+      "inserter": "actual chest-to-chest output at fixed zero capacity bonus",
+      "straight_belts": "actual boundary counts on named lanes"
+    },
+    "scenario": {
+      "counter_bindings": {
+        "dual_lane_export": {
+          "direction": "export",
+          "item": "iron-plate",
+          "lane": "both",
+          "prototype": "fast-transport-belt"
+        },
+        "dual_left_import": {
+          "direction": "import",
+          "item": "iron-plate",
+          "lane": "line-1",
+          "prototype": "fast-transport-belt"
+        },
+        "dual_right_import": {
+          "direction": "import",
+          "item": "iron-plate",
+          "lane": "line-2",
+          "prototype": "fast-transport-belt"
+        },
+        "inserter_export": {
+          "direction": "export",
+          "item": "iron-plate",
+          "lane": "sink-inventory",
+          "prototype": "fast-inserter"
+        },
+        "single_lane_export": {
+          "direction": "export",
+          "item": "iron-plate",
+          "lane": "line-1",
+          "prototype": "fast-transport-belt"
+        },
+        "single_lane_import": {
+          "direction": "import",
+          "item": "iron-plate",
+          "lane": "line-1",
+          "prototype": "fast-transport-belt"
+        }
+      },
+      "power_control": {
+        "circuit_state": "none",
+        "power_available": true,
+        "service": "isolated-electric-energy-interface-network"
+      },
+      "research": {
+        "inserter-capacity-bonus": 0
+      },
+      "setup": {
+        "inserter_source_items": 4000,
+        "removal": "count-before-unbounded-script-removal",
+        "straight_belts_per_line": 8
+      },
+      "source_schedule": {
+        "interval_ticks": 4,
+        "kind": "periodic-attempt",
+        "phase_tick": 0
+      }
+    },
+    "warmup": {
+      "counters": {
+        "dual_lane_export": 1744,
+        "dual_left_import": 900,
+        "dual_right_import": 900,
+        "inserter_export": 150,
+        "single_lane_export": 872,
+        "single_lane_import": 900
+      },
+      "end_tick": 3600,
+      "start_tick": 0
+    },
+    "windows": [
+      {
+        "counters": {
+          "dual_lane_export": 1800,
+          "dual_left_import": 900,
+          "dual_right_import": 900,
+          "inserter_export": 150,
+          "single_lane_export": 900,
+          "single_lane_import": 900
+        },
+        "end_tick": 7200,
+        "start_tick": 3600
+      },
+      {
+        "counters": {
+          "dual_lane_export": 1800,
+          "dual_left_import": 900,
+          "dual_right_import": 900,
+          "inserter_export": 150,
+          "single_lane_export": 900,
+          "single_lane_import": 900
+        },
+        "end_tick": 10800,
+        "start_tick": 7200
+      },
+      {
+        "counters": {
+          "dual_lane_export": 1800,
+          "dual_left_import": 900,
+          "dual_right_import": 900,
+          "inserter_export": 150,
+          "single_lane_export": 900,
+          "single_lane_import": 900
+        },
+        "end_tick": 14400,
+        "start_tick": 10800
+      }
+    ]
+  },
+  "capture_hash": "sha256:5375c3705ada492424f6216c59f88c4e461b645ac6e5d10a956307142ab2aaf9",
+  "counter_bindings": {
+    "ore_input_left_lane": {
+      "direction": "import",
+      "entity": "bp/root/e/1",
+      "item": "iron-ore",
+      "lane": "left"
+    },
+    "steel_output_right_lane": {
+      "direction": "export",
+      "entity": "bp/root/e/15",
+      "item": "steel-plate",
+      "lane": "right"
+    }
+  },
+  "craft_accounting": "consume-at-start-produce-at-completion",
+  "environment": {
+    "build": 84539,
+    "game_executable": "/Volumes/Spess/SteamLibrary/steamapps/common/Factorio/factorio.app/Contents/MacOS/factorio",
+    "game_version": "2.0.77",
+    "isolated_mod_directory": true,
+    "isolated_write_directory": true,
+    "mods": [
+      {
+        "name": "base",
+        "version": "2.0.77"
+      }
+    ],
+    "platform": "arm64-darwin",
+    "recipe_data_sha256": "be65dc3615d5939e522b00543b2925a02cfa890dbc9c00882dfe1c4629670f60",
+    "runner_termination": "SIGINT after complete capture file"
+  },
+  "measurement_windows": [
+    {
+      "counters": {
+        "ore_input_left_lane": 38,
+        "steel_output_right_lane": 7
+      },
+      "craft_events": [
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 3692
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 3692
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 3788
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 3788
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 3884
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 3884
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 3930
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 3930
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 3980
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 3980
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 4076
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 4076
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 4172
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 4172
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 4268
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 4268
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 4364
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 4364
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 4410
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 4410
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 4460
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 4460
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 4556
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 4556
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 4652
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 4652
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 4748
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 4748
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 4844
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 4844
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 4890
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 4890
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 4940
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 4940
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 5036
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 5036
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 5132
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 5132
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 5228
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 5228
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 5324
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 5324
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 5370
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 5370
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 5420
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 5420
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 5516
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 5516
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 5612
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 5612
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 5708
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 5708
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 5804
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 5804
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 5850
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 5850
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 5900
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 5900
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 5996
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 5996
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 6092
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 6092
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 6188
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 6188
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 6284
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 6284
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 6330
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 6330
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 6380
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 6380
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 6476
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 6476
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 6572
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 6572
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 6668
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 6668
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 6764
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 6764
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 6810
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 6810
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 6860
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 6860
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 6956
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 6956
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 7052
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 7052
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 7148
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 7148
+        }
+      ],
+      "end_tick": 7200,
+      "start_tick": 3600,
+      "state_end": {
+        "belt-13:line-1": {},
+        "belt-13:line-2": {},
+        "belt-14:line-1": {},
+        "belt-14:line-2": {},
+        "belt-15:line-1": {},
+        "belt-15:line-2": {},
+        "belt-1:line-1": {
+          "iron-ore": 4
+        },
+        "belt-1:line-2": {},
+        "belt-2:line-1": {
+          "iron-ore": 4
+        },
+        "belt-2:line-2": {},
+        "belt-3:line-1": {
+          "iron-ore": 4
+        },
+        "belt-3:line-2": {},
+        "belt-7:line-1": {},
+        "belt-7:line-2": {},
+        "belt-8:line-1": {},
+        "belt-8:line-2": {},
+        "belt-9:line-1": {},
+        "belt-9:line-2": {},
+        "furnace-11:result": {},
+        "furnace-11:source": {
+          "iron-plate": 4
+        },
+        "furnace-5:result": {},
+        "furnace-5:source": {
+          "iron-ore": 2
+        },
+        "inserter-10:hand": {},
+        "inserter-12:hand": {},
+        "inserter-4:hand": {},
+        "inserter-6:hand": {}
+      },
+      "state_start": {
+        "belt-13:line-1": {},
+        "belt-13:line-2": {},
+        "belt-14:line-1": {},
+        "belt-14:line-2": {},
+        "belt-15:line-1": {},
+        "belt-15:line-2": {},
+        "belt-1:line-1": {
+          "iron-ore": 3
+        },
+        "belt-1:line-2": {},
+        "belt-2:line-1": {
+          "iron-ore": 4
+        },
+        "belt-2:line-2": {},
+        "belt-3:line-1": {
+          "iron-ore": 4
+        },
+        "belt-3:line-2": {},
+        "belt-7:line-1": {},
+        "belt-7:line-2": {},
+        "belt-8:line-1": {},
+        "belt-8:line-2": {},
+        "belt-9:line-1": {},
+        "belt-9:line-2": {},
+        "furnace-11:result": {},
+        "furnace-11:source": {
+          "iron-plate": 1
+        },
+        "furnace-5:result": {},
+        "furnace-5:source": {
+          "iron-ore": 1
+        },
+        "inserter-10:hand": {},
+        "inserter-12:hand": {},
+        "inserter-4:hand": {
+          "iron-ore": 1
+        },
+        "inserter-6:hand": {
+          "iron-plate": 1
+        }
+      }
+    },
+    {
+      "counters": {
+        "ore_input_left_lane": 37,
+        "steel_output_right_lane": 8
+      },
+      "craft_events": [
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 7244
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 7244
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 7290
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 7290
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 7340
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 7340
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 7436
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 7436
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 7532
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 7532
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 7628
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 7628
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 7724
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 7724
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 7770
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 7770
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 7820
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 7820
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 7916
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 7916
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 8012
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 8012
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 8108
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 8108
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 8204
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 8204
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 8250
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 8250
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 8300
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 8300
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 8396
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 8396
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 8492
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 8492
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 8588
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 8588
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 8684
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 8684
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 8730
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 8730
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 8780
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 8780
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 8876
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 8876
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 8972
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 8972
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 9068
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 9068
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 9164
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 9164
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 9210
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 9210
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 9260
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 9260
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 9356
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 9356
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 9452
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 9452
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 9548
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 9548
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 9644
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 9644
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 9690
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 9690
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 9740
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 9740
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 9836
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 9836
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 9932
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 9932
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 10028
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 10028
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 10124
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 10124
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 10170
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 10170
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 10220
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 10220
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 10316
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 10316
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 10412
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 10412
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 10508
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 10508
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 10604
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 10604
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 10650
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 10650
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 10700
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 10700
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 10796
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 10796
+        }
+      ],
+      "end_tick": 10800,
+      "start_tick": 7200,
+      "state_end": {
+        "belt-13:line-1": {},
+        "belt-13:line-2": {},
+        "belt-14:line-1": {},
+        "belt-14:line-2": {},
+        "belt-15:line-1": {},
+        "belt-15:line-2": {},
+        "belt-1:line-1": {
+          "iron-ore": 3
+        },
+        "belt-1:line-2": {},
+        "belt-2:line-1": {
+          "iron-ore": 4
+        },
+        "belt-2:line-2": {},
+        "belt-3:line-1": {
+          "iron-ore": 4
+        },
+        "belt-3:line-2": {},
+        "belt-7:line-1": {},
+        "belt-7:line-2": {},
+        "belt-8:line-1": {},
+        "belt-8:line-2": {},
+        "belt-9:line-1": {},
+        "belt-9:line-2": {},
+        "furnace-11:result": {},
+        "furnace-11:source": {
+          "iron-plate": 1
+        },
+        "furnace-5:result": {},
+        "furnace-5:source": {
+          "iron-ore": 1
+        },
+        "inserter-10:hand": {},
+        "inserter-12:hand": {},
+        "inserter-4:hand": {
+          "iron-ore": 1
+        },
+        "inserter-6:hand": {
+          "iron-plate": 1
+        }
+      },
+      "state_start": {
+        "belt-13:line-1": {},
+        "belt-13:line-2": {},
+        "belt-14:line-1": {},
+        "belt-14:line-2": {},
+        "belt-15:line-1": {},
+        "belt-15:line-2": {},
+        "belt-1:line-1": {
+          "iron-ore": 4
+        },
+        "belt-1:line-2": {},
+        "belt-2:line-1": {
+          "iron-ore": 4
+        },
+        "belt-2:line-2": {},
+        "belt-3:line-1": {
+          "iron-ore": 4
+        },
+        "belt-3:line-2": {},
+        "belt-7:line-1": {},
+        "belt-7:line-2": {},
+        "belt-8:line-1": {},
+        "belt-8:line-2": {},
+        "belt-9:line-1": {},
+        "belt-9:line-2": {},
+        "furnace-11:result": {},
+        "furnace-11:source": {
+          "iron-plate": 4
+        },
+        "furnace-5:result": {},
+        "furnace-5:source": {
+          "iron-ore": 2
+        },
+        "inserter-10:hand": {},
+        "inserter-12:hand": {},
+        "inserter-4:hand": {},
+        "inserter-6:hand": {}
+      }
+    },
+    {
+      "counters": {
+        "ore_input_left_lane": 38,
+        "steel_output_right_lane": 7
+      },
+      "craft_events": [
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 10892
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 10892
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 10988
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 10988
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 11084
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 11084
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 11130
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 11130
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 11180
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 11180
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 11276
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 11276
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 11372
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 11372
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 11468
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 11468
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 11564
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 11564
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 11610
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 11610
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 11660
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 11660
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 11756
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 11756
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 11852
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 11852
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 11948
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 11948
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 12044
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 12044
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 12090
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 12090
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 12140
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 12140
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 12236
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 12236
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 12332
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 12332
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 12428
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 12428
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 12524
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 12524
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 12570
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 12570
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 12620
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 12620
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 12716
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 12716
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 12812
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 12812
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 12908
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 12908
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 13004
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 13004
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 13050
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 13050
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 13100
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 13100
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 13196
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 13196
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 13292
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 13292
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 13388
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 13388
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 13484
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 13484
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 13530
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 13530
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 13580
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 13580
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 13676
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 13676
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 13772
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 13772
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 13868
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 13868
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 13964
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 13964
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "start",
+          "recipe": "steel-plate",
+          "tick": 14010
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/11",
+          "kind": "complete",
+          "recipe": "steel-plate",
+          "tick": 14010
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 14060
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 14060
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 14156
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 14156
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 14252
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 14252
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "start",
+          "recipe": "iron-plate",
+          "tick": 14348
+        },
+        {
+          "count": 1,
+          "entity": "bp/root/e/5",
+          "kind": "complete",
+          "recipe": "iron-plate",
+          "tick": 14348
+        }
+      ],
+      "end_tick": 14400,
+      "start_tick": 10800,
+      "state_end": {
+        "belt-13:line-1": {},
+        "belt-13:line-2": {},
+        "belt-14:line-1": {},
+        "belt-14:line-2": {},
+        "belt-15:line-1": {},
+        "belt-15:line-2": {},
+        "belt-1:line-1": {
+          "iron-ore": 4
+        },
+        "belt-1:line-2": {},
+        "belt-2:line-1": {
+          "iron-ore": 4
+        },
+        "belt-2:line-2": {},
+        "belt-3:line-1": {
+          "iron-ore": 4
+        },
+        "belt-3:line-2": {},
+        "belt-7:line-1": {},
+        "belt-7:line-2": {},
+        "belt-8:line-1": {},
+        "belt-8:line-2": {},
+        "belt-9:line-1": {},
+        "belt-9:line-2": {},
+        "furnace-11:result": {},
+        "furnace-11:source": {
+          "iron-plate": 4
+        },
+        "furnace-5:result": {},
+        "furnace-5:source": {
+          "iron-ore": 2
+        },
+        "inserter-10:hand": {},
+        "inserter-12:hand": {},
+        "inserter-4:hand": {},
+        "inserter-6:hand": {}
+      },
+      "state_start": {
+        "belt-13:line-1": {},
+        "belt-13:line-2": {},
+        "belt-14:line-1": {},
+        "belt-14:line-2": {},
+        "belt-15:line-1": {},
+        "belt-15:line-2": {},
+        "belt-1:line-1": {
+          "iron-ore": 3
+        },
+        "belt-1:line-2": {},
+        "belt-2:line-1": {
+          "iron-ore": 4
+        },
+        "belt-2:line-2": {},
+        "belt-3:line-1": {
+          "iron-ore": 4
+        },
+        "belt-3:line-2": {},
+        "belt-7:line-1": {},
+        "belt-7:line-2": {},
+        "belt-8:line-1": {},
+        "belt-8:line-2": {},
+        "belt-9:line-1": {},
+        "belt-9:line-2": {},
+        "furnace-11:result": {},
+        "furnace-11:source": {
+          "iron-plate": 1
+        },
+        "furnace-5:result": {},
+        "furnace-5:source": {
+          "iron-ore": 1
+        },
+        "inserter-10:hand": {},
+        "inserter-12:hand": {},
+        "inserter-4:hand": {
+          "iron-ore": 1
+        },
+        "inserter-6:hand": {
+          "iron-plate": 1
+        }
+      }
+    }
+  ],
+  "power_control": {
+    "circuit_state": "none",
+    "power_available": true,
+    "service": "isolated-electric-energy-interface-network"
+  },
+  "record_kind": "game-observation",
+  "research": {
+    "inserter-capacity-bonus": 0,
+    "steel-processing": 1
+  },
+  "run_id": "run-2",
+  "runtime_diagnostics": {
+    "e4_drop": {
+      "x": 4.69921875,
+      "y": 14.5
+    },
+    "e4_energy": 1054.2222222222222,
+    "e4_pickup": {
+      "x": 2.5,
+      "y": 14.5
+    },
+    "e4_status": 34,
+    "e5_energy": 3306.6666666666665,
+    "e5_status": 1,
+    "inserter_drop": {
+      "x": 2.69921875,
+      "y": 9.5
+    },
+    "inserter_energy": 1054.2222222222222,
+    "inserter_pickup": {
+      "x": 0.5,
+      "y": 9.5
+    },
+    "inserter_status": 1,
+    "power_production": 500000000000
+  },
+  "scenario_hash": "sha256:aaf5cc1d378fa40ad2d8098148d5e24b1eff9e851aabfbc0286b1543a0cd13e6",
+  "scenario_id": "routing-measurement-23-base-2077-furnace-chain",
+  "schema_version": "factoribot-routing-measurement-capture-3",
+  "setup": {
+    "analysis_blueprint_hash": "sha256:9cecb5ce1dc8c938e9e544678e61d50c88751a4ce6e4fb5dd12f45193aebfb60",
+    "fixture_helpers": [
+      "scripted periodic source on bp/root/e/1 left lane",
+      "count-before-unbounded scripted removal on bp/root/e/15 line 2 (right lane)",
+      "isolated electric-energy-interface and two substations",
+      "separate straight one-lane, straight dual-lane and fast-inserter trials"
+    ],
+    "trial_blueprint": "0eNqd1u1ugyAUBuBbafitjaD4dQG7iWVZ0J5uJBYbwGWN6b2Prtu6Rbucwx8TP3g44gs4s26Y4Gi18aydmfZwYO2vawkbVAdDuPagej9a3Y1+s9PuODrVDbAR22xbVRtvtRo2Dvx0DE3ewDo9GtbKUjRF08i6KKtwSBgYr70Gx9rH+XpyejbToQPLWp4wow4Qutor51NvlQndWJ+G/i+FhC5D2ws7s3fWZgk7hUbFOWE7baG/3gqnC1jQYI6Gcxos0HDxF9bGgfXhxoLMV0kuVkz5Y8IQHrS6T/eTNaqHJSu/2RWnxNZW4WuraANZoweypsENGm6ImcKn9fIoboA5x48w54TPz/N/vj8X6PokoT7iXOIlfkALIl3haUmka0IMspj1MMPIPGZBRMkiZkVEycR85HiZGI8CLxPTIfFySZNLvExciiu8XMfkGTVTmpg8Y2SexeQZJfOYPKNkEZNnlJzH5BklFzF5RskyJs8o+TYHnQcY0v4V3N0cN6tbKa/Qe+mXgtnpa1xh4p/CZLb8XQAD9uUUagwF7lf/G66vKrJ18pZ4N3XOq8+Gd+LI63VDoAx+Q57O5w8Vb0us",
+    "trial_blueprint_hash": "sha256:e9e51933bfebb562722f5f7e52184395a29ccdbbf6e77afef63fdb5c53e6df1a"
+  },
+  "warmup_ticks": 3600
+}

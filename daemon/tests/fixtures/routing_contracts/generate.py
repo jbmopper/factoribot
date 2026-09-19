@@ -122,7 +122,7 @@ class Layout:
         return parse_graph(seal(self.g,"graph_hash"))
 
 
-BASE_MOD_DECLARATION = dict(name="base", version="2.0.76", provides=[], alters_item_mechanics=False)
+BASE_MOD_DECLARATION = dict(name="base", version="2.0.77", provides=[], alters_item_mechanics=False)
 
 
 def request(graph, feeds, budgets, exports, recipes=(), furnaces=(), mods=(), irrelevant=()):
@@ -133,7 +133,7 @@ def request(graph, feeds, budgets, exports, recipes=(), furnaces=(), mods=(), ir
         budgets=budgets,exports=exports,surplus=[],objective=dict(kind="maximize_export",export_id="product"),
         assignments=assignments,protected=dict(entities=[],endpoints=[exports[0]["endpoint"]],areas=[],
         preserve_wiring=True,preserve_unknown=True,preserve_boundaries=True),
-        assumptions=dict(game_version="2.0.76",mods=[BASE_MOD_DECLARATION, *mods],quality="normal",
+        assumptions=dict(game_version="2.0.77",mods=[BASE_MOD_DECLARATION, *mods],quality="normal",
           available_recipes=list(recipes),research=[dict(name="inserter-capacity-bonus",level=0)],
           control_policy="explicit",power="assumed_available",modules="none",beacons="none",irrelevant=list(irrelevant)),
         detail=dict(kind="full",entity_ids=[],cursor=None,limit=10000))

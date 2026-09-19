@@ -517,6 +517,7 @@ _UNRESOLVED_CODES = {
     "unsupported topology": "unresolved_topology_gap",
     "unsupported entity": "unresolved_unsupported_entity",
     "ambiguous furnace": "unresolved_ambiguous_furnace",
+    "unassigned furnace": "unresolved_unassigned_furnace",
     "power availability unknown": "unresolved_power",
     "mod alters item mechanics": "unresolved_mod_mechanics",
 }
@@ -721,7 +722,7 @@ def analyze_delivery(graph: SpatialGraph, request: RoutingRequest, options: Plan
                 gap = gaps.get(tail.split(" ")[0])
                 if gap is not None:
                     entity_ids, evidence = gap.entity_ids, gap.evidence_ids
-            elif head in ("unsupported entity", "ambiguous furnace") and tail in entities:
+            elif head in ("unsupported entity", "ambiguous furnace", "unassigned furnace") and tail in entities:
                 entity_ids, evidence = (entities[tail].id,), entities[tail].evidence_ids
             findings.append(_finding(code, "warning", kind,
                                      f"No bound or insufficiency claim: {reason}. Resolve it (assignment, evidence, or a supported adapter) before numerical analysis.",

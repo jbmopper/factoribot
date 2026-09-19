@@ -48,12 +48,23 @@ production numbers. Conceptual discussion does not require a solver call.
   contract. Two things must be said whenever you report their output: every
   advertised value is an **upper bound under stated relaxations, never an
   achievable or measured rate**, and the **game-mechanics gate is unmet** (0 of
-  16 mechanics rules observed, 6 documented-only, 10 pending), so every transport
-  arc is relaxed or conditional and inserter throughput is unknown. Nothing is
-  inferred: a feed, export, removal service, furnace recipe, research level, mod
-  or power assumption that the user has not declared does not exist. `partial`
+  16 historical 2.0.76 mechanics rules observed, 6 documented-only, 10 pending;
+  they are incompatible with the current 2.0.77 profile), so every transport arc
+  is relaxed or conditional and inserter throughput is unknown. The analysis
+  calls infer nothing. The optional host command `factoribot routes infer` can
+  derive only a furnace recipe whose explicit feed and exact supported path leave
+  one compatible item-only candidate; it saves separate evidence provenance and
+  makes no rate claim. A feed, export, removal service, research level, mod or
+  power assumption that the user has not declared does not exist. `partial`
   with the unresolved reasons listed is a correct and useful answer; do not
   manufacture a declaration to turn it into a number.
+- For the one measured serial electric-furnace subset, use
+  `evaluate_blueprint_operating_rate` and read the restricted operating section
+  of [the routing audit](references/routing.md). With a sealed v2 scenario it
+  returns a conditional recipe-data-derived operating prediction; with the full
+  required v3 capture set it also validates actual finite-window game rates.
+  It is not a general simulator. Keep its result separate from the routing LP
+  capacity bound, and never call finite stable windows a sustained result.
 - Report computed quantities from tools. State the objective and important
   assumptions, all net outputs, used/unused inputs, and useful machine counts.
   Distinguish fractional machine requirements from rounded build counts.

@@ -12,7 +12,7 @@ from factoribot.blueprint_contract import (
     SCHEMA_VERSION, MECHANICS_PROFILE, EndpointId, content_hash, parse_request, to_dict,
 )
 
-BASE_MOD = {"name": "base", "version": "2.0.76", "provides": [], "alters_item_mechanics": False}
+BASE_MOD = {"name": "base", "version": "2.0.77", "provides": [], "alters_item_mechanics": False}
 
 
 def item(name):
@@ -108,7 +108,7 @@ def make_request(
         "protected": {"entities": [], "endpoints": [], "areas": [],
                       "preserve_wiring": True, "preserve_unknown": True, "preserve_boundaries": True},
         "assumptions": {
-            "game_version": "2.0.76", "mods": mods_for(graph), "quality": "normal",
+            "game_version": "2.0.77", "mods": mods_for(graph), "quality": "normal",
             "available_recipes": recipes, "research": [],
             "control_policy": control_policy, "power": power,
             "modules": "none", "beacons": "none", "irrelevant": list(irrelevant),

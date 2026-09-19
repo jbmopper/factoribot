@@ -86,8 +86,6 @@
     };
   }
   var A = copyAssignments(D.assignments);
-  var ANALYSED = D.analyzed_assignments ? canon(assignmentDoc(copyAssignments(D.analyzed_assignments))) : null;
-  var LOADED = null;
 
   function assignmentDoc(state) {
     var s = state || A;
@@ -113,6 +111,23 @@
     objective: REQ ? { kind: REQ.objective.kind, export_id: REQ.objective.export_id } : { kind: "feasible", export_id: null }
   };
 
+  function proposalDoc(source) {
+    source = source || proposed;
+    return {
+      budgets: (source.budgets || []).map(function (b) { return { id: b.id, material: b.material, capacity: b.capacity }; }),
+      exports: (source.exports || []).slice(),
+      surplus: (source.surplus || []).slice(),
+      objective: { kind: source.objective && source.objective.kind,
+        export_id: source.objective ? source.objective.export_id : null }
+    };
+  }
+  function editableDocument(assignments, proposal) {
+    return { assignments: assignmentDoc(assignments), proposed_request: proposalDoc(proposal) };
+  }
+  var ANALYSED = (D.analyzed_assignments && REQ)
+    ? canon(editableDocument(copyAssignments(D.analyzed_assignments), proposed)) : null;
+  var LOADED = canon(editableDocument());
+
   var state = {
     tab: "findings",
     finding: null,
@@ -135,8 +150,8 @@
     if (A.graph_hash !== G.graph_hash) {
       hard.push("Stale graph hash: assignments carry " + dash(A.graph_hash) + ", this graph is " + dash(G.graph_hash) + ".");
     }
-    if (R && ANALYSED !== null && canon(assignmentDoc()) !== ANALYSED) {
-      soft.push("The displayed analysis was produced for a different assignment set. It no longer describes these edits; re-run the host analysis.");
+    if (R && ANALYSED !== null && canon(editableDocument()) !== ANALYSED) {
+      soft.push("The displayed analysis was produced for different assignments, budgets, outlets or objective. It no longer describes these edits; re-run the host analysis.");
     }
     if (R && ANALYSED === null) {
       soft.push("The displayed result carries no interpreted assignments, so these edits cannot be matched against it.");
@@ -144,7 +159,7 @@
     if (R && R.graph_match === false) {
       hard.push("The displayed result's blueprint, prototype or graph provenance does not match what is loaded here (missing or mismatched hash).");
     }
-    return { hard: hard, soft: soft, edited: canon(assignmentDoc()) !== LOADED };
+    return { hard: hard, soft: soft, edited: canon(editableDocument()) !== LOADED };
   }
 
   /* --------------------------------------------------------------- layout */
@@ -498,6 +513,15 @@
         focusKeys([], Object.keys(state.selEndpoints), []);
         renderPanel(); request();
       });
+      var removeBudget = add(row, E("button", "mini", "remove"));
+      removeBudget.disabled = users.length > 0;
+      removeBudget.title = users.length ? "Remove or replace its feeds first; shared budgets stay shared." : "Remove unused budget";
+      removeBudget.addEventListener("click", function (event) {
+        event.stopPropagation();
+        if (users.length) { return; }
+        proposed.budgets = proposed.budgets.filter(function (candidate) { return candidate.id !== budget.id; });
+        changed();
+      });
     });
     if (!proposed.budgets.length) { add(root, E("p", "note", "none declared yet")); }
     add(root, budgetForm());
@@ -540,6 +564,24 @@
       drop.addEventListener("click", function () { proposed.surplus.splice(index, 1); changed(); });
     });
     add(root, outletForm());
+
+    add(root, E("h2", null, "Draft objective"));
+    add(root, E("p", "note", "Changing the objective also makes a displayed result stale. This only edits the draft for the CLI; it does not solve in the page."));
+    var objectiveKind = choice(root, "objective", [["feasible", "Feasible request"], ["maximize_export", "Maximize an export"]], proposed.objective.kind || "feasible");
+    var objectiveExport = choice(root, "objective export", [["", "(none — required for feasible)"]].concat(
+      proposed.exports.map(function (item) { return [item.id, item.id + " · " + materialText(item.material)]; })),
+      proposed.objective.export_id || "");
+    function setObjective() {
+      if (objectiveKind.value === "maximize_export" && !objectiveExport.value) {
+        objectiveKind.value = "feasible";
+      }
+      proposed.objective = objectiveKind.value === "maximize_export"
+        ? { kind: "maximize_export", export_id: objectiveExport.value || null }
+        : { kind: "feasible", export_id: null };
+      changed();
+    }
+    objectiveKind.addEventListener("change", setObjective);
+    objectiveExport.addEventListener("change", setObjective);
 
     add(root, E("h2", null, "Furnace recipe assignment"));
     add(root, E("p", "note", "Only a recipe recorded as a candidate of that entity may be assigned. Several candidates with no override leave the model unresolved, which forces a partial result with no bounds."));
@@ -626,6 +668,137 @@
     if (!/^-?(0|[1-9][0-9]*)(\.[0-9]+)?$/.test(String(text).trim())) { return null; }
     var value = Number(text);
     return isFinite(value) ? value : null;
+  }
+
+  function inputBeltFor(endpoint) {
+    var entity = endpoint && entityByKey[endpoint.entity_key];
+    return entity && entity.input_belt ? { entity: entity, belt: entity.input_belt } : null;
+  }
+  function inputIdPart(entity) {
+    var ident = entity.id || {};
+    return (ident.book_path || []).concat([ident.entity_number]).join("_").replace(/[^a-zA-Z0-9_-]/g, "_").toLowerCase();
+  }
+  function shortcutBudgetId(entity, material) {
+    var base = "full_input_" + inputIdPart(entity) + "_" + material;
+    var id = base, suffix = 2;
+    while (proposed.budgets.some(function (budget) { return budget.id === id; })) {
+      id = base + "_" + suffix;
+      suffix += 1;
+    }
+    return id;
+  }
+  function pruneUnusedShortcutBudgets() {
+    proposed.budgets = proposed.budgets.filter(function (budget) {
+      return budget.id.indexOf("full_input_") !== 0
+        || A.feeds.some(function (feed) { return feed.budget_id === budget.id; });
+    });
+  }
+  function itemPicker(parent, labelText) {
+    var known = (D.known_items || []).map(function (item) { return [item.name, item.label]; });
+    known.unshift(["", "(choose an imported item)"]);
+    known.push(["__internal__", "Other — enter an internal item name"]);
+    var select = choice(parent, labelText, known, "");
+    var custom = field(parent, labelText + " — internal item name", "", "iron-plate");
+    custom.hidden = true;
+    select.addEventListener("change", function () { custom.hidden = select.value !== "__internal__"; });
+    return {
+      value: function () {
+        var value = select.value === "__internal__" ? custom.value.trim() : select.value;
+        return TOKEN.test(value) ? value : null;
+      }
+    };
+  }
+  function fullInputForm(endpoint) {
+    var info = inputBeltFor(endpoint);
+    if (!info) { return null; }
+    var selectedLane = (info.belt.lanes || []).filter(function (lane) { return lane.incoming_key === endpoint.key; })[0];
+    if (!selectedLane || !selectedLane.boundary_candidate) { return null; }
+    var form = E("div", "card plain full-input");
+    add(form, E("div", null, "Full supply input"));
+    add(form, E("p", "note", "This declares available external supply up to imported lane capacity; it never forces consumption. The CLI reanalyzes an exported draft."));
+    if (!selectedLane.available) {
+      add(form, E("p", "err-text", info.belt.reason || "Imported lane capacity is unavailable, so this shortcut cannot apply."));
+      return form;
+    }
+    var modeOptions = [["lane", "Selected lane only — " + selectedLane.capacity_text]];
+    if (info.belt.whole_belt_available) {
+      modeOptions.unshift(["whole", "Whole belt — " + info.belt.whole_capacity_text]);
+    }
+    var mode = choice(form, "supply scope", modeOptions, info.belt.whole_belt_available ? "whole" : "lane");
+    var packing = choice(form, "whole-belt item layout", [["same", "One item on both lanes"], ["different", "A different item per lane"]], "same");
+    var first = itemPicker(form, "item for " + selectedLane.side + " lane");
+    var otherLane = (info.belt.lanes || []).filter(function (lane) { return lane.incoming_key !== selectedLane.incoming_key; })[0];
+    var second = itemPicker(form, "item for " + (otherLane ? otherLane.side : "other") + " lane");
+    var message = add(form, E("p", "small"));
+    function packingVisibility() {
+      packing.parentElement.hidden = mode.value !== "whole";
+      /* itemPicker creates a label after the select; keep the second lane's
+         label adjacent and hidden for single-item/full-lane declarations. */
+      second._unused = false;
+      var labels = form.querySelectorAll("label.field");
+      if (labels.length >= 6) {
+        labels[4].hidden = mode.value !== "whole" || packing.value !== "different";
+        labels[5].hidden = mode.value !== "whole" || packing.value !== "different";
+      }
+    }
+    mode.addEventListener("change", packingVisibility);
+    packing.addEventListener("change", packingVisibility);
+    packingVisibility();
+    var button = add(form, E("button", "act", "Mark as full input"));
+    button.addEventListener("click", function () {
+      var useWhole = mode.value === "whole";
+      var lanes = useWhole ? info.belt.lanes.slice() : [selectedLane];
+      if (lanes.some(function (lane) { return !lane.available || !lane.boundary_candidate; })) {
+        message.className = "small err-text";
+        message.textContent = "The selected lane(s) no longer have imported incoming-boundary capacity evidence.";
+        return;
+      }
+      var firstItem = first.value();
+      var secondItem = (useWhole && packing.value === "different") ? second.value() : firstItem;
+      if (!firstItem || !secondItem) {
+        message.className = "small err-text";
+        message.textContent = "Choose an imported item or provide a valid internal item name ([a-z][a-z0-9_-]*).";
+        return;
+      }
+      var items = lanes.map(function (lane) {
+        return { lane: lane, material: lane.incoming_key === selectedLane.incoming_key ? firstItem : secondItem };
+      });
+      var replaceKeys = {};
+      lanes.forEach(function (lane) { replaceKeys[lane.incoming_key] = true; });
+      /* Replacing an input removes the old feed(s) at exactly these lane
+         entrances.  A shared advanced budget remains intact for other ports. */
+      A.feeds = A.feeds.filter(function (feed) { return !replaceKeys[epKey(feed.endpoint)]; });
+      pruneUnusedShortcutBudgets();
+      var byMaterial = {};
+      items.forEach(function (item) { (byMaterial[item.material] || (byMaterial[item.material] = [])).push(item); });
+      Object.keys(byMaterial).sort().forEach(function (material) {
+        var group = byMaterial[material];
+        var capacity = (group.length === 2 && useWhole)
+          ? info.belt.whole_capacity : group[0].lane.capacity;
+        var budgetId = shortcutBudgetId(info.entity, material);
+        proposed.budgets.push({ id: budgetId,
+          material: { kind: "item", name: material, quality: "normal" }, capacity: capacity });
+        group.forEach(function (item) {
+          A.feeds.push({ id: "full_input_" + inputIdPart(info.entity) + "_" + item.lane.side,
+            budget_id: budgetId, endpoint: endpointByKey[item.lane.incoming_key].id,
+            capacity: item.lane.capacity });
+        });
+      });
+      message.className = "small";
+      message.textContent = "Full supply assigned. Export the draft, re-run the CLI analysis, then reopen its regenerated page.";
+      changed();
+    });
+    var existingKeys = {};
+    (info.belt.lanes || []).forEach(function (lane) { existingKeys[lane.incoming_key] = true; });
+    if (A.feeds.some(function (feed) { return existingKeys[epKey(feed.endpoint)]; })) {
+      var remove = add(form, E("button", "act sub", "Remove input assignment"));
+      remove.addEventListener("click", function () {
+        A.feeds = A.feeds.filter(function (feed) { return !existingKeys[epKey(feed.endpoint)]; });
+        pruneUnusedShortcutBudgets();
+        changed();
+      });
+    }
+    return form;
   }
 
   function budgetForm() {
@@ -764,12 +937,7 @@
       blueprint_hash: A.blueprint_hash,
       graph_hash: A.graph_hash,
       assignments: assignmentDoc(),
-      proposed_request: {
-        budgets: proposed.budgets,
-        exports: proposed.exports,
-        surplus: proposed.surplus,
-        objective: proposed.objective
-      },
+      proposed_request: proposalDoc(),
       notes: [
         "Produced by the routing viewer for host reanalysis. The page ran no solver and wrote no file.",
         "Budgets, exports and surplus are request material; only 'assignments' is an AssignmentSet."
@@ -777,12 +945,12 @@
     };
   }
 
-  var exportKindValue = "assignments";
+  var exportKindValue = "draft";
 
   function renderIo(root) {
     add(root, E("h2", null, "Export"));
     add(root, E("p", "note", "The page produces JSON for the host to reanalyze. It never writes a file or solves anything by itself."));
-    var kind = choice(root, "document", [["assignments", "AssignmentSet only"], ["draft", "Assignment draft with proposed budgets and outlets"]], exportKindValue);
+    var kind = choice(root, "document", [["draft", "Assignment draft with proposed budgets and outlets (default)"], ["assignments", "AssignmentSet only"]], exportKindValue);
     var area = add(root, E("textarea"));
     area.id = "export-text";
     area.spellcheck = false;
@@ -819,7 +987,7 @@
     force.type = "checkbox";
     force.id = "import-force";
     add(forceLabel, E("span", null, "load anyway when the hashes are stale (keeps the document's hashes and marks the page stale)"));
-    var button = add(root, E("button", "act", "Import assignments"));
+    var button = add(root, E("button", "act", "Import draft or assignments"));
     var message = add(root, E("p", "small"));
     message.id = "import-message";
     if (state.importMessage) {
@@ -867,7 +1035,25 @@
         unknown.push("unknown control condition: " + dash(control && control.condition));
       }
     });
-    return { set: set, stale: stale, unknown: unknown };
+    var proposal = document_ && typeof document_ === "object" ? document_.proposed_request : null;
+    if (proposal !== null && proposal !== undefined) {
+      if (!proposal || typeof proposal !== "object" || !Array.isArray(proposal.budgets)
+          || !Array.isArray(proposal.exports) || !Array.isArray(proposal.surplus) || !proposal.objective) {
+        unknown.push("draft has an invalid proposed_request section");
+      } else {
+        (proposal.budgets || []).forEach(function (budget) {
+          if (!budget || !TOKEN.test(budget.id) || !budget.material || !budget.capacity) {
+            unknown.push("draft has an invalid budget record");
+          }
+        });
+        var ids = {};
+        (proposal.budgets || []).forEach(function (budget) {
+          if (budget && budget.id) { ids[budget.id] = (ids[budget.id] || 0) + 1; }
+        });
+        Object.keys(ids).forEach(function (id) { if (ids[id] > 1) { unknown.push("draft repeats budget ID " + id); } });
+      }
+    }
+    return { set: set, stale: stale, unknown: unknown, proposal: proposal };
   }
 
   function applyImport(text, force) {
@@ -888,9 +1074,13 @@
       return;
     }
     A = copyAssignments(report.set);
+    if (report.proposal) {
+      proposed = proposalDoc(report.proposal);
+    }
     state.importOk = true;
     state.importMessage = "Imported " + A.feeds.length + " feed(s), " + A.furnaces.length + " furnace override(s), "
       + A.controls.length + " control assignment(s)."
+      + (report.proposal ? " Restored proposed budgets, outlets and objective." : "")
       + (report.stale.length ? " Loaded with STALE hashes: " + report.stale.join("; ") : "");
     changed();
   }
@@ -956,6 +1146,17 @@
     scopeLine(card, "evidence", endpoint.evidence_ids);
     var feeds = A.feeds.filter(function (f) { return epKey(f.endpoint) === key; });
     feeds.forEach(function (feed) { kv(card, "declared feed", feed.id + " on budget " + feed.budget_id + " (" + capacityText(feed.capacity) + ")"); });
+    var input = fullInputForm(endpoint);
+    if (input) {
+      add(card, input);
+    } else {
+      var beltInfo = inputBeltFor(endpoint);
+      if (beltInfo && endpoint.kind === "port") {
+        add(card, E("p", "small", endpoint.role !== "incoming"
+          ? "Full supply applies only to an incoming boundary belt port; this is not an incoming port."
+          : "Full supply applies only to an imported incoming boundary belt; this port is internal or has no boundary evidence."));
+      }
+    }
     extras(card, endpoint.extra, "Additional endpoint fields");
     var drop = add(card, E("button", "act sub", "Deselect"));
     drop.addEventListener("click", function () { delete state.selEndpoints[key]; renderPanel(); request(); });
@@ -975,6 +1176,12 @@
     kv(card, "support", entity.support);
     if (entity.subsystem) { kv(card, "subsystem", entity.subsystem); }
     if (entity.mod) { kv(card, "mod", entity.mod); }
+    if (entity.recipes && entity.recipes.length) {
+      kv(card, "imported blueprint recipe" + (entity.recipes.length > 1 ? "s" : ""), entity.recipes.join(", "));
+      if (entity.blueprint_recipe && entity.activities.length === 0) {
+        add(card, E("p", "small", "This recipe remains visible as blueprint data; it is not an inferred or newly supported activity."));
+      }
+    }
     if (entity.furnace_candidates.length) { kv(card, "furnace candidates", entity.furnace_candidates.join(", ")); }
     scopeLine(card, "evidence", entity.evidence_ids);
     extras(card, entity.extra, "Additional entity fields");
@@ -1098,6 +1305,19 @@
   function focusBox(box) {
     var padded = [box[0] - 1.5, box[1] - 1.5, box[2] + 1.5, box[3] + 1.5];
     fit(padded);
+  }
+
+  function assignedInputText(entity) {
+    var belt = entity.input_belt;
+    if (!belt) { return ""; }
+    var bits = [];
+    (belt.lanes || []).forEach(function (lane) {
+      var feed = A.feeds.filter(function (candidate) { return epKey(candidate.endpoint) === lane.incoming_key; })[0];
+      if (!feed) { return; }
+      var budget = proposed.budgets.filter(function (candidate) { return candidate.id === feed.budget_id; })[0];
+      bits.push(lane.side + ": " + (budget ? materialText(budget.material) : feed.budget_id));
+    });
+    return bits.length ? "IN " + bits.join(" · ") : "";
   }
 
   function draw() {
@@ -1247,10 +1467,17 @@
       var labelled = normal.concat(odd);
       for (i = 0; i < labelled.length; i++) {
         var entity = labelled[i];
-        var caption = entity.prototype + (entity.support === "supported" ? "" : " (" + entity.support + ")");
+        var recipeCaption = entity.recipes && entity.recipes.length ? entity.recipes.join(", ") : "";
+        var caption = entity.prototype + (recipeCaption ? " · " + recipeCaption : "")
+          + (entity.support === "supported" ? "" : " (" + entity.support + ")");
         var room = (entity.box[2] - entity.box[0]) * k + 6;
+        if (ctx.measureText(caption).width > room && recipeCaption) { caption = recipeCaption; }
         if (ctx.measureText(caption).width > room) { continue; }
         ctx.fillText(caption, entity.box[0] * k + ox + 2, entity.box[1] * k + oy - 3);
+        var input = assignedInputText(entity);
+        if (input && ctx.measureText(input).width <= room) {
+          ctx.fillText(input, entity.box[0] * k + ox + 2, entity.box[3] * k + oy + 12);
+        }
       }
     }
 

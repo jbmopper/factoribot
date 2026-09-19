@@ -72,10 +72,10 @@ def test_the_pilot_analysis_is_partial_with_the_reasons_named(layout):
     assert summary["bounds_advertised"] is False
     assert summary["bounds"] == []
     assert report.result.witness is None
-    # Exactly the three unidentified-mod power poles, named individually.
+    # Exactly the three unidentified-mod entities, retained as topology gaps.
     assert len(summary["unresolved_reasons"]) == 3
-    assert all(r.startswith("unsupported entity: bp/root/e/") for r in summary["unresolved_reasons"])
-    assert summary["findings"]["by_code"] == {"unresolved_unsupported_entity": 3}
+    assert all(r.startswith("unsupported topology: gap_e") for r in summary["unresolved_reasons"])
+    assert summary["findings"]["by_code"] == {"unresolved_topology_gap": 3}
     # The declared mod is repeated in the result's audit assumptions.
     assert "mod:unknown:unknown" in summary["assumptions"]
 
@@ -90,10 +90,11 @@ def test_a_pilot_finding_resolves_to_its_original_entity_location(layout):
     document = rp.seal_request(load("pilot_request_template.json"), layout, load("pilot_assignments.json"))
     report = rp.analyze_layout(layout, document)
     entities = {e.id: e for e in layout.graph.entities}
-    finding = next(f for f in report.result.findings if f.code == "unresolved_unsupported_entity")
-    rows = [rp.entity_row(entities[i], include_raw=True) for i in finding.entity_ids]
+    findings = [f for f in report.result.findings if f.code == "unresolved_topology_gap"]
+    rows = [rp.entity_row(entities[i], include_raw=True)
+            for finding in findings for i in finding.entity_ids]
     assert rows and all(r["prototype"] == "ee-super-substation" for r in rows)
-    assert all(r["subsystem"] == "power" and r["mod"] == "unknown" for r in rows)
+    assert all(r["subsystem"] == "unknown" and r["mod"] == "unknown" for r in rows)
     for row in rows:
         # The world position comes back, and so does the untouched blueprint record.
         assert row["original_record"]["position"] == row["position"]

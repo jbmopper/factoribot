@@ -1,0 +1,452 @@
+{
+  "schema_version": "factoribot-sustained-throughput-design-case-2",
+  "provenance": "synthetic-mathematical-reference-not-game-evidence",
+  "defaults": {
+    "ticks_per_second": 60,
+    "warmup_ticks": 3600,
+    "window_ticks": 3600,
+    "min_windows": 3,
+    "max_windows": 8,
+    "max_ticks": 32400,
+    "max_entities": 2048,
+    "max_resident_tokens": 262144,
+    "max_state_signatures": 65536,
+    "absolute_count_quantum": 1,
+    "relative_error": "1/200"
+  },
+  "cases": [
+    {
+      "case_id": "single-fast-belt-lane",
+      "required_features": [
+        "lane-identity",
+        "finite-belt-motion",
+        "explicit-feed",
+        "explicit-removal"
+      ],
+      "mechanics_records": [
+        "belt.straight.lane_capacity",
+        "belt.transfer.belt_to_belt"
+      ],
+      "task16_case": "straight_one_lane",
+      "task17_scenario": "belt-straight-fast-one-lane",
+      "prediction_gate": "conditional",
+      "oracle_basis": "Pinned prototype/documentation reference: fast belt is 15 items/s per lane; this is not an observation.",
+      "steady_balance": {
+        "accepted_import": {
+          "iron-plate": "15"
+        },
+        "gross_production": {},
+        "activity_consumption": {},
+        "net_export": {
+          "iron-plate": "15"
+        },
+        "stored_delta": {
+          "iron-plate": "0"
+        }
+      },
+      "expectations": [
+        "left and right lanes remain distinct",
+        "unused opposite-lane capacity is not a second source",
+        "prediction is not labelled supported before compatible observations"
+      ],
+      "perturbation": null,
+      "recipe_crafts_per_s": {}
+    },
+    {
+      "case_id": "dual-fast-belt-lanes",
+      "required_features": [
+        "lane-identity",
+        "shared-whole-belt-capacity",
+        "explicit-feed",
+        "explicit-removal"
+      ],
+      "mechanics_records": [
+        "belt.straight.lane_capacity",
+        "belt.transfer.belt_to_belt"
+      ],
+      "task16_case": "straight_one_lane",
+      "task17_scenario": "belt-straight-fast-two-lane",
+      "prediction_gate": "conditional",
+      "oracle_basis": "Two documented fast-belt lanes at 15 items/s each give a 30 items/s whole-belt reference.",
+      "steady_balance": {
+        "accepted_import": {
+          "iron-plate": "30"
+        },
+        "gross_production": {},
+        "activity_consumption": {},
+        "net_export": {
+          "iron-plate": "30"
+        },
+        "stored_delta": {
+          "iron-plate": "0"
+        }
+      },
+      "expectations": [
+        "each lane exports 15 items/s",
+        "whole-belt output never exceeds 30 items/s",
+        "one shared feed budget cannot be spent twice"
+      ],
+      "perturbation": null,
+      "recipe_crafts_per_s": {}
+    },
+    {
+      "case_id": "two-lane-merge",
+      "required_features": [
+        "side-load-lane-mapping",
+        "merge-arbitration",
+        "back-pressure",
+        "lane-identity"
+      ],
+      "mechanics_records": [
+        "belt.side_load.lane_assignment",
+        "belt.straight.lane_capacity"
+      ],
+      "task16_case": "lane_merge",
+      "task17_scenario": null,
+      "prediction_gate": "unsupported",
+      "oracle_basis": "With two explicitly distinct target lanes, 15 items/s per lane implies at most 30 total; exact side-load mapping remains unobserved.",
+      "steady_balance": {
+        "accepted_import": {
+          "iron-plate": "30"
+        },
+        "gross_production": {},
+        "activity_consumption": {},
+        "net_export": {
+          "iron-plate": "30"
+        },
+        "stored_delta": {
+          "iron-plate": "0"
+        }
+      },
+      "expectations": [
+        "each target lane is at most 15 items/s",
+        "merge arbitration never depends on entity iteration order",
+        "no numeric prediction is exposed before lane mapping is supported"
+      ],
+      "perturbation": null,
+      "recipe_crafts_per_s": {}
+    },
+    {
+      "case_id": "unequal-competing-consumers",
+      "required_features": [
+        "splitter-arbitration",
+        "blocked-branch-retry",
+        "unequal-consumer-capacity"
+      ],
+      "mechanics_records": [
+        "splitter.lane_split"
+      ],
+      "task16_case": "unequal_competing_consumers",
+      "task17_scenario": null,
+      "prediction_gate": "unsupported",
+      "oracle_basis": "Declared synthetic allocator sends 3 plates/s to A and 6 plates/s to B; sufficient machine capacity yields 3/2 gears/s and 6 pipes/s. Work conservation alone does not determine this allocation.",
+      "steady_balance": {
+        "accepted_import": {
+          "iron-plate": "9"
+        },
+        "gross_production": {
+          "iron-gear-wheel": "3/2",
+          "pipe": "6"
+        },
+        "activity_consumption": {
+          "iron-plate": "9"
+        },
+        "net_export": {
+          "iron-gear-wheel": "3/2",
+          "pipe": "6"
+        },
+        "stored_delta": {
+          "iron-plate": "0",
+          "iron-gear-wheel": "0",
+          "pipe": "0"
+        }
+      },
+      "expectations": [
+        "permuting entity IDs does not change rates",
+        "the open branch receives capacity rejected by the capped branch",
+        "greedy first-branch allocation fails this case"
+      ],
+      "perturbation": null,
+      "recipe_crafts_per_s": {
+        "iron-gear-wheel": "3/2",
+        "pipe": "6"
+      }
+    },
+    {
+      "case_id": "priority-splitter",
+      "required_features": [
+        "splitter-priority",
+        "under-supplied-input",
+        "persistent-arbitration"
+      ],
+      "mechanics_records": [
+        "splitter.lane_split",
+        "splitter.priority_and_filter"
+      ],
+      "task16_case": "splitter_priority_right",
+      "task17_scenario": null,
+      "prediction_gate": "unsupported",
+      "oracle_basis": "Synthetic priority oracle: output B is declared priority and receives all 9 items/s while both branches can accept; physical side mapping awaits a game capture.",
+      "steady_balance": {
+        "accepted_import": {
+          "iron-plate": "9"
+        },
+        "gross_production": {
+          "pipe": "9"
+        },
+        "activity_consumption": {
+          "iron-plate": "9"
+        },
+        "net_export": {
+          "pipe": "9"
+        },
+        "stored_delta": {
+          "iron-plate": "0",
+          "pipe": "0"
+        }
+      },
+      "expectations": [
+        "changing priority changes eligible output allocation",
+        "priority is not represented as an extra capacity",
+        "unknown physical side mapping prevents a Factorio prediction"
+      ],
+      "perturbation": null,
+      "recipe_crafts_per_s": {
+        "pipe": "9"
+      }
+    },
+    {
+      "case_id": "fast-inserter-chest-to-chest",
+      "required_features": [
+        "finite-inserter-state",
+        "endpoint-specific-timing",
+        "hand-size-research",
+        "output-blocking"
+      ],
+      "mechanics_records": [
+        "inserter.endpoints.pickup_drop_tiles",
+        "inserter.rate.cycle_and_stack"
+      ],
+      "task16_case": "inserter_limited_transfer",
+      "task17_scenario": "fast-inserter-chest-to-chest-fixed-research",
+      "prediction_gate": "unsupported",
+      "oracle_basis": "No numerical oracle is frozen: the task 16 0.84 items/s shortcut is explicitly rejected and task 17 has no game capture.",
+      "steady_balance": null,
+      "expectations": [
+        "unknown timing yields no predicted rate",
+        "aggregate chest-to-chest measurement does not justify belt endpoint timing",
+        "hand contents remain in the conservation ledger"
+      ],
+      "perturbation": null,
+      "recipe_crafts_per_s": {}
+    },
+    {
+      "case_id": "electric-furnace-chain",
+      "required_features": [
+        "fixed-furnace-recipe",
+        "finite-machine-inventory",
+        "craft-progress",
+        "blocked-completion",
+        "direct-inventory-transfer"
+      ],
+      "mechanics_records": [
+        "machine.activity.electric_furnace"
+      ],
+      "task16_case": "furnace_chain",
+      "task17_scenario": null,
+      "prediction_gate": "unsupported",
+      "oracle_basis": "Loaded data: speed 2 / 3.2 s gives 5/8 iron plates/s; speed 2 / 16 s gives 1/8 steel crafts/s consuming 5 plates each, exactly 5/8 plates/s.",
+      "steady_balance": {
+        "accepted_import": {
+          "iron-ore": "5/8"
+        },
+        "gross_production": {
+          "iron-plate": "5/8",
+          "steel-plate": "1/8"
+        },
+        "activity_consumption": {
+          "iron-ore": "5/8",
+          "iron-plate": "5/8"
+        },
+        "net_export": {
+          "steel-plate": "1/8"
+        },
+        "stored_delta": {
+          "iron-ore": "0",
+          "iron-plate": "0",
+          "steel-plate": "0"
+        }
+      },
+      "expectations": [
+        "recipe comes from a matching explicit or task 19 inferred assignment",
+        "five iron plates are consumed per steel craft",
+        "machine buffer/start-order uncertainty prevents a supported prediction"
+      ],
+      "perturbation": null,
+      "recipe_crafts_per_s": {
+        "iron-plate": "5/8",
+        "steel-plate": "1/8"
+      }
+    },
+    {
+      "case_id": "blocked-output",
+      "required_features": [
+        "finite-storage",
+        "back-pressure",
+        "available-not-forced-feed",
+        "no-implicit-sink"
+      ],
+      "mechanics_records": [
+        "belt.straight.lane_capacity"
+      ],
+      "task16_case": "blocked_output",
+      "task17_scenario": "fast-belt-blocked-output",
+      "prediction_gate": "conditional",
+      "oracle_basis": "At a repeated fully blocked state with no removal, no item can cross the boundary and finite internal inventory has zero delta.",
+      "steady_balance": {
+        "accepted_import": {
+          "iron-plate": "0"
+        },
+        "gross_production": {},
+        "activity_consumption": {},
+        "net_export": {
+          "iron-plate": "0"
+        },
+        "stored_delta": {
+          "iron-plate": "0"
+        }
+      },
+      "expectations": [
+        "fill transient is retained inventory, not export",
+        "steady accepted supply is zero",
+        "the model never creates a virtual output sink"
+      ],
+      "perturbation": null,
+      "recipe_crafts_per_s": {}
+    },
+    {
+      "case_id": "initial-inventory-transient",
+      "required_features": [
+        "explicit-initial-state",
+        "storage-conservation",
+        "steady-state-detection"
+      ],
+      "mechanics_records": [
+        "belt.straight.lane_capacity"
+      ],
+      "task16_case": null,
+      "task17_scenario": null,
+      "prediction_gate": "convergence-test",
+      "oracle_basis": "With 100 preloaded items, no feed and an open removal, early exports are exactly storage depletion; the eventual repeated empty state has zero export.",
+      "steady_balance": {
+        "accepted_import": {
+          "iron-plate": "0"
+        },
+        "gross_production": {},
+        "activity_consumption": {},
+        "net_export": {
+          "iron-plate": "0"
+        },
+        "stored_delta": {
+          "iron-plate": "0"
+        }
+      },
+      "expectations": [
+        "initial 100 items are included in cumulative conservation",
+        "transient output is not averaged into sustained production",
+        "scenario hash changes when initial inventory changes"
+      ],
+      "perturbation": null,
+      "recipe_crafts_per_s": {}
+    },
+    {
+      "case_id": "forced-nonconvergence",
+      "required_features": [
+        "bounded-runtime",
+        "contiguous-windows",
+        "oscillation-detection"
+      ],
+      "mechanics_records": [
+        "circuit.control_state"
+      ],
+      "task16_case": null,
+      "task17_scenario": null,
+      "prediction_gate": "convergence-test",
+      "oracle_basis": "A synthetic source alternates between zero and ten items/s on successive windows without an accepted repeating dynamic state inside the work limit.",
+      "steady_balance": null,
+      "expectations": [
+        "result status is nonconverged",
+        "no arithmetic mean is exposed as sustained rate",
+        "execution ends at the declared tick/window/state limit"
+      ],
+      "perturbation": null,
+      "recipe_crafts_per_s": {}
+    },
+    {
+      "case_id": "capacity-perturbation-no-improvement",
+      "required_features": [
+        "controlled-perturbation",
+        "unused-capacity",
+        "localized-restriction"
+      ],
+      "mechanics_records": [
+        "belt.straight.lane_capacity"
+      ],
+      "task16_case": "straight_one_lane",
+      "task17_scenario": null,
+      "prediction_gate": "conditional",
+      "oracle_basis": "A 10 items/s feed on a 15 items/s lane exports 10; raising only lane capacity to 30 leaves the 10 items/s feed limiting.",
+      "steady_balance": {
+        "accepted_import": {
+          "iron-plate": "10"
+        },
+        "gross_production": {},
+        "activity_consumption": {},
+        "net_export": {
+          "iron-plate": "10"
+        },
+        "stored_delta": {
+          "iron-plate": "0"
+        }
+      },
+      "expectations": [
+        "unused lane capacity is 5 items/s before the change",
+        "output remains 10 items/s after the capacity-only change",
+        "a saturated or named constraint is not claimed causal without this comparison"
+      ],
+      "perturbation": {
+        "change": "lane capacity 15 -> 30 items/s; feed and removal unchanged",
+        "before_rate": "10",
+        "after_rate": "10",
+        "conclusion": "The capacity change does not improve production because the explicit feed remains limiting."
+      },
+      "recipe_crafts_per_s": {}
+    },
+    {
+      "case_id": "pilot-subfactory-gate",
+      "required_features": [
+        "real-blueprint-adapter",
+        "identity-binding",
+        "task17-comparison",
+        "bound-prediction-measurement-separation"
+      ],
+      "mechanics_records": [
+        "belt.straight.lane_capacity",
+        "inserter.rate.cycle_and_stack",
+        "machine.activity.electric_furnace"
+      ],
+      "task16_case": "furnace_chain",
+      "task17_scenario": null,
+      "prediction_gate": "integration-gate",
+      "oracle_basis": "No pilot subfactory or measured rate is selected before task 21 review and compatible Factorio captures.",
+      "steady_balance": null,
+      "expectations": [
+        "no pilot prediction is claimed from the relaxed LP witness",
+        "bound, prediction and measurement retain distinct hashes and labels",
+        "missing game access leaves this gate open"
+      ],
+      "perturbation": null,
+      "recipe_crafts_per_s": {}
+    }
+  ]
+}

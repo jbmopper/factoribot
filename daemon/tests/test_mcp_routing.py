@@ -109,7 +109,11 @@ def test_routing_tools_over_real_stdio(tmp_path):
                 # ---- discovery -------------------------------------------------
                 listed = await session.list_tools()
                 names = {tool.name for tool in listed.tools}
-                assert {"inspect_blueprint_layout", "analyze_blueprint_routes"} <= names
+                assert {
+                    "inspect_blueprint_layout",
+                    "analyze_blueprint_routes",
+                    "evaluate_blueprint_operating_rate",
+                } <= names
                 # existing callers keep working: no tool disappeared
                 assert {"plan_production", "get_capabilities", "analyze_blueprint", "list_belts",
                         "solve_production", "evaluate_throughput", "search_items", "get_recipe",
@@ -245,7 +249,7 @@ def test_analyze_blueprint_routes_replays_the_cli_sealed_pilot_request_over_mcp(
 
     This test supplies the now-available `provenance` argument and asserts the
     MCP result matches a direct in-process Python call on the same inputs:
-    `partial`, no bounds, the three unresolved `ee-super-substation` poles.
+        `partial`, no bounds, the three unresolved `ee-super-substation` topology gaps.
     """
     from factoribot.gamedata import load_database
     from factoribot.routing import RecipeSource
@@ -269,7 +273,8 @@ def test_analyze_blueprint_routes_replays_the_cli_sealed_pilot_request_over_mcp(
     assert direct_summary["status"] == "partial"
     assert direct_summary["bounds"] == []
     assert len(direct_summary["unresolved_reasons"]) == 3
-    assert all(r.startswith("unsupported entity: bp/root/e/") for r in direct_summary["unresolved_reasons"])
+    assert all(r.startswith("unsupported topology: gap_e")
+               for r in direct_summary["unresolved_reasons"])
 
     workdir = tmp_path / "workdir"
     workdir.mkdir()

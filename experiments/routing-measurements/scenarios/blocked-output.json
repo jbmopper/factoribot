@@ -1,0 +1,15 @@
+{
+  "scenario_version": "factoribot-routing-measurement-scenario-1",
+  "scenario_id": "fast-belt-blocked-output",
+  "purpose": "Show that full supply is an available capacity rather than forced consumption when the output remains blocked.",
+  "setup": {
+    "entities": ["editor infinity chest source", "fast inserter feed", "20 straight fast-transport-belts", "sealed steel chest output with no removal"],
+    "supply_conditions": "Iron plates are available up to the single-lane capacity; source extraction is counted.",
+    "removal_conditions": "No output removal. Count retained inventory at both window boundaries; collected remains zero.",
+    "blueprint_export_required": true
+  },
+  "research": {"inserter-capacity-bonus": 0},
+  "power_control": {"power_available": true, "circuit_state": "no circuit wires or enable condition"},
+  "measurement": {"warmup_ticks": 3600, "window_ticks": 3600, "repeat_runs": 2, "stability_tolerance_items_per_s": 0.0},
+  "expected_not_observed": "After warmup reaches the blocked state, collected output and source extraction should both be zero and retained inventory should not change over the interval."
+}

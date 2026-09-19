@@ -21,7 +21,7 @@
    }
   ],
   "furnaces": [],
-  "graph_hash": "sha256:9ad0536e3edb3972b8a111b33490f23f7deaf108ffbe60a9afb5d04c48e7cd87",
+  "graph_hash": "sha256:416268ea15b403d9f41f9e7947a6df68d673f99b09d56e4f04a1448b871066c3",
   "schema_version": "1.1.1"
  },
  "document_kind": "factoribot.routing.assignment_draft",

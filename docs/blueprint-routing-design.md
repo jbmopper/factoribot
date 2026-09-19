@@ -7,6 +7,17 @@ See [current implementation status](blueprint-routing-prompts/NEXT-STEPS.md)
 and the [next-run checklist](blueprint-routing-next-run.md). Later phases below
 remain proposals; this document alone is not evidence that a feature exists.
 
+## Revised implementation direction — 2026-09-11
+
+Prioritize a useful deterministic throughput workflow: designate full input belts
+in the page, preserve existing assembler recipes, infer furnaces where supported,
+and evaluate sustained flow. Retain the CLI for import and analysis. Keep
+optimistic bounds distinct from operating predictions and measured rates.
+Efficient and aesthetic layout optimization follows a validated evaluator.
+See the [deterministic roadmap](blueprint-routing-deterministic-roadmap.md) for
+scope, reuse evaluation and acceptance criteria. It supersedes the original
+phase ordering where explicitly stated.
+
 ## Purpose
 
 Extend Factoribot from recipe-level capacity calculations to analysis of the
@@ -25,7 +36,7 @@ The intended experience is: import a blueprint, identify its supplies and desire
 exports, inspect a map with findings, compare proposed changes, and export a new
 blueprint when a change is worth making.
 
-## Current implementation and gaps
+## Original implementation baseline and gaps (2026-09-08)
 
 - `daemon/factoribot/blueprint.py` decodes full entity records, then
   `summarize_blueprint` groups machines by recipe, machine type, and modules.

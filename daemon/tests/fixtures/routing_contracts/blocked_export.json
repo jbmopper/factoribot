@@ -24,7 +24,7 @@
       }
     ],
     "furnaces": [],
-    "graph_hash": "sha256:3bb7ebf433cdacbec10751e37e6c8994b746b059f6adcc94b8f29d6aebbed45c",
+    "graph_hash": "sha256:6546cb5dc45f3ff662c1a55a8eabc092c5ff61f9b283069fe9b5131224ffed09",
     "schema_version": "1.1.1"
   },
   "description": "SYNTHETIC schema/interaction fixture; all assignments illustrative.",
@@ -277,7 +277,7 @@
         ]
       }
     ],
-    "graph_hash": "sha256:3bb7ebf433cdacbec10751e37e6c8994b746b059f6adcc94b8f29d6aebbed45c",
+    "graph_hash": "sha256:6546cb5dc45f3ff662c1a55a8eabc092c5ff61f9b283069fe9b5131224ffed09",
     "inventories": [
       {
         "eligibility": {
@@ -363,7 +363,7 @@
         "side": "left"
       }
     ],
-    "mechanics_profile": "base-2.0.76-normal-v1",
+    "mechanics_profile": "base-2.0.77-normal-v1",
     "ports": [
       {
         "boundary_candidate": true,
@@ -447,9 +447,9 @@
         "role": "outgoing"
       }
     ],
-    "prototype_hash": "sha256:ceec76011e5a314ab83f32e9368a9c89b19f60eb98280e8eaecd643d5d607a1c",
+    "prototype_hash": "sha256:7bf97f19264ed8079b4bddb43d28503eee4344473f477de9e39b572d32990e19",
     "prototypes": {
-      "canonical": "{\"entities\":[\"assembling-machine-2\",\"transport-belt\"],\"fixture\":\"synthetic\",\"note\":\"Hand-defined geometry, activities and capacities; NOT a Factorio prototype extract.\",\"profile\":\"base-2.0.76-normal-v1\"}"
+      "canonical": "{\"entities\":[\"assembling-machine-2\",\"transport-belt\"],\"fixture\":\"synthetic\",\"note\":\"Hand-defined geometry, activities and capacities; NOT a Factorio prototype extract.\",\"profile\":\"base-2.0.77-normal-v1\"}"
     },
     "provenance": "synthetic",
     "schema_version": "1.1.1",
@@ -489,7 +489,7 @@
         }
       ],
       "furnaces": [],
-      "graph_hash": "sha256:3bb7ebf433cdacbec10751e37e6c8994b746b059f6adcc94b8f29d6aebbed45c",
+      "graph_hash": "sha256:6546cb5dc45f3ff662c1a55a8eabc092c5ff61f9b283069fe9b5131224ffed09",
       "schema_version": "1.1.1"
     },
     "assumptions": {
@@ -498,14 +498,14 @@
       ],
       "beacons": "none",
       "control_policy": "explicit",
-      "game_version": "2.0.76",
+      "game_version": "2.0.77",
       "irrelevant": [],
       "mods": [
         {
           "alters_item_mechanics": false,
           "name": "base",
           "provides": [],
-          "version": "2.0.76"
+          "version": "2.0.77"
         }
       ],
       "modules": "none",
@@ -570,8 +570,8 @@
         }
       }
     ],
-    "graph_hash": "sha256:3bb7ebf433cdacbec10751e37e6c8994b746b059f6adcc94b8f29d6aebbed45c",
-    "mechanics_profile": "base-2.0.76-normal-v1",
+    "graph_hash": "sha256:6546cb5dc45f3ff662c1a55a8eabc092c5ff61f9b283069fe9b5131224ffed09",
+    "mechanics_profile": "base-2.0.77-normal-v1",
     "objective": {
       "export_id": "product",
       "kind": "maximize_export"
@@ -596,8 +596,8 @@
       "preserve_unknown": true,
       "preserve_wiring": true
     },
-    "prototype_hash": "sha256:ceec76011e5a314ab83f32e9368a9c89b19f60eb98280e8eaecd643d5d607a1c",
-    "request_hash": "sha256:52ff203e612097208b2592884b953b6976f73fc0878ef2392d577386e6942a85",
+    "prototype_hash": "sha256:7bf97f19264ed8079b4bddb43d28503eee4344473f477de9e39b572d32990e19",
+    "request_hash": "sha256:d83fac38b1d9dbb67ab37042a55a8b5300e0d5bd3fe565516ca7cf1de005d733",
     "schema_version": "1.1.1",
     "surplus": []
   },
@@ -613,8 +613,8 @@
           "Declared illustrative feeds, recipes, external removal and power"
         ],
         "certificate": "SYNTHETIC hand proof: explicit machine, budget or outlet ceiling; illustrative allocation attains the stated relaxed bound.",
-        "comparison_hash": "sha256:032835910cffb56619f664e5ff6e45290f9f287f2bc4f0f3d7dcb62ab7eaf0e4",
-        "constraint_hash": "sha256:cea5a44d537ffe35ee436a8028ae6cea5afae60601f60d02fe3ef14223142443",
+        "comparison_hash": "sha256:46b1eb45db836f8672ef8dbb7b6e39ce15c7cc93749c7a23a5676fd07b14e9af",
+        "constraint_hash": "sha256:8d4541b146482158c4fa1e193dde4904d0cb830916a4705cb67f21765d2b88ac",
         "direction": "upper",
         "evidence_ids": [
           "fixture_geometry"
@@ -637,8 +637,8 @@
           "Declared illustrative feeds, recipes, external removal and power"
         ],
         "certificate": "SYNTHETIC hand proof: explicit machine, budget or outlet ceiling; illustrative allocation attains the stated relaxed bound.",
-        "comparison_hash": "sha256:032835910cffb56619f664e5ff6e45290f9f287f2bc4f0f3d7dcb62ab7eaf0e4",
-        "constraint_hash": "sha256:0197d44dac64957ee4880ba64f155330570ef00bd4ee50db15acaa57be104b23",
+        "comparison_hash": "sha256:46b1eb45db836f8672ef8dbb7b6e39ce15c7cc93749c7a23a5676fd07b14e9af",
+        "constraint_hash": "sha256:cf0f312645c4f9add3a62a92b0437eda423a7a16d8cd1d72a320298223106ed7",
         "direction": "upper",
         "evidence_ids": [
           "fixture_geometry"
@@ -660,8 +660,8 @@
           "Declared illustrative feeds, recipes, external removal and power"
         ],
         "certificate": "SYNTHETIC hand proof: no arc reaches the demanded endpoint, so its net export cannot reach 1/s.",
-        "comparison_hash": "sha256:032835910cffb56619f664e5ff6e45290f9f287f2bc4f0f3d7dcb62ab7eaf0e4",
-        "constraint_hash": "sha256:92b7015faf8ad9f1f7e4f6552b2605523fecfc62cb28be6e9169b0d07df65c6f",
+        "comparison_hash": "sha256:46b1eb45db836f8672ef8dbb7b6e39ce15c7cc93749c7a23a5676fd07b14e9af",
+        "constraint_hash": "sha256:7d643aeb26f2710f93daf5fa25daae87889b9bb5722d6989c0ca649b980968a6",
         "direction": "upper",
         "evidence_ids": [
           "fixture_geometry"
@@ -727,7 +727,7 @@
         "severity": "warning"
       }
     ],
-    "graph_hash": "sha256:3bb7ebf433cdacbec10751e37e6c8994b746b059f6adcc94b8f29d6aebbed45c",
+    "graph_hash": "sha256:6546cb5dc45f3ff662c1a55a8eabc092c5ff61f9b283069fe9b5131224ffed09",
     "interpreted_request": {
       "assignments": {
         "blueprint_hash": "sha256:f9820300ee70865b0b36fd3f363abc8c4bdbf3d59711e97feac75d9d281017e2",
@@ -754,7 +754,7 @@
           }
         ],
         "furnaces": [],
-        "graph_hash": "sha256:3bb7ebf433cdacbec10751e37e6c8994b746b059f6adcc94b8f29d6aebbed45c",
+        "graph_hash": "sha256:6546cb5dc45f3ff662c1a55a8eabc092c5ff61f9b283069fe9b5131224ffed09",
         "schema_version": "1.1.1"
       },
       "assumptions": {
@@ -763,14 +763,14 @@
         ],
         "beacons": "none",
         "control_policy": "explicit",
-        "game_version": "2.0.76",
+        "game_version": "2.0.77",
         "irrelevant": [],
         "mods": [
           {
             "alters_item_mechanics": false,
             "name": "base",
             "provides": [],
-            "version": "2.0.76"
+            "version": "2.0.77"
           }
         ],
         "modules": "none",
@@ -835,8 +835,8 @@
           }
         }
       ],
-      "graph_hash": "sha256:3bb7ebf433cdacbec10751e37e6c8994b746b059f6adcc94b8f29d6aebbed45c",
-      "mechanics_profile": "base-2.0.76-normal-v1",
+      "graph_hash": "sha256:6546cb5dc45f3ff662c1a55a8eabc092c5ff61f9b283069fe9b5131224ffed09",
+      "mechanics_profile": "base-2.0.77-normal-v1",
       "objective": {
         "export_id": "product",
         "kind": "maximize_export"
@@ -861,17 +861,17 @@
         "preserve_unknown": true,
         "preserve_wiring": true
       },
-      "prototype_hash": "sha256:ceec76011e5a314ab83f32e9368a9c89b19f60eb98280e8eaecd643d5d607a1c",
-      "request_hash": "sha256:52ff203e612097208b2592884b953b6976f73fc0878ef2392d577386e6942a85",
+      "prototype_hash": "sha256:7bf97f19264ed8079b4bddb43d28503eee4344473f477de9e39b572d32990e19",
+      "request_hash": "sha256:d83fac38b1d9dbb67ab37042a55a8b5300e0d5bd3fe565516ca7cf1de005d733",
       "schema_version": "1.1.1",
       "surplus": []
     },
     "limitations": [
       "Not a game observation or computed routing solution; no achievable-throughput claim"
     ],
-    "prototype_hash": "sha256:ceec76011e5a314ab83f32e9368a9c89b19f60eb98280e8eaecd643d5d607a1c",
-    "request_hash": "sha256:52ff203e612097208b2592884b953b6976f73fc0878ef2392d577386e6942a85",
-    "result_hash": "sha256:205ed6d5beb42d309636811048c5a3f4ca466e524e03b6bf42d5e100eaaacde7",
+    "prototype_hash": "sha256:7bf97f19264ed8079b4bddb43d28503eee4344473f477de9e39b572d32990e19",
+    "request_hash": "sha256:d83fac38b1d9dbb67ab37042a55a8b5300e0d5bd3fe565516ca7cf1de005d733",
+    "result_hash": "sha256:514065d438b971b88ff5f17760d1e9b5ac37dee45ff652b16cd59d9537c3523d",
     "schema_version": "1.1.1",
     "status": "insufficient",
     "witness": null

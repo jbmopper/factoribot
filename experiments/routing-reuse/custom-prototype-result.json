@@ -1,0 +1,35 @@
+{
+  "conclusion": "The custom path works for a custom name whose prototype type matches an implemented dispatcher branch; it does not provide generic entity semantics, version identity, or lane behavior.",
+  "custom_name": "probe-transport-belt",
+  "custom_speed_field": 0.125,
+  "entities": [
+    {
+      "children": [
+        2
+      ],
+      "entity_number": 1,
+      "name": "probe-transport-belt",
+      "parents": [],
+      "usage_rate": 0.0
+    },
+    {
+      "children": [],
+      "entity_number": 2,
+      "name": "probe-transport-belt",
+      "parents": [
+        1
+      ],
+      "usage_rate": 0.0
+    }
+  ],
+  "entities_input": [
+    1
+  ],
+  "entities_output": [
+    1
+  ],
+  "expected_whole_belt_capacity_from_upstream_formula": 30.0,
+  "items_input": {},
+  "items_output": {},
+  "status": "returned"
+}

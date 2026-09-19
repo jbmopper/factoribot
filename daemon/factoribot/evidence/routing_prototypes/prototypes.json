@@ -2182,88 +2182,6 @@
           "evidence_status": "documented-only",
           "unit": "tiles",
           "value": {
-            "max_x": 0.7,
-            "max_y": 0.7,
-            "min_x": -0.7,
-            "min_y": -0.7
-          }
-        },
-        "selection_box_tiles": {
-          "basis": "raw 'selection_box' normalized to named corners",
-          "evidence_ref": "source:data-raw-dump",
-          "evidence_status": "documented-only",
-          "unit": "tiles",
-          "value": {
-            "max_x": 1.0,
-            "max_y": 1.0,
-            "min_x": -1.0,
-            "min_y": -1.0
-          }
-        },
-        "tile_height": {
-          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
-          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
-          "evidence_status": "documented-only",
-          "unit": "tiles",
-          "value": 2
-        },
-        "tile_width": {
-          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
-          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
-          "evidence_status": "documented-only",
-          "unit": "tiles",
-          "value": 2
-        }
-      },
-      "in_first_entity_set": false,
-      "name": "ee-super-substation",
-      "omitted_raw_fields": [],
-      "origin": "unknown",
-      "prototype_type": "electric-pole",
-      "raw": {
-        "collision_box": [
-          [
-            -0.7,
-            -0.7
-          ],
-          [
-            0.7,
-            0.7
-          ]
-        ],
-        "fast_replaceable_group": "substation",
-        "maximum_wire_distance": 64,
-        "selection_box": [
-          [
-            -1,
-            -1
-          ],
-          [
-            1,
-            1
-          ]
-        ],
-        "supply_area_distance": 64
-      },
-      "subsystem": "power",
-      "support": "unsupported",
-      "unknown_mechanics": [
-        "power.supply_assumption"
-      ]
-    },
-    {
-      "absent_raw_fields": [
-        "next_upgrade",
-        "tile_height",
-        "tile_width"
-      ],
-      "derived": {
-        "collision_box_tiles": {
-          "basis": "raw 'collision_box' normalized to named corners",
-          "evidence_ref": "source:data-raw-dump",
-          "evidence_status": "documented-only",
-          "unit": "tiles",
-          "value": {
             "max_x": 1.2,
             "max_y": 1.2,
             "min_x": -1.2,
@@ -2449,24 +2367,29 @@
     }
   ],
   "provenance": {
-    "declared_mods": null,
-    "environment_status": "unidentified",
-    "game_version": null,
-    "matches_target_profile": "unknown",
+    "declared_mods": [
+      [
+        "base",
+        "2.0.77"
+      ]
+    ],
+    "environment_status": "identified",
+    "game_version": "2.0.77",
+    "matches_target_profile": "yes",
     "notes": [
-      "The dump carries no build number and no mod manifest, so the game version and the enabled mod list are unknown. A blueprint's encoded format version does not identify the prototype environment either.",
-      "This dump defines 142 prototypes whose names begin with 'ee-', including the ee-super-substation used by the pilot blueprint. That is consistent with an enabled Editor Extensions mod, but the dump names and versions no mod, so every prototype's origin is recorded as unknown and this extract is NOT certified as base-2.0.76-normal-v1.",
-      "The dump's quality prototypes are only 'normal' and 'quality-unknown', its only planet is 'nauvis', and it defines no space platform or elevated rail prototypes; no Quality, Space Age or Elevated Rails content was loaded.",
+      "Exported using Factorio 2.0.77 build 84539 in isolated write and mod directories. The retained mod-list enables only base 2.0.77; core is built in.",
+      "The 2.0.76 documentation and mechanics records retain their historical profile. They are incompatible with this target until a 2.0.77 observation explicitly supersedes them, so they cannot tighten an arc.",
+      "The base-only dump does not define the pilot's ee-super-substation. Blueprint import still retains every such entity as visible unsupported topology; absence from this extract is not permission to delete or ignore it.",
       "source_dump_sha256 is the SHA-256 of the dump file's bytes, the identity the MCP adapter already records for loaded game data. The 'sha256:'-prefixed hashes are canonical-JSON content hashes of decoded documents, a different thing."
     ],
     "references": [
       {
         "kind": "repository",
-        "locator": "data/data-raw-dump.json",
+        "locator": "data/data-raw-dump-2.0.77-base.json",
         "ref_id": "source:data-raw-dump",
-        "retrieved": null,
+        "retrieved": "2026-09-12",
         "title": "Local Factorio data-raw dump used for this extract",
-        "version": null
+        "version": "2.0.77"
       },
       {
         "kind": "prototype-docs",
@@ -2542,11 +2465,11 @@
       }
     ],
     "schema_version": "factoribot-routing-prototypes-1",
-    "source_dump_path": "data/data-raw-dump.json",
-    "source_dump_sha256": "42d6dd2f8b39e22123651d3de22fbd8e0f991b50ee40eace1ce54330df83de87",
+    "source_dump_path": "data/data-raw-dump-2.0.77-base.json",
+    "source_dump_sha256": "be65dc3615d5939e522b00543b2925a02cfa890dbc9c00882dfe1c4629670f60",
     "source_kind": "pinned-slice",
     "source_slice_content_hash": null,
-    "target_mechanics_profile": "base-2.0.76-normal-v1"
+    "target_mechanics_profile": "base-2.0.77-normal-v1"
   },
   "schema_version": "factoribot-routing-prototypes-1"
 }

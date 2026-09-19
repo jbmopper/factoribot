@@ -152,20 +152,26 @@ def _routes_json(path: str):
     return json.loads(_routes_read(path))
 
 
-def _routes_layout(args: argparse.Namespace):
+_DEFAULT_ROUTE_RECIPES = object()
+
+
+def _routes_layout(args: argparse.Namespace, *, recipes=_DEFAULT_ROUTE_RECIPES,
+                   furnace_candidates=None):
     """Build the layout named by --bp, reusing the loaded recipe database."""
     from .routing import RecipeSource
     from .routing_public import resolve_layout
 
-    recipes = None
-    try:
-        recipes = RecipeSource(load_database(args.data))
-    except (OSError, ValueError) as e:  # no dump: machines get no activities, and say so
-        print(f"note: no prototype dump ({e}); machines get no recipe activities.", file=sys.stderr)
+    if recipes is _DEFAULT_ROUTE_RECIPES:
+        recipes = None
+        try:
+            recipes = RecipeSource(load_database(args.data))
+        except (OSError, ValueError) as e:  # no dump: machines get no activities, and say so
+            print(f"note: no prototype dump ({e}); machines get no recipe activities.", file=sys.stderr)
     request = {
         "blueprint_string": _routes_read(args.bp),
         "book_path": args.book_path,
-        "furnace_candidates": args.furnace_candidate or [],
+        "furnace_candidates": (args.furnace_candidate or []
+                               if furnace_candidates is None else furnace_candidates),
         "provenance": args.provenance,
     }
     return resolve_layout(request, recipes=recipes)
@@ -227,7 +233,13 @@ def _cmd_routes_inspect(args: argparse.Namespace) -> int:
 def _cmd_routes_request(args: argparse.Namespace) -> int:
     """Seal a saved request from a template plus the viewer's assignment export."""
     from .blueprint_contract import canonical_json
-    from .routing_public import PublicError, request_unresolved, seal_request
+    from .routing_public import (
+        DRAFT_REQUEST_KEYS,
+        HOST_POLICY_TEMPLATE_KEYS,
+        PublicError,
+        request_unresolved,
+        seal_request,
+    )
 
     try:
         layout = _routes_layout(args)
@@ -242,6 +254,14 @@ def _cmd_routes_request(args: argparse.Namespace) -> int:
         "request_hash": document["request_hash"],
         "graph_hash": document["graph_hash"],
         "blueprint_hash": document["blueprint_hash"],
+        "page_declaration_fields": [key for key in DRAFT_REQUEST_KEYS
+                                    if isinstance(assignments, dict)
+                                    and isinstance(assignments.get("proposed_request"), dict)
+                                    and key in assignments["proposed_request"]],
+        "host_policy_fields": list(HOST_POLICY_TEMPLATE_KEYS),
+        "precedence": ("Viewer draft owns budgets, exports, surplus and objective; "
+                       "the host template owns assumptions, protected interfaces and detail. "
+                       "Differing duplicate page declarations are rejected as draft_conflict."),
         "unresolved_reasons": list(unresolved),
         "bounds_advertisable": not unresolved,
         "note": ("No bound can be advertised for this request until every reason above is resolved."
@@ -249,6 +269,120 @@ def _cmd_routes_request(args: argparse.Namespace) -> int:
                  "unresolved_reasons is empty: a certified bound may be advertised if a stage certifies one."),
     }, indent=2))
     _routes_write(args.out, canonical_json(document), "sealed request")
+    return 0
+
+
+def _cmd_routes_infer(args: argparse.Namespace) -> int:
+    """Infer uniquely evidenced furnace recipes and write replay artifacts."""
+    from .blueprint_contract import canonical_json
+    from .furnace_inference import (
+        FurnaceInferenceError,
+        INFERENCE_DOCUMENT_KIND,
+        InferenceLimits,
+        compatible_furnace_recipes,
+    )
+    from .routing import RecipeSource
+    from .routing_public import (
+        PublicError,
+        prepare_furnace_inference,
+        request_unresolved,
+        seal_request,
+    )
+
+    try:
+        template = _routes_json(args.template)
+        assignments = _routes_json(args.assignments)
+        assumptions = template.get("assumptions") if isinstance(template, dict) else None
+        available = assumptions.get("available_recipes") if isinstance(assumptions, dict) else None
+        if not isinstance(available, list):
+            raise PublicError("bad_request", "template assumptions.available_recipes must be a list")
+        recipes = RecipeSource(load_database(args.data))
+        final_candidates = compatible_furnace_recipes(recipes, available)
+
+        source_candidates = tuple(args.furnace_candidate or ())
+        if (isinstance(assignments, dict)
+                and assignments.get("document_kind") == INFERENCE_DOCUMENT_KIND):
+            prior = assignments.get("inference")
+            if not isinstance(prior, dict) or not isinstance(prior.get("candidate_recipes"), list):
+                raise PublicError("stale_inference", "previous inference artifact lacks candidate identity")
+            recorded = tuple(prior["candidate_recipes"])
+            if source_candidates and source_candidates != recorded:
+                raise PublicError(
+                    "stale_identity",
+                    "--furnace-candidate does not reproduce the previous inference graph",
+                    supplied=list(source_candidates), recorded=list(recorded),
+                )
+            source_candidates = recorded
+
+        source_layout = _routes_layout(
+            args, recipes=recipes, furnace_candidates=source_candidates
+        )
+        if (not final_candidates
+                and any(entity.prototype == "electric-furnace"
+                        for entity in source_layout.graph.entities)):
+            raise PublicError(
+                "bad_request",
+                "no available item-only smelting recipe can account for the blueprint's furnaces",
+            )
+        final_layout = _routes_layout(
+            args, recipes=recipes, furnace_candidates=final_candidates
+        )
+        artifact = prepare_furnace_inference(
+            template,
+            source_layout,
+            final_layout,
+            assignments,
+            limits=InferenceLimits(
+                max_iterations=args.max_iterations,
+                max_states=args.max_states,
+                max_steps_per_trace=args.max_steps_per_trace,
+            ),
+        )
+        request = seal_request(template, final_layout, artifact)
+        unresolved = request_unresolved(request, final_layout)
+    except (PublicError, FurnaceInferenceError) as exc:
+        error = exc if isinstance(exc, PublicError) else PublicError(exc.code, str(exc), **exc.detail)
+        print(json.dumps(error.as_dict(), indent=2), file=sys.stderr)
+        return 2
+    except (OSError, ValueError) as exc:
+        error = PublicError("bad_request", str(exc))
+        print(json.dumps(error.as_dict(), indent=2), file=sys.stderr)
+        return 2
+
+    report = artifact["inference"]
+    counts = {}
+    for furnace in report["furnaces"]:
+        counts[furnace["status"]] = counts.get(furnace["status"], 0) + 1
+    group_summary = [{
+        "id": group["id"],
+        "status": group["status"],
+        "candidates": group["candidates"],
+        "entity_count": len(group["entities"]),
+        "entity_examples": group["entities"][:10],
+        "override_path": group["override_path"],
+        "action": group["action"],
+    } for group in report["ambiguity_groups"]]
+    print(json.dumps({
+        "ok": True,
+        "inference_version": report["inference_version"],
+        "input_hash": report["input_hash"],
+        "report_hash": report["report_hash"],
+        "artifact_hash": artifact["artifact_hash"],
+        "source_graph_hash": artifact["source_graph_hash"],
+        "final_graph_hash": artifact["final_graph_hash"],
+        "graph_rebuilt": artifact["source_graph_hash"] != artifact["final_graph_hash"],
+        "candidate_recipes": report["candidate_recipes"],
+        "furnace_status_counts": dict(sorted(counts.items())),
+        "ambiguity_groups": group_summary,
+        "request_hash": request["request_hash"],
+        "unresolved_reason_count": len(unresolved),
+        "unresolved_reasons": list(unresolved[:25]),
+        "unresolved_reasons_truncated": len(unresolved) > 25,
+        "bounds_advertisable": not unresolved,
+        "meaning": "Recipe identity inference only; no item rate or runtime selection is predicted.",
+    }, indent=2, allow_nan=False))
+    _routes_write(args.out, canonical_json(artifact), "furnace inference artifact")
+    _routes_write(args.request_out, canonical_json(request), "sealed request")
     return 0
 
 
@@ -318,6 +452,47 @@ def _cmd_routes_finding(args: argparse.Namespace) -> int:
     print(json.dumps({"ok": True, "matched": len(selected), "shown": len(out), "findings": out},
                      indent=2, allow_nan=False))
     return 0
+
+
+def _cmd_routes_throughput(args: argparse.Namespace) -> int:
+    """Build the restricted operating prediction/measurement comparison report."""
+    from .blueprint_contract import canonical_json
+    from .gamedata import read_dump
+    from .sustained_throughput import build_operating_report
+
+    try:
+        scenario = _routes_json(args.scenario)
+        captures = [_routes_json(path) for path in args.capture]
+        request = _routes_json(args.request) if args.request else None
+        result = _routes_json(args.result) if args.result else None
+        _path, dump_sha, _raw = read_dump(args.data)
+        document = build_operating_report(
+            scenario,
+            captures,
+            routing_request=request,
+            routing_result=result,
+            database=load_database(args.data),
+            recipe_data_sha256=dump_sha,
+        )
+    except (OSError, ValueError) as exc:
+        print(json.dumps({"error": "invalid_throughput_evidence", "message": str(exc)},
+                         indent=2), file=sys.stderr)
+        return 2
+    comparison = document["comparison"]
+    print(json.dumps({
+        "ok": True,
+        "report_hash": document["report_hash"],
+        "scenario_hash": scenario["scenario_hash"],
+        "prediction_kind": document["prediction"]["rate_kind"],
+        "predicted_exports": document["prediction"]["items"]["net_export"],
+        "measurement_kind": "actual_measured_interval_rate",
+        "validated_runs": len(document["measurements"]),
+        "all_windows_match": comparison["all_windows_match"],
+        "sustained_rate_established": False,
+        "meaning": document["result_meanings"],
+    }, indent=2, allow_nan=False))
+    _routes_write(args.out, canonical_json(document), "throughput report")
+    return 0 if comparison["all_windows_match"] else 1
 
 
 def _cmd_chat(args: argparse.Namespace) -> int:
@@ -444,20 +619,22 @@ def _add_routes(sub) -> None:
         help="blueprint routing audit: structural graph, strict delivery analysis, viewer artifacts",
         description=(
             "Import a blueprint, build its routing graph, analyze a saved strict request, and write "
-            "local report/viewer artifacts. Nothing is inferred: feeds, exports, disposal, furnace "
-            "recipes, research, control state and power all come from the request you supply. Every "
+            "local report/viewer artifacts. The optional infer pass derives only uniquely evidenced "
+            "furnace recipes from explicit feeds; feeds, exports, disposal, research, control state "
+            "and power still come from the request you supply. Every "
             "advertised value is an upper bound under stated relaxations, never an achievable rate."
         ),
     )
     routes = parser.add_subparsers(dest="routes_cmd", required=True)
 
-    def common(p, *, blueprint=True):
+    def common(p, *, blueprint=True, furnace_candidate_help=None):
         if blueprint:
             p.add_argument("--bp", required=True, help="file with the blueprint string, or - for stdin")
             p.add_argument("--book-path", type=_book_path_arg, default=(),
                            help="book entry index values selecting one leaf, e.g. 2/7 (NOT array offsets)")
             p.add_argument("--furnace-candidate", action="append", default=[],
-                           help="candidate recipe for recipe-less furnaces; repeatable, never inferred")
+                           help=(furnace_candidate_help or
+                                 "candidate recipe for recipe-less furnaces; repeatable, never inferred"))
             p.add_argument("--provenance", default="game_export",
                            choices=["game_export", "development_pilot", "synthetic"])
 
@@ -478,11 +655,35 @@ def _add_routes(sub) -> None:
     req = routes.add_parser("request", help="seal a saved request from a template plus an assignment export")
     common(req)
     req.add_argument("--template", required=True,
-                     help="JSON with budgets, exports, surplus, objective, protected, assumptions, detail")
+                     help="host policy JSON: assumptions, protected and detail; bare assignments also need budgets, exports, surplus and objective")
     req.add_argument("--assignments", default=None,
-                     help="the viewer's assignment export (bare set or draft envelope)")
+                     help="the viewer's bare AssignmentSet or assignment draft; draft declarations must not conflict with template values")
     req.add_argument("--out", default=None, help="write the sealed request document here")
     req.set_defaults(func=_cmd_routes_request)
+
+    inf = routes.add_parser(
+        "infer",
+        help="derive furnace assignments from explicit feed/path evidence, then seal a request",
+    )
+    common(
+        inf,
+        furnace_candidate_help=(
+            "candidate list used to reproduce the source assignment graph; repeatable. "
+            "The final list is derived from loaded recipe data and available_recipes"
+        ),
+    )
+    inf.add_argument("--template", required=True,
+                     help="the same host policy/request template accepted by routes request")
+    inf.add_argument("--assignments", required=True,
+                     help="source viewer draft, assignment set, or prior inference artifact")
+    inf.add_argument("--out", required=True,
+                     help="write the provenance-bearing furnace inference artifact here")
+    inf.add_argument("--request-out", default=None,
+                     help="also write the equivalent sealed routing request")
+    inf.add_argument("--max-iterations", type=int, default=4096)
+    inf.add_argument("--max-states", type=int, default=200000)
+    inf.add_argument("--max-steps-per-trace", type=int, default=4096)
+    inf.set_defaults(func=_cmd_routes_infer)
 
     ana = routes.add_parser("analyze", help="analyze a saved request; write result and viewer artifacts")
     common(ana)
@@ -495,6 +696,21 @@ def _add_routes(sub) -> None:
     ana.add_argument("--view", default=None, help="write a standalone viewer page here (graph + result)")
     ana.add_argument("--open", action="store_true")
     ana.set_defaults(func=_cmd_routes_analyze)
+
+    throughput = routes.add_parser(
+        "throughput",
+        help="compare the restricted analytic operating rate with bound game captures",
+    )
+    throughput.add_argument("--scenario", required=True,
+                            help="sealed factoribot routing throughput scenario")
+    throughput.add_argument("--capture", action="append", required=True,
+                            help="v3 game-observation capture; repeat for every required run")
+    throughput.add_argument("--request", default=None,
+                            help="matching sealed routing request for identity verification")
+    throughput.add_argument("--result", default=None,
+                            help="matching capacity-bound result kept separate in the report")
+    throughput.add_argument("--out", required=True, help="write the sealed throughput report")
+    throughput.set_defaults(func=_cmd_routes_throughput)
 
     fnd = routes.add_parser("finding", help="show a finding and the original location of every entity it names")
     common(fnd)

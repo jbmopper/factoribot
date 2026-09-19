@@ -174,12 +174,14 @@ def test_unknown_activities_aggregate_by_prototype():
     assert "1 electric-furnace activity" in furnace.message
 
 
-def test_pilot_finding_count_drops_to_a_handful():
-    """The exact F-3 counterexample: the pilot with the power declaration.
+def test_pilot_finding_count_stays_small_without_hiding_absent_modded_poles():
+    """The pilot remains concise when the base profile cannot classify its poles.
 
     Reproduces `test_pilot_bound_under_a_declaration_is_only_as_good_as_the_declaration`
     from `test_routing_audit.py`, which is the scenario the release review measured
-    at 626 findings (623 `unknown_capacity_relaxed`).
+    at 626 findings (623 `unknown_capacity_relaxed`). The base-only 2.0.77 extract
+    no longer knows that the absent modded entity is a power pole, so a subsystem
+    declaration cannot erase its possible topology gap.
     """
     from factoribot.gamedata import load_database
     from factoribot.routing import RecipeSource
@@ -197,26 +199,19 @@ def test_pilot_finding_count_drops_to_a_handful():
                           provenance="development_pilot",
                           recipes=RecipeSource(load_database(None)))
     document = seal_request(template, layout, assignments)
-    assert request_unresolved(document, layout) == ()
+    reasons = request_unresolved(document, layout)
+    assert sorted(reasons) == [
+        "unsupported topology: gap_e162",
+        "unsupported topology: gap_e1882",
+        "unsupported topology: gap_e255",
+    ]
 
     result = analyze_delivery(layout.graph, parse_request(document, layout.graph)).result
     validate_result(result, layout.graph)
 
-    # Before the fix this was 626 findings, 623 of them `unknown_capacity_relaxed`
-    # (one per bulk inserter hand-off and per splitter body).
-    assert len(result.findings) <= 10, _finding_codes(result)
-    ucr = _unknown_capacity_findings(result)
-    assert len(ucr) == 2, [f.message for f in ucr]
-    kinds = {("inserter" if "inserter" in f.message else "splitter"): f for f in ucr}
-    assert set(kinds) == {"inserter", "splitter"}
-    assert len(kinds["inserter"].entity_ids) == 579  # 608 hand-off groups across 579 distinct pickup entities
-    assert len(kinds["splitter"].entity_ids) == 15
-
-    # The two findings that F-3 said were being buried are still present.
-    assert any(f.code == "delivery_upper_bound" for f in result.findings)
-    assert any(f.code == "zero_objective" for f in result.findings)
-    # The substation declaration -- what makes any bound advertisable here at all -- is still recorded.
+    assert result.status == "partial" and result.bounds == ()
+    assert len(result.findings) == 3, _finding_codes(result)
+    assert {finding.code for finding in result.findings} == {"unresolved_topology_gap"}
+    # The declaration is retained for audit, but cannot classify or dismiss an
+    # entity that is absent from the current profile.
     assert "irrelevant:audit_power:power:power_assumed_available" in result.assumptions
-
-    routing = next(b for b in result.bounds if b.stage == "routing")
-    assert "unknown_capacity_unlimited" in routing.relaxations

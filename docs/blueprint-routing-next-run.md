@@ -1,34 +1,34 @@
 # Blueprint routing — next-run checklist
 
-Updated 2026-09-11. [Current status](blueprint-routing-prompts/NEXT-STEPS.md):
-625 tests pass; software integration is present; game observations and real-pilot
-acceptance are still open. This checklist does not authorize changes to a live
-Factorio save and does not treat the illustrative pilot fixtures as real inputs.
+Updated 2026-09-13. [Current status](blueprint-routing-prompts/NEXT-STEPS.md) and
+[task 23 handoff](blueprint-routing-handoffs/23-sol-takeover.md): runtime migration,
+the restricted operating adapter, and a real measured small-factory case are
+complete. Real-pilot declarations and browser interaction acceptance remain
+open. This checklist does not authorize changes to a live Factorio save and does
+not treat illustrative pilot fixtures as real inputs.
 
-## 1. Review the integrated snapshot and check the connected tools
+## Revised direction
 
-The implementation is still an uncommitted tranche on `664662e`. Review tracked
-and untracked files together before making a checkpoint. A new worktree from
-HEAD alone will miss required code. Preserve unrelated work; stage only reviewed,
-intended files. Do not use a blanket add, reset, stash or clean as setup.
+The [deterministic roadmap](blueprint-routing-deterministic-roadmap.md) governs
+new development. Full-belt supply and bounded furnace inference now exist. The
+commands below remain the checklist for collecting real pilot declarations; the
+task-23 handoff contains the exact measured-case reproduction.
 
-The last full run was `make test`: 625 passed on 2026-09-11. Rerun after code or
-evidence changes; documentation-only updates do not require the full suite.
+## 1. Integrated snapshot and connected tools
 
-Restart/reconnect the Factoribot MCP integration through the host that runs it.
-In that connected session, ask the agent to:
+The tranche is now committed in `ab25b2a`. The latest recorded full run was
+`make test`: 625 passed on 2026-09-11 against the preceding working tranche.
+Rerun after implementation/evidence changes; this documentation update does not
+establish a fresh test result.
 
-```text
-Call Factoribot get_capabilities and report the blueprint_routing block. Confirm
-that inspect_blueprint_layout and analyze_blueprint_routes are available through
-this connected MCP server. Report the evidence counts and supported scope. Do
-not infer game validation from tool availability, and do not change a save.
-```
+The read-only MCP surface exposes `inspect_blueprint_layout`,
+`analyze_blueprint_routes`, and `evaluate_blueprint_operating_rate`. The last is
+the restricted deterministic serial-furnace adapter/capture validator; it does
+not call a model or replace the routing capacity bound. After server-code
+changes, verify the connected process again.
 
-Expected evidence today: 16 records, 0 observed, 6 documented-only, 10 pending.
-Fresh subprocess tests already exercise MCP, but do not prove your connected
-process has been refreshed. If the tools are missing, check that its configured
-executable points to the updated installation; record the actual error.
+Evidence remains 16 records, 0 observed, 6 documented-only and 10 pending. MCP
+connectivity does not close that gate.
 
 ## 2. Open the pilot and collect its real declarations
 
@@ -64,12 +64,12 @@ Provide these facts (or explicitly mark them unknown):
 | Incoming items | Each item, actual entry tile/lane or endpoint, and available items/s; identify shared budgets |
 | Desired exports | Each item, exit endpoint, requested rate and objective (one maximized export or the supported declared objective) |
 | Output removal | What removes each export or surplus, and its declared capacity; a chest is not automatically an unlimited sink |
-| Furnaces | Recipe for each of the 76 furnaces, or explicitly unresolved entities; no recipe inference |
+| Furnaces | Run the optional inference pass after declaring real feeds; review every ambiguity group and retain explicit owner overrides |
 | Environment | Exact game version and enabled mods with versions, especially the source of the three ee-super-substation entities |
 | Research/recipes | Relevant research levels and available recipes; an omitted level is unknown |
 | Power/control | Actual conditions or an explicitly accepted modeling assumption; record filters, priorities and circuit controls |
 
-Current profile is base 2.0.76, normal quality. If the actual game differs, stop
+Current profile is base 2.0.77, normal quality. If the actual game differs, stop
 claiming compatibility and give the integration owner the mismatch. Modules,
 beacons and unsupported mechanics require their own scope decisions. Do not
 remove unsupported entities or declare them irrelevant just to obtain a bound.
@@ -111,7 +111,7 @@ Follow the detailed [capture procedure](../daemon/factoribot/evidence/routing_me
 and [record schema](../daemon/factoribot/evidence/routing_mechanics_observations/README.md).
 Create a new sandbox; record its exact game build, mod versions, research,
 control state and name. Keep existing saves untouched. Start with the profile's
-supported version; do not label observations from another build as 2.0.76.
+supported version; do not label observations from another build as 2.0.77.
 
 First capture batch: fast-belt straight/per-lane capacity, turns, side loading,
 and belt-to-belt transfers (§4.1–4.4). Then underground range/pairing/lane mapping,

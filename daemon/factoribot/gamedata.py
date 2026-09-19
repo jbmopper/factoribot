@@ -33,6 +33,10 @@ _BARREL_RE = re.compile(r"^(empty|fill)-.*-barrel$")
 # Prototype categories that can craft recipes.
 CRAFTING_MACHINE_TYPES = ("assembling-machine", "furnace", "rocket-silo")
 
+# The routing runtime is pinned to the verified base-only Factorio 2.0.77 dump.
+# The historical data-raw-dump.json remains available by explicit path.
+TARGET_DUMP_NAME = "data-raw-dump-2.0.77-base.json"
+
 
 def _is_barreling(name: str) -> bool:
     return bool(_BARREL_RE.match(name))
@@ -167,10 +171,11 @@ def find_dump(explicit: str | None = None) -> str:
     seen = []
     for start in (Path.cwd(), Path(__file__).resolve()):
         for base in [start, *start.parents]:
-            cand = base / "data" / "data-raw-dump.json"
-            seen.append(cand)
-            if cand.exists():
-                return str(cand)
+            for filename in (TARGET_DUMP_NAME, "data-raw-dump.json"):
+                cand = base / "data" / filename
+                seen.append(cand)
+                if cand.exists():
+                    return str(cand)
     raise FileNotFoundError(
         "Could not find data/data-raw-dump.json. Run `factorio --dump-data` and "
         "copy it into ./data/, or pass --data / set FACTORIBOT_DATA."

@@ -1,0 +1,43 @@
+{
+  "assumptions": {
+    "available_recipes": [
+      "iron-plate",
+      "steel-plate"
+    ],
+    "beacons": "none",
+    "control_policy": "relax_open",
+    "game_version": "2.0.77",
+    "irrelevant": [],
+    "mods": [
+      {
+        "alters_item_mechanics": false,
+        "name": "base",
+        "provides": [],
+        "version": "2.0.77"
+      }
+    ],
+    "modules": "none",
+    "power": "assumed_available",
+    "quality": "normal",
+    "research": [
+      {
+        "level": 0,
+        "name": "inserter-capacity-bonus"
+      }
+    ]
+  },
+  "detail": {
+    "cursor": null,
+    "entity_ids": [],
+    "kind": "summary",
+    "limit": 100
+  },
+  "protected": {
+    "areas": [],
+    "endpoints": [],
+    "entities": [],
+    "preserve_boundaries": true,
+    "preserve_unknown": true,
+    "preserve_wiring": true
+  }
+}

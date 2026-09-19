@@ -6,7 +6,8 @@ From the repository root::
     .venv/bin/python daemon/factoribot/evidence/routing_prototypes/generate.py
     .venv/bin/python daemon/factoribot/evidence/routing_prototypes/generate.py --from-slice
 
-The first form re-cuts the pinned slice from the full ``data/data-raw-dump.json``
+The first form re-cuts the pinned slice from the verified base-only
+``data/data-raw-dump-2.0.77-base.json``
 and rebuilds everything from it. The second form needs no dump: it rebuilds the
 extract, the manifests and the pilot coverage from the checked-in slice, reusing
 the source dump identity already recorded in ``manifest.json``.
@@ -41,17 +42,14 @@ PILOT_PATH = REPO_ROOT / "daemon" / "tests" / "fixtures" / "wip_science.txt"
 # Observations about the source dump itself, recorded as provenance notes. They
 # describe the dump whose SHA-256 the manifest records, and nothing else.
 NOTES = (
-    "The dump carries no build number and no mod manifest, so the game version and "
-    "the enabled mod list are unknown. A blueprint's encoded format version does not "
-    "identify the prototype environment either.",
-    "This dump defines 142 prototypes whose names begin with 'ee-', including the "
-    "ee-super-substation used by the pilot blueprint. That is consistent with an "
-    "enabled Editor Extensions mod, but the dump names and versions no mod, so every "
-    "prototype's origin is recorded as unknown and this extract is NOT certified as "
-    "base-2.0.76-normal-v1.",
-    "The dump's quality prototypes are only 'normal' and 'quality-unknown', its only "
-    "planet is 'nauvis', and it defines no space platform or elevated rail "
-    "prototypes; no Quality, Space Age or Elevated Rails content was loaded.",
+    "Exported using Factorio 2.0.77 build 84539 in isolated write and mod "
+    "directories. The retained mod-list enables only base 2.0.77; core is built in.",
+    "The 2.0.76 documentation and mechanics records retain their historical profile. "
+    "They are incompatible with this target until a 2.0.77 observation explicitly "
+    "supersedes them, so they cannot tighten an arc.",
+    "The base-only dump does not define the pilot's ee-super-substation. Blueprint "
+    "import still retains every such entity as visible unsupported topology; absence "
+    "from this extract is not permission to delete or ignore it.",
     "source_dump_sha256 is the SHA-256 of the dump file's bytes, the identity the MCP "
     "adapter already records for loaded game data. The 'sha256:'-prefixed hashes are "
     "canonical-JSON content hashes of decoded documents, a different thing.",
@@ -129,8 +127,8 @@ def build_pilot_coverage(extract) -> dict:
             name: {
                 "count": counts[name],
                 "reason": (
-                    "present in this dump but its defining mod and version are "
-                    "unknown; recorded as unsupported topology with unknown origin"
+                    "absent from the verified base-only export; retained from the "
+                    "blueprint as visible unsupported topology with unknown mod origin"
                 ),
                 "subsystem": coverage[name]["subsystem"],
             }
@@ -158,19 +156,20 @@ def main() -> int:
     else:
         from factoribot.gamedata import read_dump
 
-        _resolved, dump_sha, raw = read_dump()
+        _resolved, dump_sha, raw = read_dump(
+            str(REPO_ROOT / "data" / "data-raw-dump-2.0.77-base.json"))
         slice_doc = slice_raw_dump(raw)
         write_json(slice_path, slice_doc)
 
     provenance = Provenance(
         schema_version=PROTOTYPE_SCHEMA_VERSION,
         target_mechanics_profile=TARGET_MECHANICS_PROFILE,
-        game_version=None,
-        declared_mods=None,
-        environment_status="unidentified",
-        matches_target_profile="unknown",
+        game_version="2.0.77",
+        declared_mods=(("base", "2.0.77"),),
+        environment_status="identified",
+        matches_target_profile="yes",
         source_kind="pinned-slice",
-        source_dump_path="data/data-raw-dump.json",
+        source_dump_path="data/data-raw-dump-2.0.77-base.json",
         source_dump_sha256=dump_sha,
         source_slice_content_hash=None,
         references=DEFAULT_REFERENCES,

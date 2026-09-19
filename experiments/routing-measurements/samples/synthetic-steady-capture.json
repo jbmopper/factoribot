@@ -1,0 +1,23 @@
+{
+  "schema_version": "factoribot-routing-measurement-capture-1",
+  "record_kind": "synthetic-recorder-test",
+  "scenario_id": "synthetic-belt-recorder-check",
+  "run_id": "synthetic-only-1",
+  "environment": {
+    "game_executable": "NOT-RUN",
+    "game_version": "SYNTHETIC-NOT-GAME-EVIDENCE",
+    "mods": [],
+    "save_name": "NOT-A-SAVE"
+  },
+  "setup_blueprint": "SYNTHETIC-SETUP-NOT-A-FACTORIO-BLUEPRINT",
+  "research": {"inserter-capacity-bonus": 0},
+  "power_control": {"power_available": true, "circuit_state": "synthetic always-enabled control"},
+  "supply": {"item": "iron-plate", "available_capacity_items_per_s": 15.0, "source_counter": "synthetic source extraction counter"},
+  "removal": {"collector": "synthetic counted chest", "count_before_removal": true},
+  "warmup_ticks": 3600,
+  "stability_tolerance_items_per_s": 0.016666666666666666,
+  "measurement_windows": [
+    {"start_tick": 3600, "end_tick": 7200, "source_extracted": {"iron-plate": 900}, "collected": {"iron-plate": 900}, "inventory_start": {"iron-plate": 0}, "inventory_end": {"iron-plate": 0}},
+    {"start_tick": 7200, "end_tick": 10800, "source_extracted": {"iron-plate": 900}, "collected": {"iron-plate": 900}, "inventory_start": {"iron-plate": 0}, "inventory_end": {"iron-plate": 0}}
+  ]
+}

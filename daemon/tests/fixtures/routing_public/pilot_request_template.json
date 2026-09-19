@@ -7,14 +7,14 @@
   ],
   "beacons": "none",
   "control_policy": "relax_open",
-  "game_version": "2.0.76",
+  "game_version": "2.0.77",
   "irrelevant": [],
   "mods": [
    {
     "alters_item_mechanics": false,
     "name": "unknown",
     "provides": [
-     "power"
+     "unknown"
     ],
     "version": "unknown"
    },
@@ -22,7 +22,7 @@
     "alters_item_mechanics": false,
     "name": "base",
     "provides": [],
-    "version": "2.0.76"
+    "version": "2.0.77"
    }
   ],
   "modules": "none",

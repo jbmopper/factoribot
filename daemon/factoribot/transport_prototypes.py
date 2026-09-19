@@ -50,7 +50,7 @@ OBSERVATION_SCHEMA_VERSION = "factoribot-mechanics-observation-1"
 #: The routing contract's first mechanics profile. Pinned as a literal so a
 #: contract revision cannot silently change an extract's content hash; a rename
 #: must be coordinated and the fixtures re-pinned.
-TARGET_MECHANICS_PROFILE = "base-2.0.76-normal-v1"
+TARGET_MECHANICS_PROFILE = "base-2.0.77-normal-v1"
 
 #: Evidence status of a derived value or of a mechanics rule.
 #: ``observed``       -- recorded from a controlled game capture.
@@ -173,9 +173,9 @@ _COMMON_FIELDS = (
     "next_upgrade", "fast_replaceable_group",
 )
 _CIRCUIT = ("circuit_wire_max_distance",)
-# Each list names only properties the 2.0.76 prototype documentation defines for
-# that prototype type, so an entry in ``absent_raw_fields`` always means "this
-# build's prototype leaves a real, documented field undefined".
+# Each list names properties present in the retained 2.0.76 prototype
+# documentation. Those references keep their historical provenance during the
+# 2.0.77 runtime migration; they are never treated as 2.0.77 observations.
 _FIELDS_BY_TYPE: Mapping[str, tuple[str, ...]] = {
     "transport-belt": _COMMON_FIELDS + _CIRCUIT + ("speed", "related_underground_belt"),
     "underground-belt": _COMMON_FIELDS + ("speed", "max_distance"),
@@ -601,7 +601,7 @@ def parse_extract(value: Any) -> PrototypeExtract:
 DEFAULT_REFERENCES: tuple["Reference", ...] = (
     Reference(
         REF_DUMP, "repository", "Local Factorio data-raw dump used for this extract",
-        "data/data-raw-dump.json", None, None),
+        "data/data-raw-dump-2.0.77-base.json", "2.0.77", "2026-09-12"),
     Reference(
         REF_ENTITY_DOCS, "prototype-docs", "EntityPrototype",
         "https://lua-api.factorio.com/2.0.76/prototypes/EntityPrototype.html",
@@ -1023,6 +1023,15 @@ def verify_manifest(
             "manifest claims a profile match without a known build and mod list")
     if env["environment_status"] != prov.environment_status:
         raise PrototypeError("manifest environment status contradicts the extract")
+    expected_environment = {
+        "game_version": prov.game_version,
+        "declared_mods": (None if prov.declared_mods is None
+                          else [list(mod) for mod in prov.declared_mods]),
+        "environment_status": prov.environment_status,
+        "matches_target_profile": prov.matches_target_profile,
+    }
+    if dict(env) != expected_environment:
+        raise PrototypeError("manifest environment contradicts the extract provenance")
     slice_hash = content_hash(slice_doc)
     if manifest["raw_slice"]["content_hash"] != slice_hash:
         raise PrototypeError(
@@ -1178,17 +1187,21 @@ def build_observation_index(records: Iterable[Observation]) -> dict:
     extra = sorted(set(by_id) - set(REQUIRED_MECHANICS_RULES))
     unobserved = sorted(rid for rid, rec in by_id.items()
                         if rec.evidence_status != "observed")
+    incompatible = sorted(rid for rid, rec in by_id.items()
+                          if rec.profile != TARGET_MECHANICS_PROFILE)
     return {
         "schema_version": OBSERVATION_SCHEMA_VERSION,
         "profile": TARGET_MECHANICS_PROFILE,
         "required_rules": sorted(REQUIRED_MECHANICS_RULES),
         "records": sorted(by_id),
+        "record_profiles": sorted({record.profile for record in records}),
+        "incompatible_records": incompatible,
         "status_counts": counts,
         "status_by_rule": {rid: by_id[rid].evidence_status for rid in sorted(by_id)},
         "missing_rules": missing,
         "unrecognised_records": extra,
         "rules_without_game_observation": unobserved,
-        "mechanics_gate_unmet": bool(missing or extra or unobserved),
+        "mechanics_gate_unmet": bool(missing or extra or unobserved or incompatible),
     }
 
 

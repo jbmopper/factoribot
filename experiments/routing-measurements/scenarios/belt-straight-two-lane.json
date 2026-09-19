@@ -1,0 +1,15 @@
+{
+  "scenario_version": "factoribot-routing-measurement-scenario-1",
+  "scenario_id": "belt-straight-fast-two-lane",
+  "purpose": "Measure a saturated full straight belt and retain lane-specific source/collector counts.",
+  "setup": {
+    "entities": ["two editor infinity chest feeds", "fast inserter feeds", "20 straight fast-transport-belts", "two counted lane collectors before removal"],
+    "supply_conditions": "Iron plates are available on both lanes, each up to 15 items/s; each source extraction is counted.",
+    "removal_conditions": "Each collector count is recorded before the chest is emptied; no delete sink is used for the measurement.",
+    "blueprint_export_required": true
+  },
+  "research": {"inserter-capacity-bonus": 0},
+  "power_control": {"power_available": true, "circuit_state": "no circuit wires or enable condition"},
+  "measurement": {"warmup_ticks": 3600, "window_ticks": 3600, "repeat_runs": 2, "stability_tolerance_items_per_s": 0.016666666666666666},
+  "expected_not_observed": "The documented full-belt reference is 30 items/s. The harness must record both lane counts rather than infer them from a screenshot."
+}

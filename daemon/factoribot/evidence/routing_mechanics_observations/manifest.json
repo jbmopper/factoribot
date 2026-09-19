@@ -1,7 +1,28 @@
 {
+  "incompatible_records": [
+    "belt.side_load.lane_assignment",
+    "belt.straight.lane_capacity",
+    "belt.transfer.belt_to_belt",
+    "belt.turn.lane_behavior",
+    "circuit.control_state",
+    "inserter.endpoints.pickup_drop_tiles",
+    "inserter.rate.cycle_and_stack",
+    "machine.activity.assembling_machine_2",
+    "machine.activity.electric_furnace",
+    "power.supply_assumption",
+    "splitter.lane_split",
+    "splitter.priority_and_filter",
+    "underground.lane_mapping",
+    "underground.pairing.conflict",
+    "underground.pairing.range",
+    "unsupported.entity_visibility"
+  ],
   "mechanics_gate_unmet": true,
   "missing_rules": [],
-  "profile": "base-2.0.76-normal-v1",
+  "profile": "base-2.0.77-normal-v1",
+  "record_profiles": [
+    "base-2.0.76-normal-v1"
+  ],
   "records": [
     "belt.side_load.lane_assignment",
     "belt.straight.lane_capacity",

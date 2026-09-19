@@ -1,0 +1,2474 @@
+{
+  "missing_from_first_entity_set": [],
+  "prototypes": [
+    {
+      "absent_raw_fields": [
+        "tile_height",
+        "tile_width"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.4,
+            "max_y": 0.4,
+            "min_x": -0.4,
+            "min_y": -0.4
+          }
+        },
+        "items_per_second_per_lane": {
+          "basis": "items_per_second_total / 2 lanes; cross-checked against the wiki's per-lane tier table (fast belt 15 items/s per lane)",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 7.5
+        },
+        "items_per_second_total": {
+          "basis": "speed * 480, the documented belt speed formula (both lanes)",
+          "evidence_ref": "doc:lua-api-2.0.76-transport-belt-connectable",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 15.0
+        },
+        "lane_count": {
+          "basis": "belt-connectable entities carry a left and a right lane",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "lanes",
+          "value": 2
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.5,
+            "max_y": 0.5,
+            "min_x": -0.5,
+            "min_y": -0.5
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tiles_per_tick": {
+          "basis": "raw prototype 'speed' restated with its unit",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles/tick",
+          "value": 0.03125
+        }
+      },
+      "in_first_entity_set": true,
+      "name": "transport-belt",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "transport-belt",
+      "raw": {
+        "circuit_wire_max_distance": 9,
+        "collision_box": [
+          [
+            -0.4,
+            -0.4
+          ],
+          [
+            0.4,
+            0.4
+          ]
+        ],
+        "fast_replaceable_group": "transport-belt",
+        "next_upgrade": "fast-transport-belt",
+        "related_underground_belt": "underground-belt",
+        "selection_box": [
+          [
+            -0.5,
+            -0.5
+          ],
+          [
+            0.5,
+            0.5
+          ]
+        ],
+        "speed": 0.03125
+      },
+      "subsystem": "transport",
+      "support": "supported",
+      "unknown_mechanics": [
+        "belt.turn.lane_behavior",
+        "belt.side_load.lane_assignment",
+        "belt.transfer.belt_to_belt"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "tile_height",
+        "tile_width"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.4,
+            "max_y": 0.4,
+            "min_x": -0.4,
+            "min_y": -0.4
+          }
+        },
+        "items_per_second_per_lane": {
+          "basis": "items_per_second_total / 2 lanes; cross-checked against the wiki's per-lane tier table (fast belt 15 items/s per lane)",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 15.0
+        },
+        "items_per_second_total": {
+          "basis": "speed * 480, the documented belt speed formula (both lanes)",
+          "evidence_ref": "doc:lua-api-2.0.76-transport-belt-connectable",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 30.0
+        },
+        "lane_count": {
+          "basis": "belt-connectable entities carry a left and a right lane",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "lanes",
+          "value": 2
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.5,
+            "max_y": 0.5,
+            "min_x": -0.5,
+            "min_y": -0.5
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tiles_per_tick": {
+          "basis": "raw prototype 'speed' restated with its unit",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles/tick",
+          "value": 0.0625
+        }
+      },
+      "in_first_entity_set": true,
+      "name": "fast-transport-belt",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "transport-belt",
+      "raw": {
+        "circuit_wire_max_distance": 9,
+        "collision_box": [
+          [
+            -0.4,
+            -0.4
+          ],
+          [
+            0.4,
+            0.4
+          ]
+        ],
+        "fast_replaceable_group": "transport-belt",
+        "next_upgrade": "express-transport-belt",
+        "related_underground_belt": "fast-underground-belt",
+        "selection_box": [
+          [
+            -0.5,
+            -0.5
+          ],
+          [
+            0.5,
+            0.5
+          ]
+        ],
+        "speed": 0.0625
+      },
+      "subsystem": "transport",
+      "support": "supported",
+      "unknown_mechanics": [
+        "belt.turn.lane_behavior",
+        "belt.side_load.lane_assignment",
+        "belt.transfer.belt_to_belt"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "next_upgrade",
+        "tile_height",
+        "tile_width"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.4,
+            "max_y": 0.4,
+            "min_x": -0.4,
+            "min_y": -0.4
+          }
+        },
+        "items_per_second_per_lane": {
+          "basis": "items_per_second_total / 2 lanes; cross-checked against the wiki's per-lane tier table (fast belt 15 items/s per lane)",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 22.5
+        },
+        "items_per_second_total": {
+          "basis": "speed * 480, the documented belt speed formula (both lanes)",
+          "evidence_ref": "doc:lua-api-2.0.76-transport-belt-connectable",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 45.0
+        },
+        "lane_count": {
+          "basis": "belt-connectable entities carry a left and a right lane",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "lanes",
+          "value": 2
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.5,
+            "max_y": 0.5,
+            "min_x": -0.5,
+            "min_y": -0.5
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tiles_per_tick": {
+          "basis": "raw prototype 'speed' restated with its unit",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles/tick",
+          "value": 0.09375
+        }
+      },
+      "in_first_entity_set": true,
+      "name": "express-transport-belt",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "transport-belt",
+      "raw": {
+        "circuit_wire_max_distance": 9,
+        "collision_box": [
+          [
+            -0.4,
+            -0.4
+          ],
+          [
+            0.4,
+            0.4
+          ]
+        ],
+        "fast_replaceable_group": "transport-belt",
+        "related_underground_belt": "express-underground-belt",
+        "selection_box": [
+          [
+            -0.5,
+            -0.5
+          ],
+          [
+            0.5,
+            0.5
+          ]
+        ],
+        "speed": 0.09375
+      },
+      "subsystem": "transport",
+      "support": "supported",
+      "unknown_mechanics": [
+        "belt.turn.lane_behavior",
+        "belt.side_load.lane_assignment",
+        "belt.transfer.belt_to_belt"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "tile_height",
+        "tile_width"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.4,
+            "max_y": 0.4,
+            "min_x": -0.4,
+            "min_y": -0.4
+          }
+        },
+        "items_per_second_per_lane": {
+          "basis": "items_per_second_total / 2 lanes; cross-checked against the wiki's per-lane tier table (fast belt 15 items/s per lane)",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 7.5
+        },
+        "items_per_second_total": {
+          "basis": "speed * 480, the documented belt speed formula (both lanes)",
+          "evidence_ref": "doc:lua-api-2.0.76-transport-belt-connectable",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 15.0
+        },
+        "lane_count": {
+          "basis": "belt-connectable entities carry a left and a right lane",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "lanes",
+          "value": 2
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.5,
+            "max_y": 0.5,
+            "min_x": -0.5,
+            "min_y": -0.5
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tiles_per_tick": {
+          "basis": "raw prototype 'speed' restated with its unit",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles/tick",
+          "value": 0.03125
+        },
+        "underground_span_tiles": {
+          "basis": "raw 'max_distance' is recorded verbatim; whether it counts the tiles between the pair or the centre-to-centre distance is not stated by the prototype documentation, so no span is derived here",
+          "evidence_ref": "underground.pairing.range",
+          "evidence_status": "pending",
+          "unit": "tiles",
+          "value": null
+        }
+      },
+      "in_first_entity_set": true,
+      "name": "underground-belt",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "underground-belt",
+      "raw": {
+        "collision_box": [
+          [
+            -0.4,
+            -0.4
+          ],
+          [
+            0.4,
+            0.4
+          ]
+        ],
+        "fast_replaceable_group": "transport-belt",
+        "max_distance": 5,
+        "next_upgrade": "fast-underground-belt",
+        "selection_box": [
+          [
+            -0.5,
+            -0.5
+          ],
+          [
+            0.5,
+            0.5
+          ]
+        ],
+        "speed": 0.03125
+      },
+      "subsystem": "transport",
+      "support": "supported",
+      "unknown_mechanics": [
+        "underground.pairing.range",
+        "underground.pairing.conflict",
+        "underground.lane_mapping"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "tile_height",
+        "tile_width"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.4,
+            "max_y": 0.4,
+            "min_x": -0.4,
+            "min_y": -0.4
+          }
+        },
+        "items_per_second_per_lane": {
+          "basis": "items_per_second_total / 2 lanes; cross-checked against the wiki's per-lane tier table (fast belt 15 items/s per lane)",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 15.0
+        },
+        "items_per_second_total": {
+          "basis": "speed * 480, the documented belt speed formula (both lanes)",
+          "evidence_ref": "doc:lua-api-2.0.76-transport-belt-connectable",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 30.0
+        },
+        "lane_count": {
+          "basis": "belt-connectable entities carry a left and a right lane",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "lanes",
+          "value": 2
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.5,
+            "max_y": 0.5,
+            "min_x": -0.5,
+            "min_y": -0.5
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tiles_per_tick": {
+          "basis": "raw prototype 'speed' restated with its unit",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles/tick",
+          "value": 0.0625
+        },
+        "underground_span_tiles": {
+          "basis": "raw 'max_distance' is recorded verbatim; whether it counts the tiles between the pair or the centre-to-centre distance is not stated by the prototype documentation, so no span is derived here",
+          "evidence_ref": "underground.pairing.range",
+          "evidence_status": "pending",
+          "unit": "tiles",
+          "value": null
+        }
+      },
+      "in_first_entity_set": true,
+      "name": "fast-underground-belt",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "underground-belt",
+      "raw": {
+        "collision_box": [
+          [
+            -0.4,
+            -0.4
+          ],
+          [
+            0.4,
+            0.4
+          ]
+        ],
+        "fast_replaceable_group": "transport-belt",
+        "max_distance": 7,
+        "next_upgrade": "express-underground-belt",
+        "selection_box": [
+          [
+            -0.5,
+            -0.5
+          ],
+          [
+            0.5,
+            0.5
+          ]
+        ],
+        "speed": 0.0625
+      },
+      "subsystem": "transport",
+      "support": "supported",
+      "unknown_mechanics": [
+        "underground.pairing.range",
+        "underground.pairing.conflict",
+        "underground.lane_mapping"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "next_upgrade",
+        "tile_height",
+        "tile_width"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.4,
+            "max_y": 0.4,
+            "min_x": -0.4,
+            "min_y": -0.4
+          }
+        },
+        "items_per_second_per_lane": {
+          "basis": "items_per_second_total / 2 lanes; cross-checked against the wiki's per-lane tier table (fast belt 15 items/s per lane)",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 22.5
+        },
+        "items_per_second_total": {
+          "basis": "speed * 480, the documented belt speed formula (both lanes)",
+          "evidence_ref": "doc:lua-api-2.0.76-transport-belt-connectable",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 45.0
+        },
+        "lane_count": {
+          "basis": "belt-connectable entities carry a left and a right lane",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "lanes",
+          "value": 2
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.5,
+            "max_y": 0.5,
+            "min_x": -0.5,
+            "min_y": -0.5
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tiles_per_tick": {
+          "basis": "raw prototype 'speed' restated with its unit",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles/tick",
+          "value": 0.09375
+        },
+        "underground_span_tiles": {
+          "basis": "raw 'max_distance' is recorded verbatim; whether it counts the tiles between the pair or the centre-to-centre distance is not stated by the prototype documentation, so no span is derived here",
+          "evidence_ref": "underground.pairing.range",
+          "evidence_status": "pending",
+          "unit": "tiles",
+          "value": null
+        }
+      },
+      "in_first_entity_set": true,
+      "name": "express-underground-belt",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "underground-belt",
+      "raw": {
+        "collision_box": [
+          [
+            -0.4,
+            -0.4
+          ],
+          [
+            0.4,
+            0.4
+          ]
+        ],
+        "fast_replaceable_group": "transport-belt",
+        "max_distance": 9,
+        "selection_box": [
+          [
+            -0.5,
+            -0.5
+          ],
+          [
+            0.5,
+            0.5
+          ]
+        ],
+        "speed": 0.09375
+      },
+      "subsystem": "transport",
+      "support": "supported",
+      "unknown_mechanics": [
+        "underground.pairing.range",
+        "underground.pairing.conflict",
+        "underground.lane_mapping"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "tile_height",
+        "tile_width"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.9,
+            "max_y": 0.4,
+            "min_x": -0.9,
+            "min_y": -0.4
+          }
+        },
+        "input_output_tile_offsets": {
+          "basis": "the splitter occupies the derived tile footprint, but which tile carries which input/output lane is not stated by the prototype",
+          "evidence_ref": "splitter.lane_split",
+          "evidence_status": "pending",
+          "unit": "tiles",
+          "value": null
+        },
+        "items_per_second_per_lane": {
+          "basis": "items_per_second_total / 2 lanes; cross-checked against the wiki's per-lane tier table (fast belt 15 items/s per lane)",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 7.5
+        },
+        "items_per_second_total": {
+          "basis": "speed * 480, the documented belt speed formula (both lanes)",
+          "evidence_ref": "doc:lua-api-2.0.76-transport-belt-connectable",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 15.0
+        },
+        "lane_count": {
+          "basis": "belt-connectable entities carry a left and a right lane",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "lanes",
+          "value": 2
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.9,
+            "max_y": 0.5,
+            "min_x": -0.9,
+            "min_y": -0.5
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 2
+        },
+        "tiles_per_tick": {
+          "basis": "raw prototype 'speed' restated with its unit",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles/tick",
+          "value": 0.03125
+        }
+      },
+      "in_first_entity_set": true,
+      "name": "splitter",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "splitter",
+      "raw": {
+        "circuit_wire_max_distance": 9,
+        "collision_box": [
+          [
+            -0.9,
+            -0.4
+          ],
+          [
+            0.9,
+            0.4
+          ]
+        ],
+        "default_input_left_condition": {
+          "comparator": "<",
+          "first": {
+            "name": "signal-I",
+            "type": "virtual"
+          },
+          "second": 0
+        },
+        "default_input_right_condition": {
+          "comparator": ">",
+          "first": {
+            "name": "signal-I",
+            "type": "virtual"
+          },
+          "second": 0
+        },
+        "default_output_left_condition": {
+          "comparator": "<",
+          "first": {
+            "name": "signal-O",
+            "type": "virtual"
+          },
+          "second": 0
+        },
+        "default_output_right_condition": {
+          "comparator": ">",
+          "first": {
+            "name": "signal-O",
+            "type": "virtual"
+          },
+          "second": 0
+        },
+        "fast_replaceable_group": "transport-belt",
+        "next_upgrade": "fast-splitter",
+        "related_transport_belt": "transport-belt",
+        "selection_box": [
+          [
+            -0.9,
+            -0.5
+          ],
+          [
+            0.9,
+            0.5
+          ]
+        ],
+        "speed": 0.03125,
+        "structure_animation_movement_cooldown": 10
+      },
+      "subsystem": "transport",
+      "support": "supported",
+      "unknown_mechanics": [
+        "splitter.lane_split",
+        "splitter.priority_and_filter"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "tile_height",
+        "tile_width"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.9,
+            "max_y": 0.4,
+            "min_x": -0.9,
+            "min_y": -0.4
+          }
+        },
+        "input_output_tile_offsets": {
+          "basis": "the splitter occupies the derived tile footprint, but which tile carries which input/output lane is not stated by the prototype",
+          "evidence_ref": "splitter.lane_split",
+          "evidence_status": "pending",
+          "unit": "tiles",
+          "value": null
+        },
+        "items_per_second_per_lane": {
+          "basis": "items_per_second_total / 2 lanes; cross-checked against the wiki's per-lane tier table (fast belt 15 items/s per lane)",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 15.0
+        },
+        "items_per_second_total": {
+          "basis": "speed * 480, the documented belt speed formula (both lanes)",
+          "evidence_ref": "doc:lua-api-2.0.76-transport-belt-connectable",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 30.0
+        },
+        "lane_count": {
+          "basis": "belt-connectable entities carry a left and a right lane",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "lanes",
+          "value": 2
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.9,
+            "max_y": 0.5,
+            "min_x": -0.9,
+            "min_y": -0.5
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 2
+        },
+        "tiles_per_tick": {
+          "basis": "raw prototype 'speed' restated with its unit",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles/tick",
+          "value": 0.0625
+        }
+      },
+      "in_first_entity_set": true,
+      "name": "fast-splitter",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "splitter",
+      "raw": {
+        "circuit_wire_max_distance": 9,
+        "collision_box": [
+          [
+            -0.9,
+            -0.4
+          ],
+          [
+            0.9,
+            0.4
+          ]
+        ],
+        "default_input_left_condition": {
+          "comparator": "<",
+          "first": {
+            "name": "signal-I",
+            "type": "virtual"
+          },
+          "second": 0
+        },
+        "default_input_right_condition": {
+          "comparator": ">",
+          "first": {
+            "name": "signal-I",
+            "type": "virtual"
+          },
+          "second": 0
+        },
+        "default_output_left_condition": {
+          "comparator": "<",
+          "first": {
+            "name": "signal-O",
+            "type": "virtual"
+          },
+          "second": 0
+        },
+        "default_output_right_condition": {
+          "comparator": ">",
+          "first": {
+            "name": "signal-O",
+            "type": "virtual"
+          },
+          "second": 0
+        },
+        "fast_replaceable_group": "transport-belt",
+        "next_upgrade": "express-splitter",
+        "related_transport_belt": "fast-transport-belt",
+        "selection_box": [
+          [
+            -0.9,
+            -0.5
+          ],
+          [
+            0.9,
+            0.5
+          ]
+        ],
+        "speed": 0.0625,
+        "structure_animation_movement_cooldown": 10
+      },
+      "subsystem": "transport",
+      "support": "supported",
+      "unknown_mechanics": [
+        "splitter.lane_split",
+        "splitter.priority_and_filter"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "next_upgrade",
+        "tile_height",
+        "tile_width"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.9,
+            "max_y": 0.4,
+            "min_x": -0.9,
+            "min_y": -0.4
+          }
+        },
+        "input_output_tile_offsets": {
+          "basis": "the splitter occupies the derived tile footprint, but which tile carries which input/output lane is not stated by the prototype",
+          "evidence_ref": "splitter.lane_split",
+          "evidence_status": "pending",
+          "unit": "tiles",
+          "value": null
+        },
+        "items_per_second_per_lane": {
+          "basis": "items_per_second_total / 2 lanes; cross-checked against the wiki's per-lane tier table (fast belt 15 items/s per lane)",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 22.5
+        },
+        "items_per_second_total": {
+          "basis": "speed * 480, the documented belt speed formula (both lanes)",
+          "evidence_ref": "doc:lua-api-2.0.76-transport-belt-connectable",
+          "evidence_status": "documented-only",
+          "unit": "items/s",
+          "value": 45.0
+        },
+        "lane_count": {
+          "basis": "belt-connectable entities carry a left and a right lane",
+          "evidence_ref": "wiki:transport-belts-physics",
+          "evidence_status": "documented-only",
+          "unit": "lanes",
+          "value": 2
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.9,
+            "max_y": 0.5,
+            "min_x": -0.9,
+            "min_y": -0.5
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 2
+        },
+        "tiles_per_tick": {
+          "basis": "raw prototype 'speed' restated with its unit",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles/tick",
+          "value": 0.09375
+        }
+      },
+      "in_first_entity_set": true,
+      "name": "express-splitter",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "splitter",
+      "raw": {
+        "circuit_wire_max_distance": 9,
+        "collision_box": [
+          [
+            -0.9,
+            -0.4
+          ],
+          [
+            0.9,
+            0.4
+          ]
+        ],
+        "default_input_left_condition": {
+          "comparator": "<",
+          "first": {
+            "name": "signal-I",
+            "type": "virtual"
+          },
+          "second": 0
+        },
+        "default_input_right_condition": {
+          "comparator": ">",
+          "first": {
+            "name": "signal-I",
+            "type": "virtual"
+          },
+          "second": 0
+        },
+        "default_output_left_condition": {
+          "comparator": "<",
+          "first": {
+            "name": "signal-O",
+            "type": "virtual"
+          },
+          "second": 0
+        },
+        "default_output_right_condition": {
+          "comparator": ">",
+          "first": {
+            "name": "signal-O",
+            "type": "virtual"
+          },
+          "second": 0
+        },
+        "fast_replaceable_group": "transport-belt",
+        "related_transport_belt": "express-transport-belt",
+        "selection_box": [
+          [
+            -0.9,
+            -0.5
+          ],
+          [
+            0.9,
+            0.5
+          ]
+        ],
+        "speed": 0.09375,
+        "structure_animation_movement_cooldown": 10
+      },
+      "subsystem": "transport",
+      "support": "supported",
+      "unknown_mechanics": [
+        "splitter.lane_split",
+        "splitter.priority_and_filter"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "bulk",
+        "chases_belt_items",
+        "grab_less_to_match_belt_stack",
+        "hand_size",
+        "max_belt_stack_size",
+        "stack_size_bonus",
+        "starting_distance",
+        "tile_height",
+        "tile_width",
+        "uses_inserter_stack_size_bonus",
+        "wait_for_full_hand"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.15,
+            "max_y": 0.15,
+            "min_x": -0.15,
+            "min_y": -0.15
+          }
+        },
+        "drop_offset_tiles": {
+          "basis": "raw 'insert_position', entity-relative for the unrotated orientation",
+          "evidence_ref": "doc:lua-api-2.0.76-inserter-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "x": 0.0,
+            "y": 1.2
+          }
+        },
+        "is_bulk": {
+          "basis": "raw 'bulk' when defined; null when the prototype omits it (the documented default false is not asserted here)",
+          "evidence_ref": "inserter.rate.cycle_and_stack",
+          "evidence_status": "pending",
+          "unit": "boolean",
+          "value": null
+        },
+        "items_per_second": {
+          "basis": "cycle time depends on swing geometry, source/destination type and hand size research; none of that is in the prototype. Capacity stays unknown, which the routing contract relaxes rather than bounds",
+          "evidence_ref": "inserter.rate.cycle_and_stack",
+          "evidence_status": "pending",
+          "unit": "items/s",
+          "value": null
+        },
+        "pickup_offset_tiles": {
+          "basis": "raw 'pickup_position', entity-relative for the prototype's unrotated (north) orientation; rotation to world tiles is task 03's mapping",
+          "evidence_ref": "doc:lua-api-2.0.76-inserter-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "x": 0.0,
+            "y": -1.0
+          }
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.4,
+            "max_y": 0.45,
+            "min_x": -0.4,
+            "min_y": -0.35
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        }
+      },
+      "in_first_entity_set": true,
+      "name": "inserter",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "inserter",
+      "raw": {
+        "circuit_wire_max_distance": 9,
+        "collision_box": [
+          [
+            -0.15,
+            -0.15
+          ],
+          [
+            0.15,
+            0.15
+          ]
+        ],
+        "default_stack_control_input_signal": {
+          "name": "signal-S",
+          "type": "virtual"
+        },
+        "energy_per_movement": "5kJ",
+        "energy_per_rotation": "5kJ",
+        "energy_source": {
+          "drain": "0.4kW",
+          "type": "electric",
+          "usage_priority": "secondary-input"
+        },
+        "extension_speed": 0.035,
+        "fast_replaceable_group": "inserter",
+        "filter_count": 5,
+        "insert_position": [
+          0,
+          1.2
+        ],
+        "next_upgrade": "fast-inserter",
+        "pickup_position": [
+          0,
+          -1
+        ],
+        "rotation_speed": 0.014000000000000002,
+        "selection_box": [
+          [
+            -0.4,
+            -0.35
+          ],
+          [
+            0.4,
+            0.45
+          ]
+        ]
+      },
+      "subsystem": "inserter",
+      "support": "supported",
+      "unknown_mechanics": [
+        "inserter.rate.cycle_and_stack",
+        "inserter.endpoints.pickup_drop_tiles"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "bulk",
+        "chases_belt_items",
+        "grab_less_to_match_belt_stack",
+        "hand_size",
+        "max_belt_stack_size",
+        "stack_size_bonus",
+        "starting_distance",
+        "tile_height",
+        "tile_width",
+        "uses_inserter_stack_size_bonus",
+        "wait_for_full_hand"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.15,
+            "max_y": 0.15,
+            "min_x": -0.15,
+            "min_y": -0.15
+          }
+        },
+        "drop_offset_tiles": {
+          "basis": "raw 'insert_position', entity-relative for the unrotated orientation",
+          "evidence_ref": "doc:lua-api-2.0.76-inserter-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "x": 0.0,
+            "y": 1.2
+          }
+        },
+        "is_bulk": {
+          "basis": "raw 'bulk' when defined; null when the prototype omits it (the documented default false is not asserted here)",
+          "evidence_ref": "inserter.rate.cycle_and_stack",
+          "evidence_status": "pending",
+          "unit": "boolean",
+          "value": null
+        },
+        "items_per_second": {
+          "basis": "cycle time depends on swing geometry, source/destination type and hand size research; none of that is in the prototype. Capacity stays unknown, which the routing contract relaxes rather than bounds",
+          "evidence_ref": "inserter.rate.cycle_and_stack",
+          "evidence_status": "pending",
+          "unit": "items/s",
+          "value": null
+        },
+        "pickup_offset_tiles": {
+          "basis": "raw 'pickup_position', entity-relative for the prototype's unrotated (north) orientation; rotation to world tiles is task 03's mapping",
+          "evidence_ref": "doc:lua-api-2.0.76-inserter-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "x": 0.0,
+            "y": -1.0
+          }
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.4,
+            "max_y": 0.45,
+            "min_x": -0.4,
+            "min_y": -0.35
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        }
+      },
+      "in_first_entity_set": true,
+      "name": "fast-inserter",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "inserter",
+      "raw": {
+        "circuit_wire_max_distance": 9,
+        "collision_box": [
+          [
+            -0.15,
+            -0.15
+          ],
+          [
+            0.15,
+            0.15
+          ]
+        ],
+        "default_stack_control_input_signal": {
+          "name": "signal-S",
+          "type": "virtual"
+        },
+        "energy_per_movement": "7kJ",
+        "energy_per_rotation": "7kJ",
+        "energy_source": {
+          "drain": "0.5kW",
+          "type": "electric",
+          "usage_priority": "secondary-input"
+        },
+        "extension_speed": 0.1,
+        "fast_replaceable_group": "inserter",
+        "filter_count": 5,
+        "insert_position": [
+          0,
+          1.2
+        ],
+        "next_upgrade": "bulk-inserter",
+        "pickup_position": [
+          0,
+          -1
+        ],
+        "rotation_speed": 0.04,
+        "selection_box": [
+          [
+            -0.4,
+            -0.35
+          ],
+          [
+            0.4,
+            0.45
+          ]
+        ]
+      },
+      "subsystem": "inserter",
+      "support": "supported",
+      "unknown_mechanics": [
+        "inserter.rate.cycle_and_stack",
+        "inserter.endpoints.pickup_drop_tiles"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "chases_belt_items",
+        "grab_less_to_match_belt_stack",
+        "hand_size",
+        "max_belt_stack_size",
+        "next_upgrade",
+        "stack_size_bonus",
+        "tile_height",
+        "tile_width",
+        "uses_inserter_stack_size_bonus",
+        "wait_for_full_hand"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.15,
+            "max_y": 0.15,
+            "min_x": -0.15,
+            "min_y": -0.15
+          }
+        },
+        "drop_offset_tiles": {
+          "basis": "raw 'insert_position', entity-relative for the unrotated orientation",
+          "evidence_ref": "doc:lua-api-2.0.76-inserter-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "x": 0.0,
+            "y": 1.2
+          }
+        },
+        "is_bulk": {
+          "basis": "raw 'bulk' when defined; null when the prototype omits it (the documented default false is not asserted here)",
+          "evidence_ref": "doc:lua-api-2.0.76-inserter-prototype",
+          "evidence_status": "documented-only",
+          "unit": "boolean",
+          "value": true
+        },
+        "items_per_second": {
+          "basis": "cycle time depends on swing geometry, source/destination type and hand size research; none of that is in the prototype. Capacity stays unknown, which the routing contract relaxes rather than bounds",
+          "evidence_ref": "inserter.rate.cycle_and_stack",
+          "evidence_status": "pending",
+          "unit": "items/s",
+          "value": null
+        },
+        "pickup_offset_tiles": {
+          "basis": "raw 'pickup_position', entity-relative for the prototype's unrotated (north) orientation; rotation to world tiles is task 03's mapping",
+          "evidence_ref": "doc:lua-api-2.0.76-inserter-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "x": 0.0,
+            "y": -1.0
+          }
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.4,
+            "max_y": 0.45,
+            "min_x": -0.4,
+            "min_y": -0.35
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        }
+      },
+      "in_first_entity_set": true,
+      "name": "bulk-inserter",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "inserter",
+      "raw": {
+        "bulk": true,
+        "circuit_wire_max_distance": 9,
+        "collision_box": [
+          [
+            -0.15,
+            -0.15
+          ],
+          [
+            0.15,
+            0.15
+          ]
+        ],
+        "default_stack_control_input_signal": {
+          "name": "signal-S",
+          "type": "virtual"
+        },
+        "energy_per_movement": "20kJ",
+        "energy_per_rotation": "20kJ",
+        "energy_source": {
+          "drain": "1kW",
+          "type": "electric",
+          "usage_priority": "secondary-input"
+        },
+        "extension_speed": 0.1,
+        "fast_replaceable_group": "inserter",
+        "filter_count": 5,
+        "insert_position": [
+          0,
+          1.2
+        ],
+        "pickup_position": [
+          0,
+          -1
+        ],
+        "rotation_speed": 0.04,
+        "selection_box": [
+          [
+            -0.4,
+            -0.35
+          ],
+          [
+            0.4,
+            0.45
+          ]
+        ],
+        "starting_distance": 0.85
+      },
+      "subsystem": "inserter",
+      "support": "supported",
+      "unknown_mechanics": [
+        "inserter.rate.cycle_and_stack",
+        "inserter.endpoints.pickup_drop_tiles"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "effect_receiver",
+        "ingredient_count",
+        "tile_height",
+        "tile_width"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 1.2,
+            "max_y": 1.2,
+            "min_x": -1.2,
+            "min_y": -1.2
+          }
+        },
+        "crafts_per_second_at_speed_1": {
+          "basis": "craft rate needs a recipe's energy_required; recipe arithmetic belongs to the shared calculation layer, not to this adapter",
+          "evidence_ref": "machine.activity.assembling_machine_2",
+          "evidence_status": "pending",
+          "unit": "crafts/s",
+          "value": null
+        },
+        "fluid_box_production_types": {
+          "basis": "production_type values summarised from the omitted 'fluid_boxes' field; fluid transport itself is out of the first profile",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "production types",
+          "value": [
+            "input",
+            "output"
+          ]
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 1.5,
+            "max_y": 1.5,
+            "min_x": -1.5,
+            "min_y": -1.5
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 3
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 3
+        }
+      },
+      "in_first_entity_set": true,
+      "name": "assembling-machine-2",
+      "omitted_raw_fields": [
+        [
+          "fluid_boxes",
+          "large structured field; summarised as fluid_box_production_types"
+        ]
+      ],
+      "origin": "unknown",
+      "prototype_type": "assembling-machine",
+      "raw": {
+        "allowed_effects": [
+          "consumption",
+          "speed",
+          "productivity",
+          "pollution",
+          "quality"
+        ],
+        "circuit_wire_max_distance": 9,
+        "collision_box": [
+          [
+            -1.2,
+            -1.2
+          ],
+          [
+            1.2,
+            1.2
+          ]
+        ],
+        "crafting_categories": [
+          "basic-crafting",
+          "crafting",
+          "advanced-crafting",
+          "crafting-with-fluid"
+        ],
+        "crafting_speed": 0.75,
+        "energy_source": {
+          "emissions_per_minute": {
+            "pollution": 3
+          },
+          "type": "electric",
+          "usage_priority": "secondary-input"
+        },
+        "energy_usage": "150kW",
+        "fast_replaceable_group": "assembling-machine",
+        "fluid_boxes_off_when_no_fluid_recipe": true,
+        "module_slots": 2,
+        "next_upgrade": "assembling-machine-3",
+        "selection_box": [
+          [
+            -1.5,
+            -1.5
+          ],
+          [
+            1.5,
+            1.5
+          ]
+        ]
+      },
+      "subsystem": "production",
+      "support": "supported",
+      "unknown_mechanics": [
+        "power.supply_assumption"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "effect_receiver",
+        "next_upgrade",
+        "tile_height",
+        "tile_width"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 1.2,
+            "max_y": 1.2,
+            "min_x": -1.2,
+            "min_y": -1.2
+          }
+        },
+        "crafts_per_second_at_speed_1": {
+          "basis": "craft rate needs a recipe's energy_required; recipe arithmetic belongs to the shared calculation layer, not to this adapter",
+          "evidence_ref": "machine.activity.electric_furnace",
+          "evidence_status": "pending",
+          "unit": "crafts/s",
+          "value": null
+        },
+        "fluid_box_production_types": {
+          "basis": "production_type values summarised from the omitted 'fluid_boxes' field; fluid transport itself is out of the first profile",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "production types",
+          "value": []
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 1.5,
+            "max_y": 1.5,
+            "min_x": -1.5,
+            "min_y": -1.5
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 3
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 3
+        }
+      },
+      "in_first_entity_set": true,
+      "name": "electric-furnace",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "furnace",
+      "raw": {
+        "allowed_effects": [
+          "consumption",
+          "speed",
+          "productivity",
+          "pollution",
+          "quality"
+        ],
+        "circuit_wire_max_distance": 9,
+        "collision_box": [
+          [
+            -1.2,
+            -1.2
+          ],
+          [
+            1.2,
+            1.2
+          ]
+        ],
+        "crafting_categories": [
+          "smelting"
+        ],
+        "crafting_speed": 2,
+        "energy_source": {
+          "emissions_per_minute": {
+            "pollution": 1
+          },
+          "type": "electric",
+          "usage_priority": "secondary-input"
+        },
+        "energy_usage": "180kW",
+        "fast_replaceable_group": "furnace",
+        "module_slots": 2,
+        "result_inventory_size": 1,
+        "selection_box": [
+          [
+            -1.5,
+            -1.5
+          ],
+          [
+            1.5,
+            1.5
+          ]
+        ],
+        "source_inventory_size": 1
+      },
+      "subsystem": "production",
+      "support": "supported",
+      "unknown_mechanics": [
+        "power.supply_assumption"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "next_upgrade",
+        "tile_height",
+        "tile_width"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.15,
+            "max_y": 0.15,
+            "min_x": -0.15,
+            "min_y": -0.15
+          }
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.4,
+            "max_y": 0.4,
+            "min_x": -0.4,
+            "min_y": -0.4
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        }
+      },
+      "in_first_entity_set": false,
+      "name": "small-electric-pole",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "electric-pole",
+      "raw": {
+        "collision_box": [
+          [
+            -0.15,
+            -0.15
+          ],
+          [
+            0.15,
+            0.15
+          ]
+        ],
+        "fast_replaceable_group": "electric-pole",
+        "maximum_wire_distance": 7.5,
+        "selection_box": [
+          [
+            -0.4,
+            -0.4
+          ],
+          [
+            0.4,
+            0.4
+          ]
+        ],
+        "supply_area_distance": 2.5
+      },
+      "subsystem": "power",
+      "support": "unsupported",
+      "unknown_mechanics": [
+        "power.supply_assumption"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "next_upgrade",
+        "tile_height",
+        "tile_width"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.15,
+            "max_y": 0.15,
+            "min_x": -0.15,
+            "min_y": -0.15
+          }
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.5,
+            "max_y": 0.5,
+            "min_x": -0.5,
+            "min_y": -0.5
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 1
+        }
+      },
+      "in_first_entity_set": false,
+      "name": "medium-electric-pole",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "electric-pole",
+      "raw": {
+        "collision_box": [
+          [
+            -0.15,
+            -0.15
+          ],
+          [
+            0.15,
+            0.15
+          ]
+        ],
+        "fast_replaceable_group": "electric-pole",
+        "maximum_wire_distance": 9,
+        "selection_box": [
+          [
+            -0.5,
+            -0.5
+          ],
+          [
+            0.5,
+            0.5
+          ]
+        ],
+        "supply_area_distance": 3.5
+      },
+      "subsystem": "power",
+      "support": "unsupported",
+      "unknown_mechanics": [
+        "power.supply_assumption"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "next_upgrade",
+        "tile_height",
+        "tile_width"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.65,
+            "max_y": 0.65,
+            "min_x": -0.65,
+            "min_y": -0.65
+          }
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 1.0,
+            "max_y": 1.0,
+            "min_x": -1.0,
+            "min_y": -1.0
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 2
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 2
+        }
+      },
+      "in_first_entity_set": false,
+      "name": "big-electric-pole",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "electric-pole",
+      "raw": {
+        "collision_box": [
+          [
+            -0.65,
+            -0.65
+          ],
+          [
+            0.65,
+            0.65
+          ]
+        ],
+        "fast_replaceable_group": "big-electric-pole",
+        "maximum_wire_distance": 32,
+        "selection_box": [
+          [
+            -1,
+            -1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "supply_area_distance": 2
+      },
+      "subsystem": "power",
+      "support": "unsupported",
+      "unknown_mechanics": [
+        "power.supply_assumption"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "next_upgrade",
+        "tile_height",
+        "tile_width"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 0.7,
+            "max_y": 0.7,
+            "min_x": -0.7,
+            "min_y": -0.7
+          }
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 1.0,
+            "max_y": 1.0,
+            "min_x": -1.0,
+            "min_y": -1.0
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 2
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 2
+        }
+      },
+      "in_first_entity_set": false,
+      "name": "substation",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "electric-pole",
+      "raw": {
+        "collision_box": [
+          [
+            -0.7,
+            -0.7
+          ],
+          [
+            0.7,
+            0.7
+          ]
+        ],
+        "fast_replaceable_group": "substation",
+        "maximum_wire_distance": 18,
+        "selection_box": [
+          [
+            -1,
+            -1
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "supply_area_distance": 9
+      },
+      "subsystem": "power",
+      "support": "unsupported",
+      "unknown_mechanics": [
+        "power.supply_assumption"
+      ]
+    },
+    {
+      "absent_raw_fields": [
+        "next_upgrade",
+        "tile_height",
+        "tile_width"
+      ],
+      "derived": {
+        "collision_box_tiles": {
+          "basis": "raw 'collision_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 1.2,
+            "max_y": 1.2,
+            "min_x": -1.2,
+            "min_y": -1.2
+          }
+        },
+        "selection_box_tiles": {
+          "basis": "raw 'selection_box' normalized to named corners",
+          "evidence_ref": "source:data-raw-dump",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": {
+            "max_x": 1.5,
+            "max_y": 1.5,
+            "min_x": -1.5,
+            "min_y": -1.5
+          }
+        },
+        "tile_height": {
+          "basis": "collision box height rounded up (documented tile_height default); the prototype does not define tile_height",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 3
+        },
+        "tile_width": {
+          "basis": "collision box width rounded up (documented tile_width default); the prototype does not define tile_width",
+          "evidence_ref": "doc:lua-api-2.0.76-entity-prototype",
+          "evidence_status": "documented-only",
+          "unit": "tiles",
+          "value": 3
+        }
+      },
+      "in_first_entity_set": false,
+      "name": "beacon",
+      "omitted_raw_fields": [],
+      "origin": "unknown",
+      "prototype_type": "beacon",
+      "raw": {
+        "allowed_effects": [
+          "consumption",
+          "speed",
+          "pollution"
+        ],
+        "collision_box": [
+          [
+            -1.2,
+            -1.2
+          ],
+          [
+            1.2,
+            1.2
+          ]
+        ],
+        "distribution_effectivity": 1.5,
+        "distribution_effectivity_bonus_per_quality_level": 0.2,
+        "energy_source": {
+          "type": "electric",
+          "usage_priority": "secondary-input"
+        },
+        "energy_usage": "480kW",
+        "fast_replaceable_group": "beacon",
+        "module_slots": 2,
+        "profile": [
+          1,
+          0.7071,
+          0.5773,
+          0.5,
+          0.44719999999999993,
+          0.4082,
+          0.3779,
+          0.3535,
+          0.3333,
+          0.3162,
+          0.3015,
+          0.2886,
+          0.2773,
+          0.2672,
+          0.2581,
+          0.25,
+          0.2425,
+          0.23569999999999997,
+          0.2294,
+          0.22359999999999997,
+          0.2182,
+          0.2132,
+          0.2085,
+          0.2041,
+          0.2,
+          0.1961,
+          0.1924,
+          0.1889,
+          0.1856,
+          0.1825,
+          0.1796,
+          0.1767,
+          0.174,
+          0.1714,
+          0.169,
+          0.1666,
+          0.1643,
+          0.1622,
+          0.1601,
+          0.1581,
+          0.1561,
+          0.1543,
+          0.1524,
+          0.1507,
+          0.149,
+          0.1474,
+          0.1458,
+          0.1443,
+          0.1428,
+          0.1414,
+          0.14,
+          0.1386,
+          0.1373,
+          0.136,
+          0.1348,
+          0.1336,
+          0.1324,
+          0.1313,
+          0.1301,
+          0.129,
+          0.128,
+          0.127,
+          0.1259,
+          0.125,
+          0.124,
+          0.123,
+          0.12210000000000001,
+          0.1212,
+          0.1203,
+          0.11949999999999998,
+          0.1186,
+          0.11779999999999999,
+          0.11700000000000002,
+          0.1162,
+          0.11539999999999999,
+          0.1147,
+          0.1139,
+          0.1132,
+          0.1125,
+          0.11179999999999998,
+          0.1111,
+          0.11040000000000001,
+          0.10969999999999999,
+          0.1091,
+          0.10840000000000001,
+          0.1078,
+          0.1072,
+          0.1066,
+          0.1059,
+          0.10539999999999998,
+          0.1048,
+          0.1042,
+          0.1036,
+          0.1031,
+          0.1025,
+          0.10200000000000001,
+          0.1015,
+          0.101,
+          0.1005,
+          0.1
+        ],
+        "selection_box": [
+          [
+            -1.5,
+            -1.5
+          ],
+          [
+            1.5,
+            1.5
+          ]
+        ],
+        "supply_area_distance": 3
+      },
+      "subsystem": "power",
+      "support": "unsupported",
+      "unknown_mechanics": [
+        "power.supply_assumption"
+      ]
+    }
+  ],
+  "provenance": {
+    "declared_mods": [
+      [
+        "base",
+        "2.0.77"
+      ]
+    ],
+    "environment_status": "identified",
+    "game_version": "2.0.77",
+    "matches_target_profile": "yes",
+    "notes": [
+      "Exported using Factorio 2.0.77 build 84539 in an isolated write directory and mod directory. Only base enabled; core is the engine built-in.",
+      "Environment match is not mechanics validation. Existing 2.0.76 documentation references are retained with their original version; their interpretation must be checked before activation.",
+      "The original modded pilot may include prototypes absent from this base-only export. Do not silently discard unsupported entities."
+    ],
+    "references": [
+      {
+        "kind": "repository",
+        "locator": "data/data-raw-dump.json",
+        "ref_id": "source:data-raw-dump",
+        "retrieved": null,
+        "title": "Local Factorio data-raw dump used for this extract",
+        "version": null
+      },
+      {
+        "kind": "prototype-docs",
+        "locator": "https://lua-api.factorio.com/2.0.76/prototypes/EntityPrototype.html",
+        "ref_id": "doc:lua-api-2.0.76-entity-prototype",
+        "retrieved": "2026-09-08",
+        "title": "EntityPrototype",
+        "version": "2.0.76"
+      },
+      {
+        "kind": "prototype-docs",
+        "locator": "https://lua-api.factorio.com/2.0.76/prototypes/TransportBeltConnectablePrototype.html",
+        "ref_id": "doc:lua-api-2.0.76-transport-belt-connectable",
+        "retrieved": "2026-09-08",
+        "title": "TransportBeltConnectablePrototype",
+        "version": "2.0.76"
+      },
+      {
+        "kind": "prototype-docs",
+        "locator": "https://lua-api.factorio.com/2.0.76/prototypes/UndergroundBeltPrototype.html",
+        "ref_id": "doc:lua-api-2.0.76-underground-belt-prototype",
+        "retrieved": "2026-09-08",
+        "title": "UndergroundBeltPrototype",
+        "version": "2.0.76"
+      },
+      {
+        "kind": "prototype-docs",
+        "locator": "https://lua-api.factorio.com/2.0.76/prototypes/SplitterPrototype.html",
+        "ref_id": "doc:lua-api-2.0.76-splitter-prototype",
+        "retrieved": "2026-09-08",
+        "title": "SplitterPrototype",
+        "version": "2.0.76"
+      },
+      {
+        "kind": "prototype-docs",
+        "locator": "https://lua-api.factorio.com/2.0.76/prototypes/InserterPrototype.html",
+        "ref_id": "doc:lua-api-2.0.76-inserter-prototype",
+        "retrieved": "2026-09-08",
+        "title": "InserterPrototype",
+        "version": "2.0.76"
+      },
+      {
+        "kind": "wiki",
+        "locator": "https://wiki.factorio.com/Transport_belts/Physics",
+        "ref_id": "wiki:transport-belts-physics",
+        "retrieved": "2026-09-08",
+        "title": "Transport belts/Physics (official Factorio wiki)",
+        "version": null
+      },
+      {
+        "kind": "wiki",
+        "locator": "https://wiki.factorio.com/Underground_belt",
+        "ref_id": "wiki:underground-belt",
+        "retrieved": "2026-09-08",
+        "title": "Underground belt (official Factorio wiki)",
+        "version": null
+      },
+      {
+        "kind": "wiki",
+        "locator": "https://wiki.factorio.com/Inserters",
+        "ref_id": "wiki:inserters",
+        "retrieved": "2026-09-08",
+        "title": "Inserters (official Factorio wiki)",
+        "version": "states its data is valid up to 2.0.77"
+      },
+      {
+        "kind": "repository",
+        "locator": "docs/blueprint-routing-contract.md",
+        "ref_id": "repo:blueprint-routing-contract",
+        "retrieved": null,
+        "title": "Blueprint routing contract (task 00)",
+        "version": "1.1.0"
+      }
+    ],
+    "schema_version": "factoribot-routing-prototypes-1",
+    "source_dump_path": "data/data-raw-dump-2.0.77-base.json",
+    "source_dump_sha256": "be65dc3615d5939e522b00543b2925a02cfa890dbc9c00882dfe1c4629670f60",
+    "source_kind": "full-dump",
+    "source_slice_content_hash": null,
+    "target_mechanics_profile": "base-2.0.77-normal-v1"
+  },
+  "schema_version": "factoribot-routing-prototypes-1"
+}

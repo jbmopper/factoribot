@@ -60,7 +60,7 @@ from .spatial import SpatialError, SpatialLimits, load_spatial_view
 from .transport_prototypes import PrototypeError
 
 #: Version of this integration surface (not of the contract or the analyzer).
-INTEGRATION_VERSION = "factoribot-routing-integration-1"
+INTEGRATION_VERSION = "factoribot-routing-integration-2"
 
 #: Response paging. The contract allows a `DetailScope.limit` up to 10000; MCP
 #: responses stay far below that so a large graph cannot flood a conversation.
@@ -103,6 +103,7 @@ DELIVERY_FINDING_CODES = {
     "unresolved_topology_gap": "An unsupported possible bridge withholds every bound and insufficiency claim.",
     "unresolved_unsupported_entity": "A non-supported entity is neither covered by an evidence-backed may_connect:false gap nor by an accepted irrelevance declaration.",
     "unresolved_ambiguous_furnace": "A furnace has several candidate recipes and no assignment.",
+    "unresolved_unassigned_furnace": "A furnace has one candidate recipe but no evidence-backed or manual assignment.",
     "unresolved_power": "Power availability is declared unknown.",
     "unresolved_mod_mechanics": "A declared mod alters item mechanics, so the profile cannot be certified.",
     "unresolved_model": "Fallback for an unresolved-reason class this build does not name individually.",
@@ -141,6 +142,9 @@ ERROR_CODES = {
     "stale_cursor": "The page cursor was minted against a different graph or result.",
     "oversized_page": f"A page limit above {MAX_PAGE_LIMIT} was requested; page with the returned cursor instead.",
     "unknown_section": "Unknown response section.",
+    "draft_conflict": "A host template and the viewer draft declare different budgets, outlets, surplus or objective. Remove the host key or make it identical to the draft.",
+    "stale_inference": "The furnace-inference artifact no longer matches its feeds, budgets, recipe availability or graph. Rerun routes infer.",
+    "inference_limit": "Furnace material propagation exceeded its explicit deterministic work limit.",
 }
 
 
@@ -683,16 +687,23 @@ def mechanics_evidence() -> dict:
     except Exception as exc:  # a missing record set must be visible, not fatal
         return {"available": False, "error": f"{type(exc).__name__}: {exc}"}
     statuses = _tally(rule.status for rule in rules.values())
+    incompatible = sorted(rule.id for rule in rules.values() if not rule.compatible)
+    compatible_observed = sum(rule.observed for rule in rules.values())
     return {
         "available": True,
         "records": len(rules),
         "by_status": statuses,
-        "observed": statuses.get("observed", 0),
-        "gate": "unmet" if not statuses.get("observed", 0) else "partially observed",
+        # A historical record may truthfully say it was observed in its original
+        # profile. It still cannot activate semantics in the current profile.
+        "observed": compatible_observed,
+        "incompatible_records": incompatible,
+        "legacy_profiles": sorted({rule.evidence_profile for rule in rules.values()
+                                   if not rule.compatible}),
+        "gate": "unmet" if not compatible_observed else "partially observed",
         "consequence": (
-            "No rule is observed, so no arc may claim `exact` semantics, every transport arc "
+            "No compatible rule is observed, so no arc may claim `exact` semantics, every transport arc "
             "is `relaxed` or `conditional`, and no inserter capacity is finite."
-            if not statuses.get("observed", 0) else
+            if not compatible_observed else
             "Some rules are observed; arcs citing them may claim `exact`."
         ),
         "capture_procedure": "daemon/factoribot/evidence/routing_mechanics_observations/CAPTURE.md",
@@ -911,16 +922,12 @@ def _page_scope(page_args: Any, scope_hash: str) -> DetailScope:
 # ---------------------------------------------------------------------------
 
 REQUEST_TEMPLATE_KEYS = ("budgets", "exports", "surplus", "objective", "protected", "assumptions", "detail")
+DRAFT_REQUEST_KEYS = ("budgets", "exports", "surplus", "objective")
+HOST_POLICY_TEMPLATE_KEYS = ("protected", "assumptions", "detail")
 
 
-def seal_request(template: Any, layout: Layout, assignments: Any = None) -> dict:
-    """Fill the identity fields of a request template and seal `request_hash`.
-
-    Everything numerical -- budgets, exports, surplus, objective, protected
-    interfaces and assumptions -- comes from the operator's template. Nothing is
-    inferred from the layout: the contract forbids an implicit source or sink,
-    and this function adds none.
-    """
+def _request_template_fields(template: Any, assignments: Any) -> dict:
+    """Apply task 18's page/host ownership rule without sealing identities."""
     if not isinstance(template, dict):
         raise PublicError("bad_request", "request template must be a JSON object")
     if template.get("document_kind") == "factoribot.routing.assignment_draft":
@@ -930,23 +937,130 @@ def seal_request(template: Any, layout: Layout, assignments: Any = None) -> dict
         assignments = template.get("assignments")
     if assignments is None:
         raise PublicError("bad_request", "no assignments: supply them in the template or with --assignments")
-    # The viewer's draft envelope carries the budgets, outlets and objective the
-    # operator declared on the page. They fill any key the template leaves out;
-    # an explicit template value always wins, and nothing else is taken from the
-    # page (assumptions, protected interfaces and detail scope are host policy).
+    # The viewer's draft envelope carries the declarations the operator made on
+    # the page.  The page is authoritative for those declarations, while the
+    # host must explicitly provide the non-page policy.  A page/template mismatch
+    # is never resolved by picking a side silently.
     document: dict = {}
     proposed = assignments.get("proposed_request") if isinstance(assignments, dict) else None
     from_page: list[str] = []
+    if proposed is not None and not isinstance(proposed, dict):
+        raise PublicError("bad_request", "draft proposed_request must be a JSON object")
     if isinstance(proposed, dict):
-        for key in ("budgets", "exports", "surplus", "objective"):
-            if key in proposed and key not in template:
+        unknown = sorted(set(proposed) - set(DRAFT_REQUEST_KEYS))
+        if unknown:
+            raise PublicError("bad_request", "draft proposed_request has unknown keys", unknown=unknown,
+                              allowed=list(DRAFT_REQUEST_KEYS))
+        conflicts = [key for key in DRAFT_REQUEST_KEYS
+                     if key in proposed and key in template
+                     and canonical_json(proposed[key]) != canonical_json(template[key])]
+        if conflicts:
+            raise PublicError(
+                "draft_conflict", ERROR_CODES["draft_conflict"],
+                fields=conflicts,
+                page_precedence=list(DRAFT_REQUEST_KEYS),
+                host_policy=list(HOST_POLICY_TEMPLATE_KEYS),
+                action="Remove the conflicting template field to use the page declaration, or make both values identical.",
+            )
+        for key in DRAFT_REQUEST_KEYS:
+            if key in proposed:
                 document[key] = proposed[key]
                 from_page.append(key)
     missing = [key for key in REQUEST_TEMPLATE_KEYS if key not in template and key not in document]
     if missing:
         raise PublicError("bad_request", f"request template is missing: {missing}",
                           required=list(REQUEST_TEMPLATE_KEYS), supplied_by_the_page=from_page)
-    document.update({key: template[key] for key in REQUEST_TEMPLATE_KEYS if key in template})
+    # A same-valued template key is harmless, but use the page's record above so
+    # the sealed document is exactly what the page showed.  Policy keys always
+    # come from the host template; drafts deliberately cannot smuggle them in.
+    document.update({key: template[key] for key in REQUEST_TEMPLATE_KEYS
+                     if key in template and key not in document})
+    return document
+
+
+def prepare_furnace_inference(
+    template: Any,
+    source_layout: Layout,
+    final_layout: Layout,
+    assignments: Any,
+    *,
+    limits=None,
+) -> dict:
+    """Rebuild candidate activities and return a provenance-bearing host artifact.
+
+    ``source_layout`` must be the exact graph named by the incoming assignment
+    document. ``final_layout`` is rebuilt from the same blueprint/prototypes with
+    the derived furnace candidate set. Explicit declarations are validated on the
+    source, then rebound and validated on the final graph before inference.
+    """
+    from .blueprint_view import assignment_set_from_document, check_assignment_document
+    from .furnace_inference import (
+        FurnaceInferenceError,
+        InferenceLimits,
+        make_inference_artifact,
+        parse_budget_documents,
+        rebase_assignments,
+    )
+
+    document = _request_template_fields(template, assignments)
+    check = check_assignment_document(assignments, to_dict(source_layout.graph))
+    if check["stale"] or check["unknown"]:
+        raise PublicError(
+            "stale_identity", "the source assignment document does not match its source graph",
+            stale=check["stale"], unknown=check["unknown"],
+        )
+    source_document = dict(assignment_set_from_document(assignments))
+    # A previous inference artifact can be edited and recomputed. Only the
+    # assignments explicitly recorded by the operator remain explicit; old
+    # inferred assignments are discarded before the fresh fixed point.
+    if (isinstance(assignments, dict)
+            and assignments.get("document_kind") == "factoribot.routing.furnace_inference"):
+        inference = assignments.get("inference")
+        if not isinstance(inference, dict):
+            raise PublicError("stale_inference", "previous inference artifact has no provenance record")
+        source_document["furnaces"] = list(inference.get("explicit_assignments") or ())
+    try:
+        source_set = parse_assignments(source_document, source_layout.graph)
+        final_set = rebase_assignments(source_set, source_layout.graph, final_layout.graph)
+        budgets = parse_budget_documents(document["budgets"])
+    except FurnaceInferenceError as exc:
+        raise PublicError(exc.code, str(exc), **exc.detail) from exc
+    except ContractError as exc:
+        raise PublicError("bad_request", f"source assignments rejected: {exc}") from exc
+    assumptions = document.get("assumptions")
+    if not isinstance(assumptions, dict) or not isinstance(assumptions.get("available_recipes"), list):
+        raise PublicError("bad_request", "template assumptions.available_recipes must be a list")
+    proposed = assignments.get("proposed_request") if isinstance(assignments, dict) else None
+    try:
+        return make_inference_artifact(
+            final_layout.graph,
+            final_set,
+            budgets,
+            assumptions["available_recipes"],
+            source_graph_hash=source_layout.graph_hash,
+            proposed_request=proposed,
+            limits=limits or InferenceLimits(),
+        )
+    except FurnaceInferenceError as exc:
+        raise PublicError(exc.code, str(exc), **exc.detail) from exc
+
+
+def seal_request(template: Any, layout: Layout, assignments: Any = None) -> dict:
+    """Fill the identity fields of a request template and seal `request_hash`.
+
+    A viewer assignment draft owns its proposed budgets, exports, surplus and
+    objective.  The host template owns assumptions, protected interfaces and
+    detail scope.  If both name a page-owned field, they must be canonically
+    identical; a differing declaration is a structured ``draft_conflict`` rather
+    than a silent template override.  Bare AssignmentSets retain the old template
+    driven workflow. A furnace-inference envelope is recomputed before its normal
+    assignments are accepted, so changed feeds cannot replay stale inference.
+
+    No feed, sink, research, power or operating rate is inferred here.
+    """
+    if assignments is None and isinstance(template, dict):
+        assignments = template.get("assignments")
+    document = _request_template_fields(template, assignments)
     from .blueprint_view import assignment_set_from_document, check_assignment_document
 
     graph_document = to_dict(layout.graph)
@@ -958,6 +1072,18 @@ def seal_request(template: Any, layout: Layout, assignments: Any = None) -> dict
     assignment_set["schema_version"] = layout.graph.schema_version
     assignment_set["blueprint_hash"] = layout.graph.blueprint_hash
     assignment_set["graph_hash"] = layout.graph.graph_hash
+    if (isinstance(assignments, dict)
+            and assignments.get("document_kind") == "factoribot.routing.furnace_inference"):
+        from .furnace_inference import FurnaceInferenceError, validate_inference_artifact
+
+        assumptions = document.get("assumptions")
+        available = assumptions.get("available_recipes") if isinstance(assumptions, dict) else None
+        if not isinstance(available, list):
+            raise PublicError("bad_request", "template assumptions.available_recipes must be a list")
+        try:
+            validate_inference_artifact(assignments, layout.graph, document["budgets"], available)
+        except FurnaceInferenceError as exc:
+            raise PublicError(exc.code, str(exc), **exc.detail) from exc
     try:
         parse_assignments(assignment_set, layout.graph)
     except ContractError as exc:
@@ -1017,7 +1143,11 @@ def routing_capabilities() -> dict:
         "schema_version": SCHEMA_VERSION,
         "mechanics_profile": MECHANICS_PROFILE,
         "integration_version": INTEGRATION_VERSION,
-        "tools": ["inspect_blueprint_layout", "analyze_blueprint_routes"],
+        "tools": [
+            "inspect_blueprint_layout",
+            "analyze_blueprint_routes",
+            "evaluate_blueprint_operating_rate",
+        ],
         "purity": {
             "writes_files": False,
             "calls_a_model": False,
@@ -1030,6 +1160,26 @@ def routing_capabilities() -> dict:
         "supported_prototypes": supported,
         "prototype_extract": prototype_source,
         "mechanics_evidence": evidence,
+        "furnace_inference": {
+            "version": "factoribot-furnace-inference-1",
+            "host_cli": "factoribot routes infer",
+            "contract_extension": False,
+            "provenance_artifact": "factoribot.routing.furnace_inference",
+            "inputs": [
+                "explicit positive-capacity feeds and their global material budgets",
+                "fixed assembler recipes and item-only furnace candidates from the loaded recipe database",
+                "exact supported connectivity in the rebuilt graph",
+                "explicit furnace overrides, which always take precedence",
+            ],
+            "claim": (
+                "A unique recipe identity with recorded feed/path evidence; never an item rate, "
+                "runtime recipe selection, achieved throughput or game observation."
+            ),
+            "uncertainty": (
+                "Relaxed/conditional paths and unsupported possible bridges retain candidates "
+                "and produce actionable groups rather than inferred assignments."
+            ),
+        },
         "arc_semantics_available": ["relaxed", "conditional"] if not observed else ["exact", "relaxed", "conditional"],
         "advertisable_bounds": {
             "pilot": False,
@@ -1058,11 +1208,11 @@ def routing_capabilities() -> dict:
             "note": "Detail scope selects returned detail only. It never changes the numerical model.",
         },
         "unsupported": [
-            "fluids, non-normal quality, modules, beacons, and any game version other than 2.0.76 are rejected by the contract",
+            "fluids, non-normal quality, modules, beacons, and any game version other than 2.0.77 are rejected by the contract",
             "no power coverage, generation or network claim; power is an explicit request assumption",
             "no rail, logistic-bot or circuit item behaviour; those entities stay visible and unsupported",
             "no achievable-rate, lower-bound or live-observation claim; only upper bounds and certified infeasibility",
-            "recipe inference for recipe-less furnaces is not implemented; candidates must be declared",
+            "furnace inference does not cross relaxed/conditional paths or unsupported possible bridges and makes no rate/runtime-selection claim",
         ],
         "evidence_note": (
             "Synthetic fixtures (daemon/tests/fixtures/routing_contracts/, routing_plan/, "

@@ -1,0 +1,2381 @@
+{
+  "cases": {
+    "blocked_output": {
+      "error": null,
+      "expectation": "With no declared removal service, a finite output chest eventually fills and sustained net export is 0 item/s.",
+      "observed": {
+        "entities": [
+          {
+            "children": [
+              2
+            ],
+            "entity_number": 1,
+            "input": true,
+            "name": "transport-belt",
+            "parents": [],
+            "transpoted_items": {
+              "iron-plate": 2.4
+            },
+            "usage_rate": 0.16
+          },
+          {
+            "children": [
+              3
+            ],
+            "entity_number": 2,
+            "name": "fast-inserter",
+            "parents": [
+              1
+            ],
+            "transpoted_items": {
+              "iron-plate": 2.4
+            },
+            "usage_rate": 1.0
+          },
+          {
+            "children": [
+              4
+            ],
+            "entity_number": 3,
+            "name": "assembling-machine-2",
+            "parents": [
+              2
+            ],
+            "transpoted_items": {
+              "iron-gear-wheel": 1.2
+            },
+            "usage_rate": 0.7999999999999999
+          },
+          {
+            "children": [],
+            "entity_number": 4,
+            "name": "fast-inserter",
+            "output": true,
+            "parents": [
+              3
+            ],
+            "transpoted_items": {
+              "iron-gear-wheel": 1.2
+            },
+            "usage_rate": 0.5
+          }
+        ],
+        "entities_bottleneck": [
+          2
+        ],
+        "entities_input": [
+          1
+        ],
+        "entities_output": [
+          4
+        ],
+        "items_input": {
+          "iron-plate": 2.4
+        },
+        "items_output": {
+          "iron-gear-wheel": 1.2
+        }
+      },
+      "status": "returned",
+      "stderr": []
+    },
+    "furnace_chain": {
+      "error": null,
+      "expectation": "An iron ore -> iron plate -> steel plate chain requires explicit or soundly inferred furnace recipes and conservation across both stages.",
+      "observed": {
+        "entities": [
+          {
+            "children": [
+              2
+            ],
+            "entity_number": 1,
+            "input": true,
+            "name": "wooden-chest",
+            "parents": [],
+            "transpoted_items": {}
+          },
+          {
+            "children": [
+              "2_virtual\n(empty tile)"
+            ],
+            "entity_number": 2,
+            "name": "fast-inserter",
+            "parents": [
+              1
+            ],
+            "transpoted_items": {},
+            "usage_rate": 0.0
+          },
+          {
+            "entity_number": 3,
+            "name": "electric-furnace"
+          },
+          {
+            "children": [
+              5
+            ],
+            "entity_number": 4,
+            "input": true,
+            "name": "fast-inserter",
+            "parents": [],
+            "transpoted_items": {},
+            "usage_rate": 0.0
+          },
+          {
+            "children": [
+              6
+            ],
+            "entity_number": 5,
+            "name": "transport-belt",
+            "parents": [
+              4
+            ],
+            "transpoted_items": {},
+            "usage_rate": 0.0
+          },
+          {
+            "children": [
+              "6_virtual\n(empty tile)"
+            ],
+            "entity_number": 6,
+            "name": "fast-inserter",
+            "parents": [
+              5
+            ],
+            "transpoted_items": {},
+            "usage_rate": 0.0
+          },
+          {
+            "entity_number": 7,
+            "name": "electric-furnace"
+          },
+          {
+            "children": [
+              9
+            ],
+            "entity_number": 8,
+            "input": true,
+            "name": "fast-inserter",
+            "parents": [],
+            "transpoted_items": {},
+            "usage_rate": 0.0
+          },
+          {
+            "children": [],
+            "entity_number": 9,
+            "name": "wooden-chest",
+            "output": true,
+            "parents": [
+              8
+            ],
+            "transpoted_items": {}
+          }
+        ],
+        "entities_bottleneck": [],
+        "entities_input": [
+          1,
+          4,
+          8
+        ],
+        "entities_output": [
+          "2_virtual\n(empty tile)",
+          "6_virtual\n(empty tile)",
+          9
+        ],
+        "items_input": {},
+        "items_output": {}
+      },
+      "status": "returned",
+      "stderr": [
+        "WARNING: entity electric-furnace of type furnace not supported",
+        "WARNING: entity electric-furnace of type furnace not supported"
+      ]
+    },
+    "inserter_limited_transfer": {
+      "error": null,
+      "expectation": "Under the analyser's own 0.84 item/s inserter approximation and the 2 iron -> 1 gear recipe, the mathematical reference is 0.42 gear/s. This is not an observed Factorio rate.",
+      "observed": {
+        "entities": [
+          {
+            "children": [
+              2
+            ],
+            "entity_number": 1,
+            "input": true,
+            "name": "transport-belt",
+            "parents": [],
+            "transpoted_items": {
+              "iron-plate": 0.84
+            },
+            "usage_rate": 0.056
+          },
+          {
+            "children": [
+              3
+            ],
+            "entity_number": 2,
+            "name": "inserter",
+            "parents": [
+              1
+            ],
+            "transpoted_items": {
+              "iron-plate": 0.84
+            },
+            "usage_rate": 1.0
+          },
+          {
+            "children": [
+              4
+            ],
+            "entity_number": 3,
+            "name": "assembling-machine-2",
+            "parents": [
+              2
+            ],
+            "transpoted_items": {
+              "iron-gear-wheel": 0.42000000000000004
+            },
+            "usage_rate": 0.28
+          },
+          {
+            "children": [],
+            "entity_number": 4,
+            "name": "inserter",
+            "output": true,
+            "parents": [
+              3
+            ],
+            "transpoted_items": {
+              "iron-gear-wheel": 0.42000000000000004
+            },
+            "usage_rate": 0.5000000000000001
+          }
+        ],
+        "entities_bottleneck": [
+          2
+        ],
+        "entities_input": [
+          1
+        ],
+        "entities_output": [
+          4
+        ],
+        "items_input": {
+          "iron-plate": 0.84
+        },
+        "items_output": {
+          "iron-gear-wheel": 0.42000000000000004
+        }
+      },
+      "status": "returned",
+      "stderr": []
+    },
+    "lane_merge": {
+      "error": null,
+      "expectation": "A side-load and straight feed have lane-specific occupancy. Total yellow-belt capacity is 15 item/s, 7.5 item/s per lane.",
+      "observed": {
+        "entities": [
+          {
+            "children": [
+              3
+            ],
+            "entity_number": 1,
+            "input": true,
+            "name": "transport-belt",
+            "parents": [],
+            "transpoted_items": {},
+            "usage_rate": 0.0
+          },
+          {
+            "children": [
+              3
+            ],
+            "entity_number": 2,
+            "input": true,
+            "name": "transport-belt",
+            "parents": [],
+            "transpoted_items": {},
+            "usage_rate": 0.0
+          },
+          {
+            "children": [
+              4
+            ],
+            "entity_number": 3,
+            "name": "transport-belt",
+            "output": true,
+            "parents": [
+              2,
+              1
+            ],
+            "transpoted_items": {},
+            "usage_rate": 0.0
+          },
+          {
+            "children": [],
+            "entity_number": 4,
+            "name": "transport-belt",
+            "output": true,
+            "parents": [
+              3
+            ],
+            "transpoted_items": {},
+            "usage_rate": 0.0
+          }
+        ],
+        "entities_bottleneck": [],
+        "entities_input": [
+          2,
+          1
+        ],
+        "entities_output": [
+          3
+        ],
+        "items_input": {},
+        "items_output": {}
+      },
+      "status": "returned",
+      "stderr": []
+    },
+    "splitter_priority_right": {
+      "error": null,
+      "expectation": "The right-priority output should be served before the other branch; the exact north/south mapping must be validated in-game before use as a mechanics oracle. The analyser must at minimum react to changing the blueprint priority field.",
+      "observed": {
+        "entities": [
+          {
+            "children": [
+              2
+            ],
+            "entity_number": 1,
+            "input": true,
+            "name": "wooden-chest",
+            "parents": [],
+            "transpoted_items": {
+              "iron-plate": 0.84
+            }
+          },
+          {
+            "children": [
+              3
+            ],
+            "entity_number": 2,
+            "name": "inserter",
+            "parents": [
+              1
+            ],
+            "transpoted_items": {
+              "iron-plate": 0.84
+            },
+            "usage_rate": 1.0
+          },
+          {
+            "children": [
+              4
+            ],
+            "entity_number": 3,
+            "name": "transport-belt",
+            "parents": [
+              2
+            ],
+            "transpoted_items": {
+              "iron-plate": 0.84
+            },
+            "usage_rate": 0.056
+          },
+          {
+            "children": [
+              5,
+              10
+            ],
+            "entity_number": 4,
+            "name": "splitter",
+            "output_priority": "right",
+            "parents": [
+              3
+            ],
+            "transpoted_items": {
+              "iron-plate": 0.84
+            },
+            "usage_rate": 0.056
+          },
+          {
+            "children": [
+              6
+            ],
+            "entity_number": 5,
+            "name": "transport-belt",
+            "parents": [
+              4
+            ],
+            "transpoted_items": {
+              "iron-plate": 0.8399999999999999
+            },
+            "usage_rate": 0.05599999999999999
+          },
+          {
+            "children": [
+              7
+            ],
+            "entity_number": 6,
+            "name": "fast-inserter",
+            "parents": [
+              5
+            ],
+            "transpoted_items": {
+              "iron-plate": 0.8399999999999999
+            },
+            "usage_rate": 0.35
+          },
+          {
+            "children": [
+              8
+            ],
+            "entity_number": 7,
+            "name": "assembling-machine-2",
+            "parents": [
+              6
+            ],
+            "transpoted_items": {
+              "iron-gear-wheel": 0.41999999999999993
+            },
+            "usage_rate": 0.27999999999999997
+          },
+          {
+            "children": [
+              9
+            ],
+            "entity_number": 8,
+            "name": "fast-inserter",
+            "parents": [
+              7
+            ],
+            "transpoted_items": {
+              "iron-gear-wheel": 0.41999999999999993
+            },
+            "usage_rate": 0.175
+          },
+          {
+            "children": [],
+            "entity_number": 9,
+            "name": "wooden-chest",
+            "output": true,
+            "parents": [
+              8
+            ],
+            "transpoted_items": {
+              "iron-gear-wheel": 0.41999999999999993
+            }
+          },
+          {
+            "children": [
+              11
+            ],
+            "entity_number": 10,
+            "name": "transport-belt",
+            "parents": [
+              4
+            ],
+            "transpoted_items": {
+              "iron-plate": 1.1102230246251565e-16
+            },
+            "usage_rate": 7.401486830834377e-18
+          },
+          {
+            "children": [
+              12
+            ],
+            "entity_number": 11,
+            "name": "transport-belt",
+            "parents": [
+              10
+            ],
+            "transpoted_items": {
+              "iron-plate": 1.1102230246251565e-16
+            },
+            "usage_rate": 7.401486830834377e-18
+          },
+          {
+            "children": [
+              13
+            ],
+            "entity_number": 12,
+            "name": "transport-belt",
+            "parents": [
+              11
+            ],
+            "transpoted_items": {
+              "iron-plate": 1.1102230246251565e-16
+            },
+            "usage_rate": 7.401486830834377e-18
+          },
+          {
+            "children": [
+              14
+            ],
+            "entity_number": 13,
+            "name": "transport-belt",
+            "parents": [
+              12
+            ],
+            "transpoted_items": {
+              "iron-plate": 1.1102230246251565e-16
+            },
+            "usage_rate": 7.401486830834377e-18
+          },
+          {
+            "children": [
+              15
+            ],
+            "entity_number": 14,
+            "name": "fast-inserter",
+            "parents": [
+              13
+            ],
+            "transpoted_items": {
+              "iron-plate": 1.1102230246251565e-16
+            },
+            "usage_rate": 4.625929269271486e-17
+          },
+          {
+            "children": [
+              16
+            ],
+            "entity_number": 15,
+            "name": "assembling-machine-2",
+            "parents": [
+              14
+            ],
+            "transpoted_items": {
+              "pipe": 1.1102230246251565e-16
+            },
+            "usage_rate": 7.401486830834377e-17
+          },
+          {
+            "children": [
+              17
+            ],
+            "entity_number": 16,
+            "name": "fast-inserter",
+            "parents": [
+              15
+            ],
+            "transpoted_items": {
+              "pipe": 1.1102230246251565e-16
+            },
+            "usage_rate": 4.625929269271486e-17
+          },
+          {
+            "children": [],
+            "entity_number": 17,
+            "name": "wooden-chest",
+            "output": true,
+            "parents": [
+              16
+            ],
+            "transpoted_items": {
+              "pipe": 1.1102230246251565e-16
+            }
+          }
+        ],
+        "entities_bottleneck": [
+          2
+        ],
+        "entities_input": [
+          1
+        ],
+        "entities_output": [
+          9,
+          17
+        ],
+        "items_input": {
+          "iron-plate": 0.84
+        },
+        "items_output": {
+          "iron-gear-wheel": 0.41999999999999993,
+          "pipe": 1.1102230246251565e-16
+        }
+      },
+      "status": "returned",
+      "stderr": []
+    },
+    "straight_one_lane": {
+      "error": null,
+      "expectation": "With one explicitly supplied yellow-belt lane, the declared source capacity is 7.5 item/s; the other lane is distinct and empty.",
+      "observed": {
+        "entities": [
+          {
+            "children": [
+              2
+            ],
+            "entity_number": 1,
+            "input": true,
+            "name": "transport-belt",
+            "output": true,
+            "parents": [],
+            "transpoted_items": {},
+            "usage_rate": 0.0
+          },
+          {
+            "children": [
+              3
+            ],
+            "entity_number": 2,
+            "input": true,
+            "name": "transport-belt",
+            "output": true,
+            "parents": [
+              1
+            ],
+            "transpoted_items": {},
+            "usage_rate": 0.0
+          },
+          {
+            "children": [],
+            "entity_number": 3,
+            "input": true,
+            "name": "transport-belt",
+            "output": true,
+            "parents": [
+              2
+            ],
+            "transpoted_items": {},
+            "usage_rate": 0.0
+          }
+        ],
+        "entities_bottleneck": [],
+        "entities_input": [
+          1
+        ],
+        "entities_output": [
+          1
+        ],
+        "items_input": {},
+        "items_output": {}
+      },
+      "status": "returned",
+      "stderr": []
+    },
+    "unequal_competing_consumers": {
+      "error": null,
+      "expectation": "The 0.84 item/s source feeds an unprioritized splitter with both outputs open. An ideal alternating split gives 0.42 iron/s per branch: 0.21 gear/s north and 0.42 pipe/s south. This is a mathematical reference, not a recorded game result.",
+      "observed": {
+        "entities": [
+          {
+            "children": [
+              2
+            ],
+            "entity_number": 1,
+            "input": true,
+            "name": "wooden-chest",
+            "parents": [],
+            "transpoted_items": {
+              "iron-plate": 0.84
+            }
+          },
+          {
+            "children": [
+              3
+            ],
+            "entity_number": 2,
+            "name": "inserter",
+            "parents": [
+              1
+            ],
+            "transpoted_items": {
+              "iron-plate": 0.84
+            },
+            "usage_rate": 1.0
+          },
+          {
+            "children": [
+              4
+            ],
+            "entity_number": 3,
+            "name": "transport-belt",
+            "parents": [
+              2
+            ],
+            "transpoted_items": {
+              "iron-plate": 0.84
+            },
+            "usage_rate": 0.056
+          },
+          {
+            "children": [
+              5,
+              10
+            ],
+            "entity_number": 4,
+            "name": "splitter",
+            "parents": [
+              3
+            ],
+            "transpoted_items": {
+              "iron-plate": 0.84
+            },
+            "usage_rate": 0.056
+          },
+          {
+            "children": [
+              6
+            ],
+            "entity_number": 5,
+            "name": "transport-belt",
+            "parents": [
+              4
+            ],
+            "transpoted_items": {
+              "iron-plate": 0.8399999999999999
+            },
+            "usage_rate": 0.05599999999999999
+          },
+          {
+            "children": [
+              7
+            ],
+            "entity_number": 6,
+            "name": "fast-inserter",
+            "parents": [
+              5
+            ],
+            "transpoted_items": {
+              "iron-plate": 0.8399999999999999
+            },
+            "usage_rate": 0.35
+          },
+          {
+            "children": [
+              8
+            ],
+            "entity_number": 7,
+            "name": "assembling-machine-2",
+            "parents": [
+              6
+            ],
+            "transpoted_items": {
+              "iron-gear-wheel": 0.41999999999999993
+            },
+            "usage_rate": 0.27999999999999997
+          },
+          {
+            "children": [
+              9
+            ],
+            "entity_number": 8,
+            "name": "fast-inserter",
+            "parents": [
+              7
+            ],
+            "transpoted_items": {
+              "iron-gear-wheel": 0.41999999999999993
+            },
+            "usage_rate": 0.175
+          },
+          {
+            "children": [],
+            "entity_number": 9,
+            "name": "wooden-chest",
+            "output": true,
+            "parents": [
+              8
+            ],
+            "transpoted_items": {
+              "iron-gear-wheel": 0.41999999999999993
+            }
+          },
+          {
+            "children": [
+              11
+            ],
+            "entity_number": 10,
+            "name": "transport-belt",
+            "parents": [
+              4
+            ],
+            "transpoted_items": {
+              "iron-plate": 1.1102230246251565e-16
+            },
+            "usage_rate": 7.401486830834377e-18
+          },
+          {
+            "children": [
+              12
+            ],
+            "entity_number": 11,
+            "name": "transport-belt",
+            "parents": [
+              10
+            ],
+            "transpoted_items": {
+              "iron-plate": 1.1102230246251565e-16
+            },
+            "usage_rate": 7.401486830834377e-18
+          },
+          {
+            "children": [
+              13
+            ],
+            "entity_number": 12,
+            "name": "transport-belt",
+            "parents": [
+              11
+            ],
+            "transpoted_items": {
+              "iron-plate": 1.1102230246251565e-16
+            },
+            "usage_rate": 7.401486830834377e-18
+          },
+          {
+            "children": [
+              14
+            ],
+            "entity_number": 13,
+            "name": "transport-belt",
+            "parents": [
+              12
+            ],
+            "transpoted_items": {
+              "iron-plate": 1.1102230246251565e-16
+            },
+            "usage_rate": 7.401486830834377e-18
+          },
+          {
+            "children": [
+              15
+            ],
+            "entity_number": 14,
+            "name": "fast-inserter",
+            "parents": [
+              13
+            ],
+            "transpoted_items": {
+              "iron-plate": 1.1102230246251565e-16
+            },
+            "usage_rate": 4.625929269271486e-17
+          },
+          {
+            "children": [
+              16
+            ],
+            "entity_number": 15,
+            "name": "assembling-machine-2",
+            "parents": [
+              14
+            ],
+            "transpoted_items": {
+              "pipe": 1.1102230246251565e-16
+            },
+            "usage_rate": 7.401486830834377e-17
+          },
+          {
+            "children": [
+              17
+            ],
+            "entity_number": 16,
+            "name": "fast-inserter",
+            "parents": [
+              15
+            ],
+            "transpoted_items": {
+              "pipe": 1.1102230246251565e-16
+            },
+            "usage_rate": 4.625929269271486e-17
+          },
+          {
+            "children": [],
+            "entity_number": 17,
+            "name": "wooden-chest",
+            "output": true,
+            "parents": [
+              16
+            ],
+            "transpoted_items": {
+              "pipe": 1.1102230246251565e-16
+            }
+          }
+        ],
+        "entities_bottleneck": [
+          2
+        ],
+        "entities_input": [
+          1
+        ],
+        "entities_output": [
+          9,
+          17
+        ],
+        "items_input": {
+          "iron-plate": 0.84
+        },
+        "items_output": {
+          "iron-gear-wheel": 0.41999999999999993,
+          "pipe": 1.1102230246251565e-16
+        }
+      },
+      "status": "returned",
+      "stderr": []
+    }
+  },
+  "pilot": {
+    "error": null,
+    "observed": {
+      "analysed_entity_rows": 2771,
+      "entities_bottleneck": [
+        226,
+        231,
+        236,
+        241,
+        246,
+        251,
+        259,
+        264,
+        269,
+        274,
+        397,
+        402,
+        407,
+        412,
+        417,
+        422,
+        429,
+        434,
+        439,
+        444,
+        455,
+        460,
+        465,
+        470,
+        475,
+        480,
+        487,
+        492,
+        497,
+        502,
+        623,
+        628,
+        633,
+        638,
+        643,
+        648,
+        655,
+        660,
+        665,
+        670,
+        709,
+        714,
+        719,
+        724,
+        729,
+        734,
+        741,
+        746,
+        751,
+        756,
+        877,
+        882,
+        887,
+        892,
+        897,
+        902,
+        909,
+        914,
+        919,
+        924,
+        935,
+        940,
+        945,
+        950,
+        955,
+        960,
+        967,
+        972,
+        977,
+        982,
+        1101,
+        1106,
+        1111,
+        1116,
+        1121,
+        1126,
+        1133,
+        1138,
+        1143,
+        1148,
+        1177,
+        1182,
+        1187,
+        1192,
+        1197,
+        1202,
+        1323,
+        1328,
+        1333,
+        1338,
+        1343,
+        1348,
+        1367,
+        1372,
+        1377,
+        1382,
+        1387,
+        1392,
+        1519,
+        1524,
+        1529,
+        1534,
+        1539,
+        1544,
+        1613,
+        1618,
+        1623,
+        1628,
+        1633,
+        1638,
+        1765,
+        1770,
+        1775,
+        1780,
+        1785,
+        1790,
+        1809,
+        1814,
+        1819,
+        1824,
+        1829,
+        1834,
+        1962,
+        1967,
+        1972,
+        1977,
+        1982,
+        1987,
+        2056,
+        2061,
+        2066,
+        2071,
+        2076,
+        2081,
+        2208,
+        2213,
+        2218,
+        2223,
+        2228,
+        2233,
+        2252,
+        2257,
+        2262,
+        2267,
+        2272,
+        2277,
+        2400,
+        2405,
+        2410,
+        2415,
+        2420,
+        2425
+      ],
+      "entities_input": [
+        50,
+        61,
+        64,
+        72,
+        75,
+        128,
+        131,
+        166,
+        167,
+        173,
+        174,
+        180,
+        181,
+        226,
+        231,
+        236,
+        241,
+        246,
+        251,
+        259,
+        264,
+        269,
+        274,
+        283,
+        352,
+        284,
+        285,
+        288,
+        291,
+        289,
+        294,
+        297,
+        295,
+        300,
+        302,
+        301,
+        306,
+        307,
+        309,
+        312,
+        314,
+        315,
+        318,
+        320,
+        321,
+        326,
+        328,
+        329,
+        332,
+        334,
+        335,
+        338,
+        340,
+        341,
+        344,
+        346,
+        347,
+        350,
+        397,
+        402,
+        407,
+        412,
+        417,
+        422,
+        429,
+        434,
+        439,
+        444,
+        455,
+        460,
+        465,
+        470,
+        475,
+        480,
+        487,
+        492,
+        497,
+        502,
+        509,
+        545,
+        548,
+        549,
+        552,
+        554,
+        553,
+        558,
+        560,
+        559,
+        564,
+        566,
+        565,
+        570,
+        571,
+        573,
+        576,
+        577,
+        579,
+        582,
+        583,
+        585,
+        590,
+        591,
+        593,
+        596,
+        597,
+        599,
+        602,
+        603,
+        605,
+        608,
+        610,
+        611,
+        614,
+        623,
+        628,
+        633,
+        638,
+        643,
+        648,
+        655,
+        660,
+        665,
+        670,
+        709,
+        714,
+        719,
+        724,
+        729,
+        734,
+        741,
+        746,
+        751,
+        756,
+        763,
+        832,
+        764,
+        765,
+        768,
+        771,
+        769,
+        774,
+        777,
+        775,
+        780,
+        782,
+        781,
+        786,
+        787,
+        789,
+        792,
+        794,
+        795,
+        798,
+        800,
+        801,
+        806,
+        808,
+        809,
+        812,
+        814,
+        815,
+        818,
+        819,
+        821,
+        824,
+        825,
+        827,
+        830,
+        877,
+        882,
+        887,
+        892,
+        897,
+        902,
+        909,
+        914,
+        919,
+        924,
+        935,
+        940,
+        945,
+        950,
+        955,
+        960,
+        967,
+        972,
+        977,
+        982,
+        989,
+        1025,
+        1028,
+        1029,
+        1032,
+        1035,
+        1033,
+        1038,
+        1040,
+        1039,
+        1044,
+        1045,
+        1047,
+        1050,
+        1051,
+        1053,
+        1056,
+        1058,
+        1059,
+        1062,
+        1064,
+        1065,
+        1070,
+        1072,
+        1073,
+        1076,
+        1078,
+        1079,
+        1082,
+        1084,
+        1085,
+        1088,
+        1090,
+        1091,
+        1094,
+        1101,
+        1106,
+        1111,
+        1116,
+        1121,
+        1126,
+        1133,
+        1138,
+        1143,
+        1148,
+        1130,
+        1141,
+        1150,
+        1177,
+        1182,
+        1187,
+        1192,
+        1197,
+        1202,
+        1211,
+        1212,
+        1213,
+        1216,
+        1219,
+        1217,
+        1222,
+        1225,
+        1223,
+        1228,
+        1229,
+        1231,
+        1234,
+        1235,
+        1237,
+        1240,
+        1242,
+        1243,
+        1246,
+        1248,
+        1249,
+        1323,
+        1328,
+        1333,
+        1338,
+        1343,
+        1348,
+        1367,
+        1372,
+        1377,
+        1382,
+        1387,
+        1392,
+        1419,
+        1464,
+        1465,
+        1468,
+        1470,
+        1469,
+        1474,
+        1476,
+        1475,
+        1480,
+        1481,
+        1483,
+        1486,
+        1487,
+        1489,
+        1492,
+        1494,
+        1495,
+        1498,
+        1500,
+        1501,
+        1519,
+        1524,
+        1529,
+        1534,
+        1539,
+        1544,
+        1613,
+        1618,
+        1623,
+        1628,
+        1633,
+        1638,
+        1653,
+        1654,
+        1655,
+        1658,
+        1661,
+        1659,
+        1664,
+        1667,
+        1665,
+        1670,
+        1671,
+        1673,
+        1676,
+        1677,
+        1679,
+        1682,
+        1684,
+        1685,
+        1688,
+        1690,
+        1691,
+        1765,
+        1770,
+        1775,
+        1780,
+        1785,
+        1790,
+        1809,
+        1814,
+        1819,
+        1824,
+        1829,
+        1834,
+        1861,
+        1907,
+        1908,
+        1911,
+        1913,
+        1912,
+        1917,
+        1919,
+        1918,
+        1923,
+        1926,
+        1924,
+        1929,
+        1931,
+        1930,
+        1935,
+        1938,
+        1937,
+        1941,
+        1944,
+        1943,
+        1962,
+        1967,
+        1972,
+        1977,
+        1982,
+        1987,
+        2056,
+        2061,
+        2066,
+        2071,
+        2076,
+        2081,
+        2096,
+        2097,
+        2098,
+        2101,
+        2104,
+        2102,
+        2107,
+        2110,
+        2108,
+        2113,
+        2116,
+        2114,
+        2119,
+        2122,
+        2120,
+        2125,
+        2128,
+        2127,
+        2131,
+        2134,
+        2133,
+        2208,
+        2213,
+        2218,
+        2223,
+        2228,
+        2233,
+        2252,
+        2257,
+        2262,
+        2267,
+        2272,
+        2277,
+        2304,
+        2347,
+        2348,
+        2351,
+        2353,
+        2352,
+        2357,
+        2359,
+        2358,
+        2363,
+        2365,
+        2364,
+        2369,
+        2371,
+        2370,
+        2375,
+        2378,
+        2377,
+        2381,
+        2384,
+        2383,
+        2400,
+        2405,
+        2410,
+        2415,
+        2420,
+        2425,
+        2578,
+        2586,
+        2581,
+        2603,
+        2616,
+        2615,
+        2619,
+        2618,
+        2620,
+        2621,
+        2623,
+        2622,
+        2625,
+        2624,
+        2627,
+        2626,
+        2629,
+        2628,
+        2631,
+        2630,
+        2633,
+        2632,
+        2635,
+        2634,
+        2637,
+        2636,
+        2639,
+        2638,
+        2640,
+        2641,
+        2642,
+        2643,
+        2644,
+        2645,
+        2646,
+        2647,
+        2654,
+        2657,
+        2658,
+        2659,
+        2660,
+        2661,
+        2662,
+        2663,
+        2664,
+        2665,
+        2666,
+        2667,
+        2668,
+        2669,
+        2670,
+        2671,
+        2672,
+        2673,
+        2674,
+        2675,
+        2676,
+        2677,
+        2678,
+        2679,
+        2680,
+        2681,
+        2682,
+        2683,
+        2684,
+        2685,
+        2686,
+        2687,
+        2688,
+        2689,
+        2690,
+        2691,
+        2692,
+        2693,
+        2694,
+        2695,
+        2697,
+        2698,
+        2699,
+        2700,
+        2701,
+        2702,
+        2703,
+        2704,
+        2711,
+        2714,
+        2715,
+        2716,
+        2717,
+        2718,
+        2719,
+        2720,
+        2721,
+        2722,
+        2723,
+        2724,
+        2725,
+        2726,
+        2727,
+        2728,
+        2729,
+        2730,
+        2731,
+        2732,
+        2733,
+        2734,
+        2735,
+        2736,
+        2737,
+        2738,
+        2739,
+        2740,
+        2741,
+        2742,
+        2743,
+        2744,
+        2745,
+        2746,
+        2747,
+        2748,
+        2749,
+        2750,
+        2751,
+        2752,
+        2753,
+        2754,
+        2755,
+        2756,
+        2757,
+        2758,
+        2759,
+        2760,
+        2761,
+        2762,
+        2763
+      ],
+      "entities_output": [
+        50,
+        61,
+        64,
+        72,
+        75,
+        128,
+        131,
+        166,
+        167,
+        173,
+        174,
+        180,
+        181,
+        226,
+        231,
+        236,
+        241,
+        246,
+        251,
+        259,
+        264,
+        269,
+        274,
+        284,
+        285,
+        288,
+        291,
+        289,
+        294,
+        297,
+        295,
+        300,
+        302,
+        301,
+        306,
+        307,
+        309,
+        312,
+        314,
+        315,
+        318,
+        320,
+        321,
+        326,
+        328,
+        329,
+        332,
+        334,
+        335,
+        338,
+        340,
+        341,
+        344,
+        346,
+        347,
+        350,
+        397,
+        402,
+        407,
+        412,
+        417,
+        422,
+        429,
+        434,
+        439,
+        444,
+        455,
+        460,
+        465,
+        470,
+        475,
+        480,
+        487,
+        492,
+        497,
+        502,
+        548,
+        549,
+        552,
+        554,
+        553,
+        558,
+        560,
+        559,
+        564,
+        566,
+        565,
+        570,
+        571,
+        573,
+        576,
+        577,
+        579,
+        582,
+        583,
+        585,
+        590,
+        591,
+        593,
+        596,
+        597,
+        599,
+        602,
+        603,
+        605,
+        608,
+        610,
+        611,
+        614,
+        623,
+        628,
+        633,
+        638,
+        643,
+        648,
+        655,
+        660,
+        665,
+        670,
+        709,
+        714,
+        719,
+        724,
+        729,
+        734,
+        741,
+        746,
+        751,
+        756,
+        764,
+        765,
+        768,
+        771,
+        769,
+        774,
+        777,
+        775,
+        780,
+        782,
+        781,
+        786,
+        787,
+        789,
+        792,
+        794,
+        795,
+        798,
+        800,
+        801,
+        806,
+        808,
+        809,
+        812,
+        814,
+        815,
+        818,
+        819,
+        821,
+        824,
+        825,
+        827,
+        830,
+        877,
+        882,
+        887,
+        892,
+        897,
+        902,
+        909,
+        914,
+        919,
+        924,
+        935,
+        940,
+        945,
+        950,
+        955,
+        960,
+        967,
+        972,
+        977,
+        982,
+        1028,
+        1029,
+        1032,
+        1035,
+        1033,
+        1038,
+        1040,
+        1039,
+        1044,
+        1045,
+        1047,
+        1050,
+        1051,
+        1053,
+        1056,
+        1058,
+        1059,
+        1062,
+        1064,
+        1065,
+        1070,
+        1072,
+        1073,
+        1076,
+        1078,
+        1079,
+        1082,
+        1084,
+        1085,
+        1088,
+        1090,
+        1091,
+        1094,
+        1101,
+        1106,
+        1111,
+        1116,
+        1121,
+        1126,
+        1133,
+        1138,
+        1143,
+        1148,
+        1177,
+        1182,
+        1187,
+        1192,
+        1197,
+        1202,
+        1212,
+        1213,
+        1216,
+        1219,
+        1217,
+        1222,
+        1225,
+        1223,
+        1228,
+        1229,
+        1231,
+        1234,
+        1235,
+        1237,
+        1240,
+        1242,
+        1243,
+        1246,
+        1248,
+        1249,
+        1323,
+        1328,
+        1333,
+        1338,
+        1343,
+        1348,
+        1367,
+        1372,
+        1377,
+        1382,
+        1387,
+        1392,
+        1464,
+        1465,
+        1468,
+        1470,
+        1469,
+        1474,
+        1476,
+        1475,
+        1480,
+        1481,
+        1483,
+        1486,
+        1487,
+        1489,
+        1492,
+        1494,
+        1495,
+        1498,
+        1500,
+        1501,
+        1519,
+        1524,
+        1529,
+        1534,
+        1539,
+        1544,
+        1613,
+        1618,
+        1623,
+        1628,
+        1633,
+        1638,
+        1654,
+        1655,
+        1658,
+        1661,
+        1659,
+        1664,
+        1667,
+        1665,
+        1670,
+        1671,
+        1673,
+        1676,
+        1677,
+        1679,
+        1682,
+        1684,
+        1685,
+        1688,
+        1690,
+        1691,
+        1765,
+        1770,
+        1775,
+        1780,
+        1785,
+        1790,
+        1809,
+        1814,
+        1819,
+        1824,
+        1829,
+        1834,
+        1907,
+        1908,
+        1911,
+        1913,
+        1912,
+        1917,
+        1919,
+        1918,
+        1923,
+        1926,
+        1924,
+        1929,
+        1931,
+        1930,
+        1935,
+        1938,
+        1937,
+        1941,
+        1944,
+        1943,
+        1962,
+        1967,
+        1972,
+        1977,
+        1982,
+        1987,
+        2056,
+        2061,
+        2066,
+        2071,
+        2076,
+        2081,
+        2097,
+        2098,
+        2101,
+        2104,
+        2102,
+        2107,
+        2110,
+        2108,
+        2113,
+        2116,
+        2114,
+        2119,
+        2122,
+        2120,
+        2125,
+        2128,
+        2127,
+        2131,
+        2134,
+        2133,
+        2208,
+        2213,
+        2218,
+        2223,
+        2228,
+        2233,
+        2252,
+        2257,
+        2262,
+        2267,
+        2272,
+        2277,
+        2347,
+        2348,
+        2351,
+        2353,
+        2352,
+        2357,
+        2359,
+        2358,
+        2363,
+        2365,
+        2364,
+        2369,
+        2371,
+        2370,
+        2375,
+        2378,
+        2377,
+        2381,
+        2384,
+        2383,
+        2400,
+        2405,
+        2410,
+        2415,
+        2420,
+        2425,
+        2578,
+        2586,
+        2581,
+        2603,
+        2614,
+        2616,
+        2615,
+        2619,
+        2618,
+        2620,
+        2621,
+        2623,
+        2622,
+        2625,
+        2624,
+        2627,
+        2626,
+        2629,
+        2628,
+        2631,
+        2630,
+        2633,
+        2632,
+        2635,
+        2634,
+        2637,
+        2636,
+        2639,
+        2638,
+        2640,
+        2641,
+        2642,
+        2643,
+        2644,
+        2645,
+        2646,
+        2647,
+        2654,
+        2657,
+        2658,
+        2659,
+        2660,
+        2661,
+        2662,
+        2663,
+        2664,
+        2665,
+        2666,
+        2667,
+        2668,
+        2669,
+        2670,
+        2671,
+        2672,
+        2673,
+        2674,
+        2675,
+        2676,
+        2677,
+        2678,
+        2679,
+        2680,
+        2681,
+        2682,
+        2683,
+        2684,
+        2685,
+        2686,
+        2687,
+        2688,
+        2689,
+        2690,
+        2691,
+        2692,
+        2693,
+        2695,
+        2697,
+        2698,
+        2699,
+        2700,
+        2701,
+        2702,
+        2703,
+        2704,
+        2711,
+        2714,
+        2715,
+        2716,
+        2717,
+        2718,
+        2719,
+        2720,
+        2721,
+        2722,
+        2723,
+        2724,
+        2725,
+        2726,
+        2727,
+        2728,
+        2729,
+        2730,
+        2731,
+        2732,
+        2733,
+        2734,
+        2735,
+        2736,
+        2737,
+        2738,
+        2739,
+        2740,
+        2741,
+        2742,
+        2743,
+        2744,
+        2745,
+        2746,
+        2747,
+        2748,
+        2749,
+        2750,
+        2751,
+        2752,
+        2753,
+        2754,
+        2755,
+        2756,
+        2757,
+        2758,
+        2759,
+        2760,
+        2761,
+        2762,
+        2763
+      ],
+      "entity_names": {
+        "assembling-machine-2": 153,
+        "bulk-inserter": 608,
+        "ee-super-substation": 3,
+        "electric-furnace": 76,
+        "fast-splitter": 15,
+        "fast-transport-belt": 1738,
+        "fast-underground-belt": 178
+      },
+      "items_input": {
+        "advanced-circuit": 0.75,
+        "electric-furnace": 4.800000000000001,
+        "production-science-pack": 12.857142857142868
+      },
+      "items_output": {
+        "advanced-circuit": 0.75,
+        "electric-furnace": 4.800000000000001,
+        "production-science-pack": 12.857142857142868
+      },
+      "nonzero_entity_rows": 153,
+      "nonzero_examples": [
+        {
+          "children": [],
+          "entity_number": 50,
+          "input": true,
+          "name": "assembling-machine-2",
+          "output": true,
+          "parents": [],
+          "transpoted_items": {
+            "advanced-circuit": 0.75
+          },
+          "usage_rate": 0.5
+        },
+        {
+          "children": [],
+          "entity_number": 226,
+          "input": true,
+          "name": "assembling-machine-2",
+          "output": true,
+          "parents": [],
+          "transpoted_items": {
+            "production-science-pack": 0.10714285714285714
+          },
+          "usage_rate": 1.0
+        },
+        {
+          "children": [],
+          "entity_number": 231,
+          "input": true,
+          "name": "assembling-machine-2",
+          "output": true,
+          "parents": [],
+          "transpoted_items": {
+            "production-science-pack": 0.10714285714285714
+          },
+          "usage_rate": 1.0
+        },
+        {
+          "children": [],
+          "entity_number": 236,
+          "input": true,
+          "name": "assembling-machine-2",
+          "output": true,
+          "parents": [],
+          "transpoted_items": {
+            "production-science-pack": 0.10714285714285714
+          },
+          "usage_rate": 1.0
+        },
+        {
+          "children": [],
+          "entity_number": 241,
+          "input": true,
+          "name": "assembling-machine-2",
+          "output": true,
+          "parents": [],
+          "transpoted_items": {
+            "production-science-pack": 0.10714285714285714
+          },
+          "usage_rate": 1.0
+        },
+        {
+          "children": [],
+          "entity_number": 246,
+          "input": true,
+          "name": "assembling-machine-2",
+          "output": true,
+          "parents": [],
+          "transpoted_items": {
+            "production-science-pack": 0.10714285714285714
+          },
+          "usage_rate": 1.0
+        },
+        {
+          "children": [],
+          "entity_number": 251,
+          "input": true,
+          "name": "assembling-machine-2",
+          "output": true,
+          "parents": [],
+          "transpoted_items": {
+            "production-science-pack": 0.10714285714285714
+          },
+          "usage_rate": 1.0
+        },
+        {
+          "children": [],
+          "entity_number": 259,
+          "input": true,
+          "name": "assembling-machine-2",
+          "output": true,
+          "parents": [],
+          "transpoted_items": {
+            "electric-furnace": 0.15
+          },
+          "usage_rate": 1.0
+        },
+        {
+          "children": [],
+          "entity_number": 264,
+          "input": true,
+          "name": "assembling-machine-2",
+          "output": true,
+          "parents": [],
+          "transpoted_items": {
+            "electric-furnace": 0.15
+          },
+          "usage_rate": 1.0
+        },
+        {
+          "children": [],
+          "entity_number": 269,
+          "input": true,
+          "name": "assembling-machine-2",
+          "output": true,
+          "parents": [],
+          "transpoted_items": {
+            "electric-furnace": 0.15
+          },
+          "usage_rate": 1.0
+        },
+        {
+          "children": [],
+          "entity_number": 274,
+          "input": true,
+          "name": "assembling-machine-2",
+          "output": true,
+          "parents": [],
+          "transpoted_items": {
+            "electric-furnace": 0.15
+          },
+          "usage_rate": 1.0
+        },
+        {
+          "children": [],
+          "entity_number": 397,
+          "input": true,
+          "name": "assembling-machine-2",
+          "output": true,
+          "parents": [],
+          "transpoted_items": {
+            "production-science-pack": 0.10714285714285714
+          },
+          "usage_rate": 1.0
+        }
+      ],
+      "warning_counts": {
+        "WARNING: Entity bulk-inserter not found in Factorio data": 608,
+        "WARNING: Entity ee-super-substation not found in Factorio data": 3,
+        "WARNING: Unknown direction 12 for fast-transport-belt": 196,
+        "WARNING: Unknown direction 12 for fast-underground-belt": 285,
+        "WARNING: Unknown direction 8 for fast-transport-belt": 850,
+        "WARNING: Unknown direction 8 for fast-underground-belt": 15,
+        "WARNING: entity electric-furnace of type furnace not supported": 76
+      }
+    },
+    "status": "returned",
+    "stderr_line_count": 2033
+  }
+}

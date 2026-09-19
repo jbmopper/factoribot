@@ -234,26 +234,24 @@ def test_subsystem_hints_cover_the_contract_vocabulary():
         subsystem_for("")
 
 
-def test_modded_pole_is_classified_but_not_supported_and_has_unknown_origin(extract):
-    pole = extract.by_name("ee-super-substation")
-    assert pole.prototype_type == "electric-pole"
-    assert pole.subsystem == "power"
-    assert pole.support == "unsupported"
-    assert pole.in_first_entity_set is False
-    assert pole.origin == "unknown"
-    # Geometry is recorded from the dump; nothing is guessed for it.
-    assert pole.raw_field("supply_area_distance") == 64
+def test_modded_pole_is_absent_from_base_extract_but_retained_in_pilot_coverage(extract):
+    assert extract.get("ee-super-substation") is None
+    coverage = load_json(PILOT_COVERAGE_PATH)
+    assert coverage["coverage"]["ee-super-substation"] == {
+        "count": 3, "in_extract": False, "origin": None,
+        "prototype_type": None, "subsystem": None, "support": None,
+    }
 
 
 # --------------------------------------------------------------- provenance
 
-def test_provenance_records_unknowns_instead_of_asserting_the_profile(extract):
+def test_provenance_identifies_the_verified_base_2077_export(extract):
     prov = extract.provenance
     assert prov.target_mechanics_profile == TARGET_MECHANICS_PROFILE
-    assert prov.game_version is None
-    assert prov.declared_mods is None
-    assert prov.environment_status == "unidentified"
-    assert prov.matches_target_profile == "unknown"
+    assert prov.game_version == "2.0.77"
+    assert prov.declared_mods == (("base", "2.0.77"),)
+    assert prov.environment_status == "identified"
+    assert prov.matches_target_profile == "yes"
     assert prov.source_dump_sha256 and len(prov.source_dump_sha256) == 64
     assert set(REQUIRED_REFERENCE_IDS) <= prov.reference_ids
 
@@ -275,9 +273,9 @@ def test_a_profile_match_claim_needs_a_build_and_a_mod_list():
         Provenance(**{**kwargs, "environment_status": "identified"})
     ok = Provenance(**{**kwargs, "matches_target_profile": "yes",
                        "environment_status": "identified",
-                       "game_version": "2.0.76",
-                       "declared_mods": (("base", "2.0.76"),)})
-    assert ok.declared_mods == (("base", "2.0.76"),)
+                       "game_version": "2.0.77",
+                       "declared_mods": (("base", "2.0.77"),)})
+    assert ok.declared_mods == (("base", "2.0.77"),)
 
 
 def test_extraction_requires_the_declared_evidence_references(slice_doc, extract):
@@ -297,7 +295,7 @@ def test_manifest_matches_its_artifacts(manifest, extract, slice_doc):
     verify_manifest(manifest, extract=extract, slice_doc=slice_doc)
     assert manifest["extract"]["content_hash"] == content_hash(extract.to_dict())
     assert manifest["raw_slice"]["content_hash"] == content_hash(slice_doc)
-    assert manifest["source_dump"]["path"] == "data/data-raw-dump.json"
+    assert manifest["source_dump"]["path"] == "data/data-raw-dump-2.0.77-base.json"
 
 
 @pytest.mark.parametrize("mutate", [
@@ -306,9 +304,9 @@ def test_manifest_matches_its_artifacts(manifest, extract, slice_doc):
     lambda m: m["raw_slice"].__setitem__("content_hash", "sha256:" + "0" * 64),
     lambda m: m["extract"].__setitem__("prototype_count", 3),
     lambda m: m["source_dump"].__setitem__("sha256", "f" * 64),
-    lambda m: m["environment"].__setitem__("matches_target_profile", "yes"),
-    lambda m: m["environment"].__setitem__("environment_status", "identified"),
-    lambda m: m.__setitem__("target_mechanics_profile", "base-2.0.77-normal-v1"),
+    lambda m: m["environment"].__setitem__("matches_target_profile", "unknown"),
+    lambda m: m["environment"].__setitem__("environment_status", "unidentified"),
+    lambda m: m.__setitem__("target_mechanics_profile", "base-2.0.76-normal-v1"),
     lambda m: m.pop("observations"),
     lambda m: m.__setitem__("extra", True),
 ])
@@ -365,7 +363,7 @@ def test_fixture_locations_resolve_inside_the_installed_package():
 def test_every_first_release_rule_has_exactly_one_record(observations):
     assert {r.record_id for r in observations} == set(REQUIRED_MECHANICS_RULES)
     for record in observations:
-        assert record.profile == TARGET_MECHANICS_PROFILE
+        assert record.profile == "base-2.0.76-normal-v1"
         assert record.title == REQUIRED_MECHANICS_RULES[record.record_id]
 
 
@@ -374,6 +372,8 @@ def test_observation_index_matches_the_records(observations):
     validate_observation_index(index, observations)
     assert index["missing_rules"] == []
     assert index["unrecognised_records"] == []
+    assert index["record_profiles"] == ["base-2.0.76-normal-v1"]
+    assert set(index["incompatible_records"]) == set(REQUIRED_MECHANICS_RULES)
 
 
 def test_the_game_observation_gate_is_unmet_and_says_so(observations):
@@ -437,14 +437,14 @@ def test_a_claimed_observation_without_evidence_is_rejected():
             setup_blueprint="0eNq...", measurement_interval_s=60.0,
             observation_method="counted chest contents",
             measurement={"items_per_second": 15.0},
-            environment={"game_version": "2.0.76",
-                         "declared_mods": [["base", "2.0.76"]], "save": None}))
+            environment={"game_version": "2.0.77",
+                         "declared_mods": [["base", "2.0.77"]], "save": None}))
     complete = parse_observation(_record(
         evidence_status="observed", blocking_gate=None,
         setup_blueprint="0eNq...", measurement_interval_s=60.0,
         observation_method="counted chest contents",
         measurement={"items_per_second": 15.0},
-        environment={"game_version": "2.0.76", "declared_mods": [["base", "2.0.76"]],
+        environment={"game_version": "2.0.77", "declared_mods": [["base", "2.0.77"]],
                      "save": "disposable sandbox routing-02"}))
     assert complete.evidence_status == "observed"
 
@@ -496,10 +496,11 @@ def test_pilot_records_its_unresolved_prototype_and_missing_feeds(extract):
     coverage = load_json(PILOT_COVERAGE_PATH)
     assert coverage["unsupported_entities"] == ["ee-super-substation"]
     unresolved = coverage["unresolved_prototypes"]["ee-super-substation"]
-    assert unresolved["count"] == 3 and unresolved["subsystem"] == "power"
+    assert unresolved["count"] == 3 and unresolved["subsystem"] is None
     joined = " ".join(coverage["unavailable_information"]).lower()
     for missing in ("fed from outside", "budgets", "research", "mods", "power",
                     "circuit", "recipe"):
         assert missing in joined
     for name, entry in coverage["coverage"].items():
-        assert entry["support"] == extract.by_name(name).support
+        prototype = extract.get(name)
+        assert entry["support"] == (None if prototype is None else prototype.support)

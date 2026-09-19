@@ -146,12 +146,12 @@ def test_stale_assignments_requests_results_rejected():
     lambda r: r.update(unused_machine_options={"smelting":"assembling-machine-2"}),
     lambda r: r["objective"].update(kind="maximize_ratio"),
     lambda r: r["assumptions"].update(quality="legendary"),
-    lambda r: r["assumptions"].update(game_version="2.0.77"),
+    lambda r: r["assumptions"].update(game_version="2.0.76"),
     lambda r: r["assumptions"].update(modules="productivity-module"),
-    lambda r: r["assumptions"]["mods"].append({"name":"space-age","version":"2.0.76"}),
+    lambda r: r["assumptions"]["mods"].append({"name":"space-age","version":"2.0.77"}),
     lambda r: r["assumptions"]["mods"].append({"name":"space-age","version":"","provides":[],"alters_item_mechanics":False}),
-    lambda r: r["assumptions"]["mods"].append({"name":"base","version":"2.0.76","provides":[],"alters_item_mechanics":False}),
-    lambda r: r["assumptions"]["mods"][0].update(version="2.0.77"),
+    lambda r: r["assumptions"]["mods"].append({"name":"base","version":"2.0.77","provides":[],"alters_item_mechanics":False}),
+    lambda r: r["assumptions"]["mods"][0].update(version="2.0.76"),
     lambda r: r["assumptions"].update(mods=[]),
     lambda r: r["exports"][0]["sink"].update(kind="buffer"),
     lambda r: r["exports"][0]["sink"].update(service=""),
@@ -626,7 +626,7 @@ def test_declaring_mods_does_not_enable_fluid_or_quality():
     with pytest.raises(ContractError, match="unsupported option"):
         parse_request(seal(request, "request_hash"), graph)
     request = deepcopy(sample["request"])
-    request["assumptions"]["game_version"] = "2.0.77"
+    request["assumptions"]["game_version"] = "2.0.76"
     with pytest.raises(ContractError, match="unsupported option"):
         parse_request(seal(request, "request_hash"), graph)
 

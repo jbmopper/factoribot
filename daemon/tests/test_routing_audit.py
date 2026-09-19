@@ -874,13 +874,14 @@ def test_capability_block_is_computed_from_the_records_not_hardcoded(tmp_path, m
     for name in os.listdir(source):
         document = json.load(open(os.path.join(source, name)))
         if document["record_id"] == "belt.straight.lane_capacity":
-            document.update(evidence_status="observed",
+                document.update(profile="base-2.0.77-normal-v1",
+                                evidence_status="observed",
                             setup_blueprint="0SYNTHETIC-AUDIT-FIXTURE",
                             measurement={"items_per_s_per_lane": 15.0},
                             measurement_interval_s=60.0,
                             observation_method="AUDIT FIXTURE, not a real capture",
-                            environment={"game_version": "2.0.76",
-                                         "declared_mods": ["base 2.0.76"],
+                            environment={"game_version": "2.0.77",
+                                         "declared_mods": ["base 2.0.77"],
                                          "save": "audit-disposable"})
         json.dump(document, open(target / name, "w"))
 
@@ -978,9 +979,9 @@ def test_pilot_withholds_every_bound_with_the_substations_undeclared():
     assert template["assumptions"]["irrelevant"] == []
     document = seal_request(template, layout, assignments)
     reasons = request_unresolved(document, layout)
-    assert sorted(reasons) == ["unsupported entity: bp/root/e/162",
-                               "unsupported entity: bp/root/e/1882",
-                               "unsupported entity: bp/root/e/255"]
+    assert sorted(reasons) == ["unsupported topology: gap_e162",
+                               "unsupported topology: gap_e1882",
+                               "unsupported topology: gap_e255"]
 
     result = analyze_delivery(layout.graph, parse_request(document, layout.graph)).result
     assert result.status == "partial"
@@ -988,14 +989,8 @@ def test_pilot_withholds_every_bound_with_the_substations_undeclared():
     assert not any(f.evidence_kind == "upper_bound" for f in result.findings)
 
 
-def test_pilot_bound_under_a_declaration_is_only_as_good_as_the_declaration():
-    """Declaring the poles irrelevant admits a bound that records the assumption.
-
-    HAND: the declaration is an assumption, not evidence. The routing bound for
-    the two ILLUSTRATIVE endpoints is 0 items/s because they are not connected,
-    and the result must repeat the declaration in its assumptions so an auditor
-    sees what the number rests on.
-    """
+def test_pilot_irrelevance_cannot_erase_a_possible_bridge_absent_from_base_export():
+    """A declaration cannot turn unknown modded geometry into a disconnection."""
     from factoribot.gamedata import load_database
     from factoribot.routing import RecipeSource
     from factoribot.routing_public import build_layout, request_unresolved, seal_request
@@ -1012,15 +1007,14 @@ def test_pilot_bound_under_a_declaration_is_only_as_good_as_the_declaration():
                           provenance="development_pilot",
                           recipes=RecipeSource(load_database(None)))
     document = seal_request(template, layout, assignments)
-    assert request_unresolved(document, layout) == ()
+    reasons = request_unresolved(document, layout)
+    assert len(reasons) == 3
+    assert all(reason.startswith("unsupported topology") for reason in reasons)
 
     result = analyze_delivery(layout.graph, parse_request(document, layout.graph)).result
-    assert result.status == "feasible_relaxed"
-    got = bounds_of(result)
-    assert got["routing"] == pytest.approx(0.0)
-    assert got["aggregate"] >= got["budget"] >= got["routing"]
-    assert "irrelevant:audit_power:power:power_assumed_available" in result.assumptions
-    assert any(f.code == "zero_objective" for f in result.findings)
+    assert result.status == "partial"
+    assert result.bounds == () and result.witness is None
+    assert any(f.code == "unresolved_topology_gap" for f in result.findings)
 
 
 def test_pilot_fixture_endpoints_are_labelled_illustrative():

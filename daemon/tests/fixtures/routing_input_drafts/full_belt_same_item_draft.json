@@ -1,0 +1,99 @@
+{
+  "document_kind": "factoribot.routing.assignment_draft",
+  "view_version": "factoribot-blueprint-view-1",
+  "blueprint_hash": "sha256:4beb99cde1bebd7e05892e44ca21e655b5526a58267fbf0d07e6da732d75ed38",
+  "graph_hash": "sha256:e380c37d693f20fcf78b220187abb98e69edb80d3ea5ff849a2c79aec376e7d1",
+  "assignments": {
+    "schema_version": "1.1.1",
+    "blueprint_hash": "sha256:4beb99cde1bebd7e05892e44ca21e655b5526a58267fbf0d07e6da732d75ed38",
+    "graph_hash": "sha256:e380c37d693f20fcf78b220187abb98e69edb80d3ea5ff849a2c79aec376e7d1",
+    "feeds": [
+      {
+        "id": "full_input_1_left",
+        "budget_id": "full_input_1_iron-plate",
+        "endpoint": {
+          "entity": {
+            "book_path": [],
+            "entity_number": 1
+          },
+          "kind": "port",
+          "name": "in_left"
+        },
+        "capacity": {
+          "kind": "finite",
+          "value": 15.0
+        }
+      },
+      {
+        "id": "full_input_1_right",
+        "budget_id": "full_input_1_iron-plate",
+        "endpoint": {
+          "entity": {
+            "book_path": [],
+            "entity_number": 1
+          },
+          "kind": "port",
+          "name": "in_right"
+        },
+        "capacity": {
+          "kind": "finite",
+          "value": 15.0
+        }
+      }
+    ],
+    "furnaces": [],
+    "controls": []
+  },
+  "proposed_request": {
+    "budgets": [
+      {
+        "id": "full_input_1_iron-plate",
+        "material": {
+          "kind": "item",
+          "name": "iron-plate",
+          "quality": "normal"
+        },
+        "capacity": {
+          "kind": "finite",
+          "value": 30.0
+        }
+      }
+    ],
+    "exports": [
+      {
+        "id": "iron_export",
+        "material": {
+          "kind": "item",
+          "name": "iron-plate",
+          "quality": "normal"
+        },
+        "endpoint": {
+          "entity": {
+            "book_path": [],
+            "entity_number": 3
+          },
+          "kind": "port",
+          "name": "out_left"
+        },
+        "requirement": "minimum",
+        "rate": 0.0,
+        "sink": {
+          "kind": "external",
+          "service": "SYNTHETIC illustrative continuous removal; not game evidence",
+          "capacity": {
+            "kind": "unlimited",
+            "value": null
+          }
+        }
+      }
+    ],
+    "surplus": [],
+    "objective": {
+      "kind": "maximize_export",
+      "export_id": "iron_export"
+    }
+  },
+  "notes": [
+    "SYNTHETIC fixture; declarations, not game evidence."
+  ]
+}

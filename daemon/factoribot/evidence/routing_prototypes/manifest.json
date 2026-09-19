@@ -1,21 +1,26 @@
 {
   "environment": {
-    "declared_mods": null,
-    "environment_status": "unidentified",
-    "game_version": null,
-    "matches_target_profile": "unknown"
+    "declared_mods": [
+      [
+        "base",
+        "2.0.77"
+      ]
+    ],
+    "environment_status": "identified",
+    "game_version": "2.0.77",
+    "matches_target_profile": "yes"
   },
   "extract": {
-    "content_hash": "sha256:756af0daaf0da4d68e414513bf18144b2638e9e6b76d3319fe1f7e38e126655e",
+    "content_hash": "sha256:4cb74412fc6a5d1b9b234c22c1cec60724b7de60b7a84aa007e243ad50297e75",
     "missing_from_first_entity_set": [],
     "path": "prototypes.json",
-    "prototype_count": 20,
+    "prototype_count": 19,
     "supported_count": 14
   },
   "notes": [
-    "The dump carries no build number and no mod manifest, so the game version and the enabled mod list are unknown. A blueprint's encoded format version does not identify the prototype environment either.",
-    "This dump defines 142 prototypes whose names begin with 'ee-', including the ee-super-substation used by the pilot blueprint. That is consistent with an enabled Editor Extensions mod, but the dump names and versions no mod, so every prototype's origin is recorded as unknown and this extract is NOT certified as base-2.0.76-normal-v1.",
-    "The dump's quality prototypes are only 'normal' and 'quality-unknown', its only planet is 'nauvis', and it defines no space platform or elevated rail prototypes; no Quality, Space Age or Elevated Rails content was loaded.",
+    "Exported using Factorio 2.0.77 build 84539 in isolated write and mod directories. The retained mod-list enables only base 2.0.77; core is built in.",
+    "The 2.0.76 documentation and mechanics records retain their historical profile. They are incompatible with this target until a 2.0.77 observation explicitly supersedes them, so they cannot tighten an arc.",
+    "The base-only dump does not define the pilot's ee-super-substation. Blueprint import still retains every such entity as visible unsupported topology; absence from this extract is not permission to delete or ignore it.",
     "source_dump_sha256 is the SHA-256 of the dump file's bytes, the identity the MCP adapter already records for loaded game data. The 'sha256:'-prefixed hashes are canonical-JSON content hashes of decoded documents, a different thing."
   ],
   "observations": {
@@ -28,13 +33,13 @@
     }
   },
   "raw_slice": {
-    "content_hash": "sha256:297274bf56ad05206171519360feaf1875a0b40082c82c4c7ec2db76171fed72",
+    "content_hash": "sha256:5737564269fde2800500ba971052a0c523748037a6b3d57d5e7bbf65096a0299",
     "path": "raw_prototype_slice.json"
   },
   "schema_version": "factoribot-routing-prototypes-1",
   "source_dump": {
-    "path": "data/data-raw-dump.json",
-    "sha256": "42d6dd2f8b39e22123651d3de22fbd8e0f991b50ee40eace1ce54330df83de87"
+    "path": "data/data-raw-dump-2.0.77-base.json",
+    "sha256": "be65dc3615d5939e522b00543b2925a02cfa890dbc9c00882dfe1c4629670f60"
   },
-  "target_mechanics_profile": "base-2.0.76-normal-v1"
+  "target_mechanics_profile": "base-2.0.77-normal-v1"
 }

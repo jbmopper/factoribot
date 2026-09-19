@@ -562,10 +562,10 @@ def test_contract_entities_carry_subsystem_and_mod_claims(pilot_view):
     poles = by_prototype["ee-super-substation"]
     assert len(poles) == 3
     for pole in poles:
-        # Unsupported, classified `power`, and NOT attributed to a named mod:
-        # task 02's extract records origin "unknown" for every prototype.
-        assert (pole.support, pole.subsystem, pole.mod) == ("unsupported", "power", "unknown")
-        assert pole.footprint.maximum.x - pole.footprint.minimum.x == 2.0
+        # The base-only 2.0.77 extract cannot classify or size this absent modded
+        # prototype. It remains visible with conservative unknown topology.
+        assert (pole.support, pole.subsystem, pole.mod) == ("unsupported", "unknown", "unknown")
+        assert pole.footprint.maximum.x - pole.footprint.minimum.x == 1.0
         assert pole.raw.value()["name"] == "ee-super-substation"
 
 
@@ -612,7 +612,7 @@ def test_pilot_sample_is_compact_and_covers_the_pilot_prototypes():
     pole = [e for e in sample["entities"] if e["prototype"] == "ee-super-substation"]
     assert len(pole) == 1
     assert (pole[0]["support"], pole[0]["subsystem"], pole[0]["mod"]) == (
-        "unsupported", "power", "unknown")
+        "unsupported", "unknown", "unknown")
     assert sample["source"]["file_sha256"].startswith("e48fa3fa")
 
 
