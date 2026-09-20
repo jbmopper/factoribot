@@ -107,3 +107,24 @@ def test_no_pilot_mechanic_is_observed(layout):
     evidence = rp.mechanics_evidence()
     assert evidence["observed"] == 0 and evidence["gate"] == "unmet"
     assert layout.unobserved_mechanics, "the pilot relies on unobserved mechanics and must say so"
+
+
+def test_the_task_19_inference_policy_seals_against_this_same_graph(layout):
+    """The policy behind the documented `routes infer` pilot run must be sealable.
+
+    Its three `ee-super-substation` poles resolve as mod `unknown` with subsystem
+    `unknown`, so that is the scope the declaration has to grant. Naming a
+    subsystem the analyzer never assigns to an unidentified prototype (`power`,
+    say) rejects every such entity as out of scope.
+    """
+    policy = json.loads(
+        (ROOT / "daemon/tests/fixtures/furnace_inference/pilot_policy.json").read_text())
+    unknown = next(mod for mod in policy["assumptions"]["mods"] if mod["name"] == "unknown")
+    assert unknown["provides"] == ["unknown"]
+
+    document = rp.seal_request(policy, layout, load("pilot_assignments.json"))
+    assert document["graph_hash"] == layout.graph_hash
+
+    unknown["provides"] = ["power"]
+    with pytest.raises(rp.PublicError, match="outside declared mod scope"):
+        rp.seal_request(policy, layout, load("pilot_assignments.json"))

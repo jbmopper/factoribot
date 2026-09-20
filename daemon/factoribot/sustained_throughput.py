@@ -331,7 +331,12 @@ def validate_operating_scenario(value: Mapping[str, Any]) -> dict[str, Any]:
 def predict_operating_rate(
     scenario: Mapping[str, Any], *, database=None, recipe_data_sha256: str | None = None,
 ) -> dict[str, Any]:
-    """Compute the conditional serial-furnace rate from loaded recipe coefficients."""
+    """Compute the conditional serial-furnace rate from loaded recipe coefficients.
+
+    The chain runs at a single scale: a machine that could outrun the one after
+    it blocks on its own output instead of accumulating an unbounded buffer, so
+    the reported ledger conserves every item exactly.
+    """
     scenario = validate_operating_scenario(scenario)
     if database is None:
         from .gamedata import load_database, read_dump
@@ -343,13 +348,13 @@ def predict_operating_rate(
     if not loaded_sha or loaded_sha != scenario["recipe_data"]["sha256"]:
         raise ThroughputError("loaded recipe data identity does not match the scenario")
 
-    available = _fraction(
+    supply_capacity = _fraction(
         scenario["model"]["external_supply"]["capacity_items_per_s"],
         "external_supply.capacity_items_per_s")
     current_item = scenario["model"]["external_supply"]["item"]
-    machine_rows = []
-    produced: dict[str, Fraction] = {}
-    consumed: dict[str, Fraction] = {}
+
+    # Read the chain's coefficients first; the rates need the whole chain.
+    steps = []
     for entry in scenario["model"]["machines"]:
         recipe = database.recipes.get(entry["recipe"])
         machine = database.machines.get(entry["prototype"])
@@ -361,26 +366,57 @@ def predict_operating_rate(
             raise ThroughputError("serial adapter requires one item input and one item output per recipe")
         input_amount = Fraction(str(ingredients[0].amount))
         output_amount = Fraction(str(results[0].amount))
-        craft_capacity = Fraction(str(machine.speed)) / Fraction(str(recipe.energy))
-        craft_rate = min(craft_capacity, available / input_amount)
-        input_rate, output_rate = craft_rate * input_amount, craft_rate * output_amount
-        consumed[current_item] = consumed.get(current_item, Fraction()) + input_rate
-        produced[results[0].name] = produced.get(results[0].name, Fraction()) + output_rate
-        machine_rows.append({
-            "entity": entry["entity"], "prototype": entry["prototype"],
-            "recipe": entry["recipe"], "crafts_per_s": str(craft_rate),
-            "craft_capacity_per_s": str(craft_capacity),
-            "input": {current_item: str(input_rate)},
-            "output": {results[0].name: str(output_rate)},
+        energy = Fraction(str(recipe.energy))
+        if min(input_amount, output_amount, energy) <= 0:
+            raise ThroughputError(f"recipe {entry['recipe']} has a nonpositive amount or energy")
+        steps.append({
+            "entry": entry,
+            "input_item": current_item,
+            "output_item": results[0].name,
+            "input_amount": input_amount,
+            "output_amount": output_amount,
+            "craft_capacity": Fraction(str(machine.speed)) / energy,
         })
-        current_item, available = results[0].name, output_rate
+        current_item = results[0].name
+
+    # A serial chain has no buffer that can absorb a permanent surplus: a
+    # machine that outruns the one downstream of it fills that machine's input
+    # and its own output, then blocks. So the whole chain runs at one scale,
+    # set by the tightest of the supply and every machine's own capacity,
+    # rather than each machine independently consuming whatever arrives.
+    # `relative` is machine i's crafts per craft of machine 1.
+    relative = Fraction(1)
+    relatives = []
+    for index, step in enumerate(steps):
+        relatives.append(relative)
+        if index + 1 < len(steps):
+            relative = relative * step["output_amount"] / steps[index + 1]["input_amount"]
+    lead_rate = supply_capacity / steps[0]["input_amount"]
+    for step, share in zip(steps, relatives):
+        lead_rate = min(lead_rate, step["craft_capacity"] / share)
+
+    machine_rows = []
+    produced: dict[str, Fraction] = {}
+    consumed: dict[str, Fraction] = {}
+    available = Fraction()
+    for step, share in zip(steps, relatives):
+        craft_rate = lead_rate * share
+        input_rate = craft_rate * step["input_amount"]
+        output_rate = craft_rate * step["output_amount"]
+        consumed[step["input_item"]] = consumed.get(step["input_item"], Fraction()) + input_rate
+        produced[step["output_item"]] = produced.get(step["output_item"], Fraction()) + output_rate
+        machine_rows.append({
+            "entity": step["entry"]["entity"], "prototype": step["entry"]["prototype"],
+            "recipe": step["entry"]["recipe"], "crafts_per_s": str(craft_rate),
+            "craft_capacity_per_s": str(step["craft_capacity"]),
+            "input": {step["input_item"]: str(input_rate)},
+            "output": {step["output_item"]: str(output_rate)},
+        })
+        available = output_rate
     export_item = scenario["model"]["external_removal"]["item"]
     if current_item != export_item:
         raise ThroughputError("serial chain result does not match the declared export")
     supply_item = scenario["model"]["external_supply"]["item"]
-    supply_capacity = _fraction(
-        scenario["model"]["external_supply"]["capacity_items_per_s"],
-        "external_supply.capacity_items_per_s")
     accepted = consumed.get(supply_item, Fraction())
     prediction = {
         "schema_version": OPERATING_PREDICTION_VERSION,
@@ -419,6 +455,13 @@ def predict_operating_rate(
             "recurrence-proved sustained rates and layouts without a matching capture",
         ],
     }
+    # The emitted ledger must satisfy the same conservation identity the design
+    # fixtures are held to: nothing may appear or vanish between the machines.
+    try:
+        _balance({field: prediction["items"][field] for field in _BALANCE_FIELDS},
+                 "prediction.items")
+    except ThroughputDesignError as error:
+        raise ThroughputError(f"prediction ledger does not conserve items: {error}") from error
     return seal_document(prediction, "prediction_hash")
 
 

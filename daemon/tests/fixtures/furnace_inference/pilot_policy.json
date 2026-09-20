@@ -17,7 +17,7 @@
       {
         "alters_item_mechanics": false,
         "name": "unknown",
-        "provides": ["power"],
+        "provides": ["unknown"],
         "version": "unknown"
       },
       {
