@@ -325,9 +325,21 @@ def test_a_mutated_slice_fails_its_manifest(manifest, extract, slice_doc):
 
 
 def test_pinned_slice_agrees_with_the_full_dump():
+    """Cross-check the pinned slice against the dump it was actually cut from.
+
+    Only the manifest's own source dump can answer this. A dump from another
+    Factorio version or mod set is a different document, not a regression, so
+    it skips instead of reporting the slice as wrong.
+    """
     raw = full_dump_or_skip()
+    manifest = load_json(MANIFEST_PATH)
+    resolved, digest, _raw = gamedata.read_dump()
+    if digest != manifest["source_dump"]["sha256"]:
+        pytest.skip(
+            f"the resolved dump ({resolved}) is not the pinned "
+            f"{TARGET_MECHANICS_PROFILE} source dump; run `make dump-base`")
     assert slice_raw_dump(raw) == load_json(RAW_SLICE_PATH)
-    assert load_json(MANIFEST_PATH)["source_dump"]["sha256"] == gamedata.read_dump()[1]
+    assert manifest["source_dump"]["sha256"] == digest
 
 
 def test_slice_is_small_enough_to_check_in():

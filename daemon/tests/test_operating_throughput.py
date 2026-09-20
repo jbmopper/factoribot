@@ -28,9 +28,21 @@ SCENARIO = ROOT / "experiments/routing-measurements/scenarios/furnace-chain-base
 CAPTURES = ROOT / "experiments/routing-measurements/captures"
 
 
+def dump_or_skip() -> Path:
+    """The base-only dump the scenario is sealed against.
+
+    It is a second dump, distinct from the working `data/data-raw-dump.json`
+    that `make dump` writes with whatever mods are enabled, and it is too large
+    to check in. Absent means "not generated here yet", not a regression.
+    """
+    if not DATA.exists():
+        pytest.skip(f"{DATA.name} is absent; run `make dump-base` to regenerate it")
+    return DATA
+
+
 def _inputs():
     scenario = json.loads(SCENARIO.read_text())
-    _path, digest, _raw = read_dump(str(DATA))
+    _path, digest, _raw = read_dump(str(dump_or_skip()))
     return scenario, load_database(str(DATA)), digest
 
 
@@ -108,6 +120,7 @@ def test_retained_game_captures_validate_and_match_the_frozen_tolerance():
 
 
 def test_routes_throughput_cli_writes_the_separate_operating_report(tmp_path, capsys):
+    dump_or_skip()
     scenario = json.loads(SCENARIO.read_text())
     captures = sorted(CAPTURES.glob(f"{scenario['scenario_id']}-run-*.json"))
     out = tmp_path / "report.json"
@@ -131,6 +144,7 @@ def test_routes_throughput_cli_writes_the_separate_operating_report(tmp_path, ca
 
 
 def test_operating_rate_tool_over_real_stdio_mcp(tmp_path):
+    dump_or_skip()
     pytest.importorskip("mcp")
     from mcp import ClientSession, StdioServerParameters
     from mcp.client.stdio import stdio_client
